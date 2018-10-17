@@ -1,0 +1,27 @@
+Ship Hardpoints
+		
+External Points
+	Weapons (cannons, lasers, missiles, etc)
+	Shield
+	Repair Beam
+	CHAF
+Internal
+	Mandatory
+		Aiming Module
+		Navigation Module
+		Engines
+		Power Generator
+		Crew Quarters
+		
+	Optional (varying number of slots dependant on ship size)
+		Cargo Hold (ammo[not safe] and stuff)	
+		Magazine (ammo[safe])
+		Barracks
+		Battery
+		More generators
+		Shield Generator (magnetic, plasma, etc)
+		Capacitor
+		Tractor Beam
+		Scanner Beam
+		Drone Bay	(repair, scanner,tractor (anchor),transfer)
+		
