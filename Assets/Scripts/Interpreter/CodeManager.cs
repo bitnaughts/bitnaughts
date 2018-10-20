@@ -10,9 +10,8 @@ public class CodeManager : MonoBehaviour {
     public List<string> strings_within_editting_scope = new List<string>();
     string[] available_variable_types;
     public List<string> lines;
-    string[] list_of_PDTs = { "boolean", "char", "double", "int", "String" };
+    string[] list_of_PDTs = { "bool", "double", "int", "string" };
     string[] list_of_evaluations = { "==", ">", "<", "<=", ">=", "!=" };
-    string[] list_of_operations = { " + ", " - ", " * ", " / ", " % "};
     string[] list_of_condensed_operations = { "=", "++", "--", "+=", "-=", "*=", "/=", "%=" };
     public List<VariableObject<bool>> booleans = new List<VariableObject<bool>>();
     public List<VariableObject<int>> integers = new List<VariableObject<int>>();
@@ -43,20 +42,27 @@ public class CodeManager : MonoBehaviour {
             case "for":
             case "while":
                 //flow control
+                // if (health < 10) 
                 break;
             case "break":
             case "continue":
                 //scope-flow control?
+                //break => go to current loop's } 
+                //continue => go to current loop's { [where ++ and conditionals are also checked]
                 break;
             default:
+                //get what it is
                 switch (line)
                 {
                     case "isFunction":
+                        // Fire();
+                        // Fire(10);
+                        // Subroutines...
                         break;
                     case "isVariable":
-                        break;                    
-                    //function call?
-                    //variable modification?
+                        // angle += leadObject(object, speed);
+                        // planet = planets[closestPlanet];
+                        break;              
                 }
                 break;
         }
