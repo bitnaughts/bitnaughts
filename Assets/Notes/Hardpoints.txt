@@ -7,8 +7,13 @@ External Points
 	CHAF
 Internal
 	Mandatory
-		Aiming Module
-		Navigation Module
+		Navigation Computer
+		Targetting Computer
+		Integrated Computer <-- generalized
+		Bridge Computer <-- main ship
+		--> computer == script
+		--> Subroutines == functions
+		-----> Power Distribution
 		Engines
 		Power Generator
 		Crew Quarters

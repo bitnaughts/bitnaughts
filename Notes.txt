@@ -1,0 +1,19 @@
+foreach line in lines
+{
+	switch (part1)
+	{
+		//check for flow control
+		"{ || }"
+		"if"
+		"else"
+		"while"
+		"for"
+		"..."
+		default
+			//has to be a variable || function call
+			switch(part1)
+			{
+				
+			}
+	}
+}
