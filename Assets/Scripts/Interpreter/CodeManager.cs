@@ -42,12 +42,19 @@ public class CodeManager : MonoBehaviour {
             case "else":
             case "for":
             case "while":
-            case "switch":
                 //flow control
+                break;
+            case "break":
+            case "continue":
+                //scope-flow control?
                 break;
             default:
                 switch (line)
                 {
+                    case "isFunction":
+                        break;
+                    case "isVariable":
+                        break;                    
                     //function call?
                     //variable modification?
                 }
