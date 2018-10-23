@@ -1,19 +1,29 @@
-foreach line in lines
-{
-	switch (part1)
-	{
-		//check for flow control
-		"{ || }"
-		"if"
-		"else"
-		"while"
-		"for"
-		"..."
-		default
-			//has to be a variable || function call
-			switch(part1)
-			{
-				
-			}
-	}
-}
+Economy:
+--------
+
+-Couriers (for FTL communications, warp-capable ships are required, thus, couriers are viable for transmitting data between solar systems)
+-- Take data (bits) from one system, fly them to another system, and get paid.
+-- Alternately, you can snoop through the bits you are carrying to find other secrets
+-- Some bits might be protected, use decryption to read them
+
+-Freighters (for bulk shipments, large ships are required, thus, freighters are as common a sight as on a modern highway)
+-- Buy cargo (or do via a quest system), fly it to somewhere that has a higher demand, and get paid.
+-- Alternately, you could raid existing freighters and take their cargo
+-- Some freighters will have protection, meaning you need to have weapons systems advanced enough to win the fight
+
+-Research (for technology to advance, there is a huge demand for research in all sectors)
+-- Scan objects, write code, etc for the betterment of the galaxy
+
+-Policing (to keep order, pirates and military enemies need to be destroyed via crowdsourcing)
+-- Find a bounty, track down the target vessel, and destroy it
+
+-Conscription (to bolster militaries, war vessels can be conscripted to fight in battles)
+-- Get paid to fight for a military group
+-- Alternately, flee battle and risk having a bounty put on you
+
+-Entrepenuership (for those with extra capital, one can invest in industries to make money in the long term)
+-- Buy or found an industry, but take on the risk of it failing, being destroyed, attacked, etc. 
+-- Alternately, you can invade an existing planet and usurp their industries, but risk bounties/massive retaliation.
+
+-Gambling (out-code a rigged game for money)
+
