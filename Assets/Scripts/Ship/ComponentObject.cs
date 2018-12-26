@@ -10,33 +10,33 @@ public class IntVector {
         this.y = y;
     }
     public static IntVector operator + (IntVector left, IntVector right) {
-        return new IntVector (left.x + right.x, left.y + right.y);
+        return new IntVector ((short) (left.x + right.x), (short) (left.y + right.y));
     }
 }
 
 public static class ComponentConstants {
-    public static string BRIDGE_NAME = "bridge"; /* Command module of a ship */
+    public const string BRIDGE_NAME = "bridge"; /* Command module of a ship */
     public static short BRIDGE_ID = 0;
 
-    public static string STRUT_NAME = "strut"; /* Simple spanning structure */
+    public const string STRUT_NAME = "strut"; /* Simple spanning structure */
     public static short STRUT_ID = 1;
 
-    public static string GIRDER_NAME = "girder"; /* Large spanning structure */
+    public const string GIRDER_NAME = "girder"; /* Large spanning structure */
     public static short GIRDER_ID = 2;
 
-    public static string SILO_NAME = "silo"; /* Tubular component, great for lauching things */
+    public const string SILO_NAME = "silo"; /* Tubular component, great for lauching things */
     public static short SILO_ID = 3;
 
-    public static string DEPOT_NAME = "depot"; /* Storage box */
+    public const string DEPOT_NAME = "depot"; /* Storage box */
     public static short DEPOT_ID = 4;
 
-    public static string CACHE_NAME = "cache"; /* Large storage box, great for mounting things on */
+    public const string CACHE_NAME = "cache"; /* Large storage box, great for mounting things on */
     public static short CACHE_ID = 5;
 
-    public static string BAY_NAME = "bay"; /* Extra large box, great for misc */
+    public const string BAY_NAME = "bay"; /* Extra large box, great for misc */
     public static short BAY_ID = 6;
 
-    public static string ENGINE_NAME = "engine"; /* Main thrust-providing system (RCS being considered)*/
+    public const string ENGINE_NAME = "engine"; /* Main thrust-providing system (RCS being considered)*/
     public static short ENGINE_ID = 7;
 
     public static IntVector[] SIZES = {
@@ -44,7 +44,7 @@ public static class ComponentConstants {
 
     };
 
-    public static IntVector[][] ATTACH_POINTS = {
+    public static IntVector[][] ATTACH_POINTS = { /* Where the object can be attached from */
         /* BRIDGE */
         new IntVector[] { },
         /* STRUT */
@@ -62,7 +62,7 @@ public static class ComponentConstants {
         /* ENGINE */
         new IntVector[] { new IntVector (-1, 0), new IntVector (0, 0), new IntVector (1, 0), new IntVector (-1, 1), new IntVector (0, 1), new IntVector (1, 1) }
     };
-    public static IntVector[][] MOUNT_POINTS = {
+    public static IntVector[][] MOUNT_POINTS = { /* Where the Object supports construction off of itself */
         /* BRIDGE */
         new IntVector[] { new IntVector (-1, -2), new IntVector (0, 2), new IntVector (0, -2), new IntVector (1, -2) },
         /* STRUT */
@@ -99,21 +99,23 @@ public static class ComponentConstants {
                 return ComponentConstants.BAY_ID;
             case ComponentConstants.ENGINE_NAME:
                 return ComponentConstants.ENGINE_ID;
+            default:
+                return -1;
         }
     }
 }
 
 public class ComponentObject {
-    string type;
-    short id;
+    public string type;
+    public short id;
 
-    IntVector position;
+    public IntVector position;
 
     public ComponentObject (string type, IntVector position) {
         this.type = type;
         this.position = position;
 
-        id = getComponentID (type);
+        id = ComponentConstants.getComponentID (type);
     }
 
 }
