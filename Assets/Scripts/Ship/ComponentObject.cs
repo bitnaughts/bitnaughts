@@ -39,46 +39,23 @@ public static class ComponentConstants {
     public const string ENGINE_NAME = "engine"; /* Main thrust-providing system (RCS being considered)*/
     public static short ENGINE_ID = 7;
 
-    public static IntVector[] SIZES = {
-        new IntVector (2, 2)
-
-    };
-
-    public static IntVector[][] ATTACH_POINTS = { /* Where the object can be attached from */
+    public static IntVector[][] MOUNT_POINTS = { /* Where the Object supports construction off of itself */
         /* BRIDGE */
-        new IntVector[] { },
+        new IntVector[] { new IntVector (-1, -2), new IntVector (0, 2), new IntVector (0, -2), new IntVector (1, -2) },
         /* STRUT */
-        new IntVector[] { new IntVector (0, -2), new IntVector (0, 2) },
+        new IntVector[] { new IntVector (0, -2), new IntVector (0, 2), new IntVector (0, 1), new IntVector (0, 0), new IntVector (0, -1) },
         /* GIRDER */
-        new IntVector[] { new IntVector (0, -2), new IntVector (0, 2) },
+        new IntVector[] { new IntVector (0, -2), new IntVector (0, 2), new IntVector (-1, 2), new IntVector (-1, 1), new IntVector (-1, 0), new IntVector (-1, -1), new IntVector (-1, -2), new IntVector (0, 1), new IntVector (0, 0), new IntVector (0, -1), new IntVector (1, 2), new IntVector (1, 1), new IntVector (1, 0), new IntVector (1, -1), new IntVector (1, -2) },
         /* SILO */
         new IntVector[] { new IntVector (0, 0) },
         /* DEPOT */
         new IntVector[] { new IntVector (-1, 0), new IntVector (0, 0), new IntVector (1, 0) },
         /* CACHE */
-        new IntVector[] { new IntVector (-1, -1), new IntVector (-1, 0), new IntVector (-1, 1), new IntVector (0, -1), new IntVector (0, 1), new IntVector (1, -1), new IntVector (1, 0), new IntVector (1, 1) },
+        new IntVector[] { new IntVector (-1, -1), new IntVector (-1, 0), new IntVector (-1, 1), new IntVector (0, -1), new IntVector (0, 1), new IntVector (1, -1), new IntVector (1, 0), new IntVector (1, 1), new IntVector (0, 0) },
         /* BAY */
         new IntVector[] { new IntVector (-1, 2), new IntVector (-1, 1), new IntVector (-1, 0), new IntVector (-1, -1), new IntVector (-1, -2), new IntVector (0, -2), new IntVector (0, 2), new IntVector (0, 1), new IntVector (0, 0), new IntVector (0, -1), new IntVector (1, 2), new IntVector (1, 1), new IntVector (1, 0), new IntVector (1, -1), new IntVector (1, -2) },
         /* ENGINE */
         new IntVector[] { new IntVector (-1, 0), new IntVector (0, 0), new IntVector (1, 0), new IntVector (-1, 1), new IntVector (0, 1), new IntVector (1, 1) }
-    };
-    public static IntVector[][] MOUNT_POINTS = { /* Where the Object supports construction off of itself */
-        /* BRIDGE */
-        new IntVector[] { new IntVector (-1, -2), new IntVector (0, 2), new IntVector (0, -2), new IntVector (1, -2) },
-        /* STRUT */
-        new IntVector[] { new IntVector (0, 1), new IntVector (0, 0), new IntVector (0, -1) },
-        /* GIRDER */
-        new IntVector[] { new IntVector (-1, 2), new IntVector (-1, 1), new IntVector (-1, 0), new IntVector (-1, -1), new IntVector (-1, -2), new IntVector (0, 1), new IntVector (0, 0), new IntVector (0, -1), new IntVector (1, 2), new IntVector (1, 1), new IntVector (1, 0), new IntVector (1, -1), new IntVector (1, -2) },
-        /* SILO */
-        new IntVector[] { },
-        /* DEPOT */
-        new IntVector[] { },
-        /* CACHE */
-        new IntVector[] { new IntVector (0, 0) },
-        /* BAY */
-        new IntVector[] { },
-        /* ENGINE */
-        new IntVector[] { }
     };
 
     public static short getComponentID (string type) {
@@ -102,6 +79,13 @@ public static class ComponentConstants {
             default:
                 return -1;
         }
+    }
+
+    public static IntVector[] getComponentMountPoints(string type) {
+        return getComponentMountPoints(getComponentID(type));
+    }
+    public static IntVector[] getComponentMountPoints(short type) {
+        return MOUNT_POINTS[type];
     }
 }
 
