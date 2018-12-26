@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ShipObject {
 
-    string name;
+    public string name;
 
-    List<ComponentObject> components;
+    public List<ComponentObject> components;
 
-    List<IntVector> attach_points;
-    List<IntVector> mount_points;
+    public List<IntVector> attach_points;
+    public List<IntVector> mount_points;
 
     public ShipObject (string name) {
         this.name = name;
