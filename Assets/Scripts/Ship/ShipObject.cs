@@ -37,10 +37,26 @@ public class ShipObject {
         //mountable position over top a mountable positions removes both positions from list, allows placement
         //attachable position over top a mountable position removes mountable position from list, allows placement
     }
-    public void place (string type, IntVector position) {
+    public void place (ComponentObject component, IntVector position) {
         // place(ComponentConstants.getComponentID (type), position, ship);\\
-        components.Add (new ComponentObject (type, position));
+        component.position = position;
+        components.Add (component);
         updatePoints ();
+    }
+
+    public void remove (ComponentObject component) {
+        components.Remove (component);
+
+        updatePoints ();
+        //if (ComponentConstants.isStructural (component.id)) {
+            for (int i = 0; i < components.Count; i++) {
+                if (!isPlaceable (components[i].id, components[i].position)) {
+                    components.Remove (components[i]);
+                    updatePoints ();
+                }
+            }
+        //}
+
     }
 
     // public static void place(short id, IntVector position, ShipObject ship) {
@@ -58,7 +74,7 @@ public class ShipObject {
                     bool isUnique = true;
                     for (int k = 0; k < mount_points.Count; k++) {
                         if (mount_points[k] == potential_mount_point) {
-                            mount_points.RemoveAt(k--);
+                            mount_points.RemoveAt (k--);
                             isUnique = false;
                         }
                     }
@@ -72,7 +88,7 @@ public class ShipObject {
                     //remove all mount points being occupied
                     for (int k = 0; k < mount_points.Count; k++) {
                         if (mount_points[k] == potential_mount_point) {
-                            mount_points.RemoveAt(k--);
+                            mount_points.RemoveAt (k--);
                         }
                     }
                 }
@@ -81,4 +97,11 @@ public class ShipObject {
         }
     }
 
+    public override string ToString () {
+        string output = "Ship(" + name + "):\n";
+        for (int i = 0; i < components.Count; i++) {
+            output += "-> Component(" + components[i].id + ", " + components[i].position + ")\n";
+        }
+        return output;
+    }
 }

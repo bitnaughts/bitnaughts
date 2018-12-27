@@ -6,29 +6,31 @@ public class ComponentEditor : MonoBehaviour {
 
 	public string type;
 
+	ComponentObject component;
+
 	List<GameObject> markers = new List<GameObject> ();
 	public GameObject markerPrefab;
-
 	ShipObject ship; //reference to ship component is attached to. Null if none.
 
 	bool clickedOverComponent = false;
 
 	// Use this for initialization
 	void Start () {
-		//ship = null;
+		component = new ComponentObject (type);
+		//change this via UI (if double-click on a owned ship, set "ship" to that ship...)
+		//ship = GameObject.Find ("Ship").GetComponent<ShipEditor> ().ship;
+
 	}
 
 	// Update is called once per frame
 	void Update () {
 		Camera.main.ScreenToWorldPoint (Input.mousePosition);
-		if (Input.GetMouseButtonDown (0)) {
-
-		} else if (Input.GetMouseButtonUp (0)) {
-			if (ship == null && clickedOverComponent == true) {
-				//for all ships
-				ship = GameObject.Find("Ship").ship;
-				if (ship.isPlaceable (type, new IntVector ((short) this.transform.position.x, (short) this.transform.position.y))) {
-					ship.place (type, new IntVector ((short) this.transform.position.x, (short) this.transform.position.y));
+		if (Input.GetMouseButtonUp (0)) {
+			if (clickedOverComponent == true) {
+				//for all ShipManager.getSelectedShip()s
+				if (ShipManager.getSelectedShip ().isPlaceable (type, new IntVector ((short) this.transform.position.x, (short) this.transform.position.y))) {
+					ShipManager.getSelectedShip ().place (component, new IntVector ((short) this.transform.position.x, (short) this.transform.position.y));
+					ship = ShipManager.getSelectedShip ();
 				}
 			}
 			clickedOverComponent = false;
@@ -36,9 +38,13 @@ public class ComponentEditor : MonoBehaviour {
 		if (clickedOverComponent && Input.GetMouseButton (0)) {
 			Vector2 position = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			this.transform.position = new Vector2 ((int) position.x, (int) position.y);
-			if (ship.isPlaceable (type, new IntVector ((short) position.x, (short) position.y))) {
+			if (ShipManager.getSelectedShip ().isPlaceable (type, new IntVector ((short) position.x, (short) position.y))) {
 				this.GetComponent<SpriteRenderer> ().color = new Color (255, 255, 255);
 			} else this.GetComponent<SpriteRenderer> ().color = new Color (255, 0, 0);
+		}
+
+		if (ship != null) {
+			this.GetComponent<SpriteRenderer> ().color = new Color (0, 255, 0);
 		}
 	}
 	void OnMouseEnter () {
@@ -56,6 +62,11 @@ public class ComponentEditor : MonoBehaviour {
 	void OnMouseOver () {
 		if (Input.GetMouseButtonDown (0)) {
 			clickedOverComponent = true;
+			if (ship != null) {
+				ship.remove (component);
+				ship = null;
+			}
+
 		}
 
 	}
