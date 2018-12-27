@@ -8,7 +8,7 @@ public class ShipEditor : MonoBehaviour {
 
     public GameObject markerPrefab;
 
-    ShipObject ship;
+    public ShipObject ship;
 
 	// Use this for initialization
 	void Start () { 

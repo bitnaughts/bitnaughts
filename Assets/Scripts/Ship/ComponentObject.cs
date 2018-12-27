@@ -12,6 +12,18 @@ public class IntVector {
     public static IntVector operator + (IntVector left, IntVector right) {
         return new IntVector ((short) (left.x + right.x), (short) (left.y + right.y));
     }
+    public static IntVector operator - (IntVector left, IntVector right) {
+        return new IntVector ((short) (left.x - right.x), (short) (left.y - right.y));
+    }
+    public static bool operator == (IntVector left, IntVector right) {
+        return left.x == right.x && left.y == right.y;
+    }
+    public static bool operator != (IntVector left, IntVector right) {
+        return !(left.x == right.x && left.y == right.y);
+    }
+    public override string ToString() {
+        return "IntVector(" + x + ", " + y +")";
+    }
 }
 
 public static class ComponentConstants {
@@ -86,6 +98,13 @@ public static class ComponentConstants {
     }
     public static IntVector[] getComponentMountPoints(short type) {
         return MOUNT_POINTS[type];
+    }
+
+    public static bool isStructural(string type) {
+        return isStructural(getComponentID(type));
+    }
+     public static bool isStructural(short type) {
+        return type <= 2; //bridge, strut, girder are structural, all other components are placed on top of these
     }
 }
 
