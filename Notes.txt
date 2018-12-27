@@ -1,3 +1,15 @@
+CONGLOMERATES:
+--------------
+
+Players make groups of ships doing specific tasks. They can "automate" their income streams.
+
+e.g. a player builds 10 mining vessles with AI to mine astroids and sell the resulting minerals.
+however, other players can see the 10 mining vessles and attack them and claim the minerals as their own.
+
+Players can lay claim to solar systems apart from main, mission-critical ones. Land-grabs and territorial disputes predicted to be common
+
+
+
 Economy:
 --------
 
