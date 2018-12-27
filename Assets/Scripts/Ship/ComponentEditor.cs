@@ -9,13 +9,13 @@ public class ComponentEditor : MonoBehaviour {
 	List<GameObject> markers = new List<GameObject> ();
 	public GameObject markerPrefab;
 
-	GameObject ship; //reference to ship component is attached to. Null if none.
+	ShipObject ship; //reference to ship component is attached to. Null if none.
 
 	bool clickedOverComponent = false;
 
 	// Use this for initialization
 	void Start () {
-
+		//ship = null;
 	}
 
 	// Update is called once per frame
@@ -24,9 +24,11 @@ public class ComponentEditor : MonoBehaviour {
 		if (Input.GetMouseButtonDown (0)) {
 
 		} else if (Input.GetMouseButtonUp (0)) {
-			if (clickedOverComponent == true) {
-				if (ShipObject.isPlaceable (type, new IntVector ((short) this.transform.position.x, (short) this.transform.position.y), GameObject.Find ("Ship").GetComponent<ShipEditor> ().ship)) {
-					ShipObject.place (type, new IntVector ((short) this.transform.position.x, (short) this.transform.position.y), GameObject.Find ("Ship").GetComponent<ShipEditor> ().ship);
+			if (ship == null && clickedOverComponent == true) {
+				//for all ships
+				ship = GameObject.Find("Ship").ship;
+				if (ship.isPlaceable (type, new IntVector ((short) this.transform.position.x, (short) this.transform.position.y))) {
+					ship.place (type, new IntVector ((short) this.transform.position.x, (short) this.transform.position.y));
 				}
 			}
 			clickedOverComponent = false;
@@ -34,7 +36,7 @@ public class ComponentEditor : MonoBehaviour {
 		if (clickedOverComponent && Input.GetMouseButton (0)) {
 			Vector2 position = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			this.transform.position = new Vector2 ((int) position.x, (int) position.y);
-			if (ShipObject.isPlaceable (type, new IntVector ((short) position.x, (short) position.y), GameObject.Find ("Ship").GetComponent<ShipEditor> ().ship)) {
+			if (ship.isPlaceable (type, new IntVector ((short) position.x, (short) position.y))) {
 				this.GetComponent<SpriteRenderer> ().color = new Color (255, 255, 255);
 			} else this.GetComponent<SpriteRenderer> ().color = new Color (255, 0, 0);
 		}
