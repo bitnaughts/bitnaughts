@@ -8,39 +8,52 @@ public class ShipObject {
 
     public List<ComponentObject> components;
 
-    // public List<IntVector> attach_points;
-    public List<IntVector> mount_points;
+    // public List<Point> attach_points;
+    public List<Point> mount_points;
+    public List<Point> occupied_points;
 
     public ShipObject (string name) {
         this.name = name;
         this.components = new List<ComponentObject> ();
-        this.components.Add (new ComponentObject ("bridge", new IntVector (0, 0)));
+        this.occupied_points = new List<Point> ();
+        this.components.Add (new ComponentObject ("bridge", new Point (0, 0)));
         updatePoints ();
     }
 
-    public bool isPlaceable (string type, IntVector position) {
+    public bool isPlaceable (ComponentObject component) {
+        return isPlaceable (component.id, component.position);
+    }
+    public bool isPlaceable (string type, Point position) {
         return isPlaceable (ComponentConstants.getComponentID (type), position);
     }
-    public bool isPlaceable (short id, IntVector position) {
-        IntVector[] component_mount_points = ComponentConstants.getComponentMountPoints (id);
-
-        for (int i = 0; i < mount_points.Count; i++) {
+    public bool isPlaceable (short id, Point position) {
+        return findOccupiedPoints (id, position).Count > 0; //If attaching at at least one point, cleared to place
+    }
+    public List<Point> findOccupiedPoints (short id, Point position) {
+        Point[] component_mount_points = ComponentConstants.getComponentMountPoints (id);
+        List<Point> potentially_occupied_points = new List<Point> ();
+        for (int i = 0; i < occupied_points.Count; i++) {
             for (int j = 0; j < component_mount_points.Length; j++) {
-                if (component_mount_points[j] + position == mount_points[i]) {
-                    return true;
+                if (component_mount_points[j] + position == occupied_points[i]) {
+                    return potentially_occupied_points; //Placing over existing connection not allowed, Count == 0, false
                 }
             }
         }
-        return false;
-        //bridges, struts, and girders give "mountable positions" for other objects
-        //silos, depots, caches, bays, engines mount on positions from given "attachable positions", removing the "mountable position(s)" from use 
-        //mountable position over top a mountable positions removes both positions from list, allows placement
-        //attachable position over top a mountable position removes mountable position from list, allows placement
+        for (int i = 0; i < mount_points.Count; i++) {
+            for (int j = 0; j < component_mount_points.Length; j++) {
+                if (component_mount_points[j] + position == mount_points[i]) {
+                    potentially_occupied_points.Add (component_mount_points[j] + position); //Count > 0, true
+                }
+            }
+        }
+        return potentially_occupied_points;
     }
-    public void place (ComponentObject component, IntVector position) {
+
+    public void place (ComponentObject component, Point position) {
         // place(ComponentConstants.getComponentID (type), position, ship);\\
         component.position = position;
         components.Add (component);
+        // findOccupiedPoints (id, position);
         updatePoints ();
     }
 
@@ -48,59 +61,54 @@ public class ShipObject {
         components.Remove (component);
 
         updatePoints ();
-        //if (ComponentConstants.isStructural (component.id)) {
+        if (ComponentConstants.isStructural (component.id)) {
             for (int i = 0; i < components.Count; i++) {
-                if (!isPlaceable (components[i].id, components[i].position)) {
-                    components.Remove (components[i]);
-                    updatePoints ();
-                }
+        //     if (!isPlaceable (components[i].id, components[i].position)) {
+        //         components.Remove (components[i]);
+        //         i--;
+        //         updatePoints ();
             }
-        //}
-
+        }
     }
 
-    // public static void place(short id, IntVector position, ShipObject ship) {
-    //     ship.components.Add(new ComponentObject(id, position)); 
-    //     updatePoints(ship);
-    // }
-
     public void updatePoints () {
-        mount_points = new List<IntVector> ();
+        /* Reset Lists */
+        mount_points = new List<Point> ();
+        occupied_points = new List<Point> ();
+
         for (int i = 0; i < components.Count; i++) {
-            IntVector[] component_mount_points = ComponentConstants.getComponentMountPoints (components[i].id);
-            if (ComponentConstants.isStructural (components[i].id)) {
-                for (int j = 0; j < component_mount_points.Length; j++) {
-                    IntVector potential_mount_point = components[i].position + component_mount_points[j];
-                    bool isUnique = true;
+
+            Point[] component_mount_points = ComponentConstants.getComponentMountPoints (components[i].id);
+           
+            for (int j = 0; j < component_mount_points.Length; j++) {
+            
+                Point potential_mount_point = components[i].position + component_mount_points[j];                
+                /* Structural Components provide mounting points, unless two structural components overlap */
+                if (ComponentConstants.isStructural (components[i].id)) {
+                    bool is_unique = true;
                     for (int k = 0; k < mount_points.Count; k++) {
                         if (mount_points[k] == potential_mount_point) {
-                            mount_points.RemoveAt (k--);
-                            isUnique = false;
+                            //occupied_points.Add (potential_mount_point);
+                            is_unique = false;
+                            break;
                         }
                     }
-                    if (isUnique) {
+                    if (is_unique) {
                         mount_points.Add (potential_mount_point);
                     }
-                }
-            } else {
-                for (int j = 0; j < component_mount_points.Length; j++) {
-                    IntVector potential_mount_point = components[i].position + component_mount_points[j];
-                    //remove all mount points being occupied
-                    for (int k = 0; k < mount_points.Count; k++) {
-                        if (mount_points[k] == potential_mount_point) {
-                            mount_points.RemoveAt (k--);
-                        }
-                    }
+                /* Non-structural components only block placement of other components */
+                } else {
+                    occupied_points.Add (potential_mount_point);
                 }
             }
-
         }
     }
 
     public override string ToString () {
+        updatePoints ();
         string output = "Ship(" + name + "):\n";
         for (int i = 0; i < components.Count; i++) {
-            output += "-> Component(" + components[i].id + ", " + components[i].position + ")\n";
+            output += "-> Component(" + components[i].id + ", " + components[i].position + "): " + isPlaceable (components[i]) + "\n";
         }
         return output;
     }

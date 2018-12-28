@@ -28,8 +28,8 @@ public class ComponentEditor : MonoBehaviour {
 		if (Input.GetMouseButtonUp (0)) {
 			if (clickedOverComponent == true) {
 				//for all ShipManager.getSelectedShip()s
-				if (ShipManager.getSelectedShip ().isPlaceable (type, new IntVector ((short) this.transform.position.x, (short) this.transform.position.y))) {
-					ShipManager.getSelectedShip ().place (component, new IntVector ((short) this.transform.position.x, (short) this.transform.position.y));
+				if (ShipManager.getSelectedShip ().isPlaceable (type, new Point ((short) this.transform.position.x, (short) this.transform.position.y))) {
+					ShipManager.getSelectedShip ().place (component, new Point ((short) this.transform.position.x, (short) this.transform.position.y));
 					ship = ShipManager.getSelectedShip ();
 				}
 			}
@@ -37,8 +37,9 @@ public class ComponentEditor : MonoBehaviour {
 		}
 		if (clickedOverComponent && Input.GetMouseButton (0)) {
 			Vector2 position = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			this.transform.position = new Vector2 ((int) position.x, (int) position.y);
-			if (ShipManager.getSelectedShip ().isPlaceable (type, new IntVector ((short) position.x, (short) position.y))) {
+			this.transform.position = position;
+			if (ShipManager.getSelectedShip ().isPlaceable (type, new Point ((short) position.x, (short) position.y))) {
+				this.transform.position = new Vector2 ((int) position.x, (int) position.y);
 				this.GetComponent<SpriteRenderer> ().color = new Color (255, 255, 255);
 			} else this.GetComponent<SpriteRenderer> ().color = new Color (255, 0, 0);
 		}
@@ -49,7 +50,7 @@ public class ComponentEditor : MonoBehaviour {
 	}
 	void OnMouseEnter () {
 		short id = ComponentConstants.getComponentID (type);
-		IntVector[] component_mount_points = ComponentConstants.getComponentMountPoints (id);
+		Point[] component_mount_points = ComponentConstants.getComponentMountPoints (id);
 
 		for (int i = 0; i < component_mount_points.Length; i++) {
 			GameObject marker_instance = Instantiate (markerPrefab, new Vector2 (0, 0), Quaternion.identity) as GameObject;

@@ -2,74 +2,77 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IntVector {
+public class Point {
     public short x;
     public short y;
-    public IntVector (short x, short y) {
+
+    public Point (short x, short y) {
         this.x = x;
         this.y = y;
     }
-    public static IntVector operator + (IntVector left, IntVector right) {
-        return new IntVector ((short) (left.x + right.x), (short) (left.y + right.y));
+    public static Point operator + (Point left, Point right) {
+        return new Point ((short) (left.x + right.x), (short) (left.y + right.y));
     }
-    public static IntVector operator - (IntVector left, IntVector right) {
-        return new IntVector ((short) (left.x - right.x), (short) (left.y - right.y));
+    public static Point operator - (Point left, Point right) {
+        return new Point ((short) (left.x - right.x), (short) (left.y - right.y));
     }
-    public static bool operator == (IntVector left, IntVector right) {
+    public static bool operator == (Point left, Point right) {
         return left.x == right.x && left.y == right.y;
     }
-    public static bool operator != (IntVector left, IntVector right) {
+    public static bool operator != (Point left, Point right) {
         return !(left.x == right.x && left.y == right.y);
     }
     public override string ToString () {
-        return "IntVector(" + x + ", " + y + ")";
+        return "Point(" + x + ", " + y + ")";
     }
 }
 
 public static class ComponentConstants {
-    public const string BRIDGE_NAME = "bridge"; /* Command module of a ship */
+    /* Command module of a ship */
+    public const string BRIDGE_NAME = "bridge"; 
     public static short BRIDGE_ID = 0;
-
-    public const string STRUT_NAME = "strut"; /* Simple spanning structure */
+    /* Simple spanning structure */
+    public const string STRUT_NAME = "strut"; 
     public static short STRUT_ID = 1;
-
-    public const string GIRDER_NAME = "girder"; /* Large spanning structure */
+    /* Large spanning structure */
+    public const string GIRDER_NAME = "girder"; 
     public static short GIRDER_ID = 2;
-
-    public const string SILO_NAME = "silo"; /* Tubular component, great for lauching things */
+    /* Tubular component, great for lauching things */
+    public const string SILO_NAME = "silo"; 
     public static short SILO_ID = 3;
-
-    public const string DEPOT_NAME = "depot"; /* Storage box */
+    /* Storage box */
+    public const string DEPOT_NAME = "depot"; 
     public static short DEPOT_ID = 4;
-
-    public const string CACHE_NAME = "cache"; /* Large storage box, great for mounting things on */
+    /* Large storage box, great for mounting things on */
+    public const string CACHE_NAME = "cache"; 
     public static short CACHE_ID = 5;
-
-    public const string BAY_NAME = "bay"; /* Extra large box, great for misc */
+    /* Extra large box, great for misc */
+    public const string BAY_NAME = "bay"; 
     public static short BAY_ID = 6;
-
-    public const string ENGINE_NAME = "engine"; /* Main thrust-providing system (RCS being considered)*/
+    /* Main thrust-providing system (RCS being considered)*/
+    public const string ENGINE_NAME = "engine"; 
     public static short ENGINE_ID = 7;
-
-    public static IntVector[][] MOUNT_POINTS = { /* Where the Object supports construction off of itself */
+    /* Where the Object supports construction off of itself */
+    public static Point[][] MOUNT_POINTS = { 
         /* BRIDGE */
-        new IntVector[] { new IntVector (-1, -2), new IntVector (0, 2), new IntVector (0, -2), new IntVector (1, -2) },
+        new Point[] { new Point (-1, -2), new Point (0, 2), new Point (0, -2), new Point (1, -2) },
         /* STRUT */
-        new IntVector[] { new IntVector (0, -2), new IntVector (0, 2), new IntVector (0, 1), new IntVector (0, 0), new IntVector (0, -1) },
+        new Point[] { new Point (0, -2), new Point (0, 2), new Point (0, 1), new Point (0, 0), new Point (0, -1) },
         /* GIRDER */
-        new IntVector[] { new IntVector (0, -2), new IntVector (0, 2), new IntVector (-1, 2), new IntVector (-1, 1), new IntVector (-1, 0), new IntVector (-1, -1), new IntVector (-1, -2), new IntVector (0, 1), new IntVector (0, 0), new IntVector (0, -1), new IntVector (1, 2), new IntVector (1, 1), new IntVector (1, 0), new IntVector (1, -1), new IntVector (1, -2) },
+        new Point[] { new Point (0, -2), new Point (0, 2), new Point (-1, 2), new Point (-1, 1), new Point (-1, 0), new Point (-1, -1), new Point (-1, -2), new Point (0, 1), new Point (0, 0), new Point (0, -1), new Point (1, 2), new Point (1, 1), new Point (1, 0), new Point (1, -1), new Point (1, -2) },
         /* SILO */
-        new IntVector[] { new IntVector (0, 0) },
+        new Point[] { new Point (0, 0) },
         /* DEPOT */
-        new IntVector[] { new IntVector (-1, 0), new IntVector (0, 0), new IntVector (1, 0) },
+        new Point[] { new Point (-1, 0), new Point (0, 0), new Point (1, 0) },
         /* CACHE */
-        new IntVector[] { new IntVector (-1, -1), new IntVector (-1, 0), new IntVector (-1, 1), new IntVector (0, -1), new IntVector (0, 1), new IntVector (1, -1), new IntVector (1, 0), new IntVector (1, 1), new IntVector (0, 0) },
+        new Point[] { new Point (-1, -1), new Point (-1, 0), new Point (-1, 1), new Point (0, -1), new Point (0, 1), new Point (1, -1), new Point (1, 0), new Point (1, 1), new Point (0, 0) },
         /* BAY */
-        new IntVector[] { new IntVector (-1, 2), new IntVector (-1, 1), new IntVector (-1, 0), new IntVector (-1, -1), new IntVector (-1, -2), new IntVector (0, -2), new IntVector (0, 2), new IntVector (0, 1), new IntVector (0, 0), new IntVector (0, -1), new IntVector (1, 2), new IntVector (1, 1), new IntVector (1, 0), new IntVector (1, -1), new IntVector (1, -2) },
+        new Point[] { new Point (-1, 2), new Point (-1, 1), new Point (-1, 0), new Point (-1, -1), new Point (-1, -2), new Point (0, -2), new Point (0, 2), new Point (0, 1), new Point (0, 0), new Point (0, -1), new Point (1, 2), new Point (1, 1), new Point (1, 0), new Point (1, -1), new Point (1, -2) },
         /* ENGINE */
-        new IntVector[] { new IntVector (-1, 0), new IntVector (0, 0), new IntVector (1, 0), new IntVector (-1, 1), new IntVector (0, 1), new IntVector (1, 1) }
-    };
+        new Point[] { new Point (-1, 0), new Point (0, 0), new Point (1, 0), new Point (-1, 1), new Point (0, 1), new Point (1, 1) }
+    };    
 
+    /* String to ID */
     public static short getComponentID (string type) {
         switch (type) {
             case ComponentConstants.BRIDGE_NAME:
@@ -92,11 +95,11 @@ public static class ComponentConstants {
                 return -1;
         }
     }
-
-    public static IntVector[] getComponentMountPoints (string type) {
+    /* Get Mount Points for Component */
+    public static Point[] getComponentMountPoints (string type) {
         return getComponentMountPoints (getComponentID (type));
     }
-    public static IntVector[] getComponentMountPoints (short type) {
+    public static Point[] getComponentMountPoints (short type) {
         return MOUNT_POINTS[type];
     }
 
@@ -112,19 +115,46 @@ public class ComponentObject {
     public string type;
     public short id;
 
-    public IntVector position;
+    public GameObject obj;
 
-    public ComponentObject (string type) {
+    public Point position;
+
+    //If connected_at.Count == 0, disconnected from a ship
+    public List<Point> connected_at; 
+
+
+
+    // List<ComponentObject> connected_components;
+
+    public ComponentObject() { }
+    public ComponentObject(string type) {
         this.type = type;
-        this.position = new IntVector (-10, -10);
-        
-        id = ComponentConstants.getComponentID (type);
+        this.id = ComponentConstants.getComponentID (type);
     }
-    public ComponentObject (string type, IntVector position) {
+    public ComponentObject (string type, Point position) {
         this.type = type;
         this.position = position;
 
-        id = ComponentConstants.getComponentID (type);
-    }
+        this.id = ComponentConstants.getComponentID (type);
 
+        // connected_components = new List<ComponentObject>();
+        // for (int i = 0; i < connectors.Length; i++) {
+        //     connected_components.Add(connectors[i]);
+        // }
+    }
 }
+
+/* Could child class structural components to clean logic, but isn't too messy at the moment */
+// public class StructuralObject : ComponentObject
+// {
+//     List<ComponentObject> connected_components;
+
+//     public StructuralObject() { }
+//     public StructuralObject(string type, Point position)
+//     {
+//         this.type = type;
+//         this.position = position;
+
+//         id = ComponentConstants.getComponentID(type);
+//     }
+// }
