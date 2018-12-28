@@ -61,14 +61,41 @@ public class ShipObject {
         components.Remove (component);
 
         updatePoints ();
-        if (ComponentConstants.isStructural (component.id)) {
-            for (int i = 0; i < components.Count; i++) {
-        //     if (!isPlaceable (components[i].id, components[i].position)) {
-        //         components.Remove (components[i]);
-        //         i--;
-        //         updatePoints ();
-            }
-        }
+
+        //for structural
+        // set all components to not-connected
+        // recursicely iterate across componets, if connected, set to connected
+        // end
+        // for all not-connected, remove component
+        // update points
+
+        //for non structural, remove if not over any mount points
+
+        // if (ComponentConstants.isStructural (component.id)) {
+        //     for (int i = 0; i < components.Count; i++) {
+        //         if (ComponentConstants.isStructural (components[i].id)) {
+        //             if (!isPlaceable (components[i].id, components[i].position)) {
+        //                 remove (components[i]);
+        //                 i--;
+        //             }
+        //         }
+        //     }
+
+        // for (int i = 0; i < components.Count; i++) {
+        //     if (!ComponentConstants.isStructural (components[i].id)) {
+        //         if (!isPlaceable (components[i].id, components[i].position)) {
+        //             remove (components[i]);
+        //             i--;
+        //         }
+        //     }
+        // }
+        //}
+        updatePoints ();
+    }
+
+    public bool isConnected (ComponentObject component) {
+
+        return false;
     }
 
     public void updatePoints () {
@@ -79,10 +106,10 @@ public class ShipObject {
         for (int i = 0; i < components.Count; i++) {
 
             Point[] component_mount_points = ComponentConstants.getComponentMountPoints (components[i].id);
-           
+
             for (int j = 0; j < component_mount_points.Length; j++) {
-            
-                Point potential_mount_point = components[i].position + component_mount_points[j];                
+
+                Point potential_mount_point = components[i].position + component_mount_points[j];
                 /* Structural Components provide mounting points, unless two structural components overlap */
                 if (ComponentConstants.isStructural (components[i].id)) {
                     bool is_unique = true;
@@ -96,7 +123,7 @@ public class ShipObject {
                     if (is_unique) {
                         mount_points.Add (potential_mount_point);
                     }
-                /* Non-structural components only block placement of other components */
+                    /* Non-structural components only block placement of other components */
                 } else {
                     occupied_points.Add (potential_mount_point);
                 }

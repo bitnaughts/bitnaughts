@@ -115,21 +115,21 @@ public class ComponentObject {
     public string type;
     public short id;
 
-    public GameObject obj;
+    public ComponentEditor obj;
 
     public Point position;
 
     //If connected_at.Count == 0, disconnected from a ship
-    public List<Point> connected_at; 
 
 
 
     // List<ComponentObject> connected_components;
 
     public ComponentObject() { }
-    public ComponentObject(string type) {
+    public ComponentObject(string type, ComponentEditor obj) {
         this.type = type;
         this.id = ComponentConstants.getComponentID (type);
+        this.obj = obj;
     }
     public ComponentObject (string type, Point position) {
         this.type = type;

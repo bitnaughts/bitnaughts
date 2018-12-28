@@ -16,7 +16,7 @@ public class ComponentEditor : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		component = new ComponentObject (type);
+		component = new ComponentObject (type, this);
 		//change this via UI (if double-click on a owned ship, set "ship" to that ship...)
 		//ship = GameObject.Find ("Ship").GetComponent<ShipEditor> ().ship;
 
