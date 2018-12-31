@@ -58,8 +58,13 @@ public class ShipObject {
     }
 
     public void remove (ComponentObject component) {
+        for (int i = 0; i < components.Count; i++) {
+            if (components[i].disconnectComponent(component)) {
+                remove (components[i]);
+            }
+        }
+        component.connected_components = new List<ComponentObject>();
         components.Remove (component);
-
         updatePoints ();
 
         //for structural
@@ -105,6 +110,7 @@ public class ShipObject {
 
         for (int i = 0; i < components.Count; i++) {
 
+            components[i].connected_components = new List<ComponentObject>();
             Point[] component_mount_points = ComponentConstants.getComponentMountPoints (components[i].id);
 
             for (int j = 0; j < component_mount_points.Length; j++) {
@@ -115,7 +121,11 @@ public class ShipObject {
                     bool is_unique = true;
                     for (int k = 0; k < mount_points.Count; k++) {
                         if (mount_points[k] == potential_mount_point) {
-                            //occupied_points.Add (potential_mount_point);
+                            /* Two structural components are connected! */
+                            ComponentObject responsible_component = findResponsibleComponent (mount_points[k]);
+                            components[i].addConnectedComponent (responsible_component);
+
+                            occupied_points.Add (potential_mount_point);
                             is_unique = false;
                             break;
                         }
@@ -129,13 +139,33 @@ public class ShipObject {
                 }
             }
         }
+        for (int i = 0; i < components.Count; i++) {
+            if (components[i].id != 0 && components[i].connected_components.Count == 0) {
+                remove(components[i]);
+            }
+        }
+    }
+
+    public ComponentObject findResponsibleComponent (Point point) {
+        for (int i = 0; i < components.Count; i++) {
+            Point[] component_mount_points = ComponentConstants.getComponentMountPoints (components[i].id);
+            for (int j = 0; j < component_mount_points.Length; j++) {
+                if (point == components[i].position + component_mount_points[j]) {
+                    return components[i];
+                }
+            }
+        }
+        return null;
     }
 
     public override string ToString () {
         updatePoints ();
         string output = "Ship(" + name + "):\n";
         for (int i = 0; i < components.Count; i++) {
-            output += "-> Component(" + components[i].id + ", " + components[i].position + "): " + isPlaceable (components[i]) + "\n";
+            output += "-> Component(" + components[i].id + ", " + components[i].position + "): \n";
+            for (int j = 0; j < components[i].connected_components.Count; j++) {
+                output += "-> -> ConnectedTo(" + components[i].connected_components[j].position + "): \n";
+            }
         }
         return output;
     }

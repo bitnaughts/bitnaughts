@@ -29,31 +29,31 @@ public class Point {
 
 public static class ComponentConstants {
     /* Command module of a ship */
-    public const string BRIDGE_NAME = "bridge"; 
+    public const string BRIDGE_NAME = "bridge";
     public static short BRIDGE_ID = 0;
     /* Simple spanning structure */
-    public const string STRUT_NAME = "strut"; 
+    public const string STRUT_NAME = "strut";
     public static short STRUT_ID = 1;
     /* Large spanning structure */
-    public const string GIRDER_NAME = "girder"; 
+    public const string GIRDER_NAME = "girder";
     public static short GIRDER_ID = 2;
     /* Tubular component, great for lauching things */
-    public const string SILO_NAME = "silo"; 
+    public const string SILO_NAME = "silo";
     public static short SILO_ID = 3;
     /* Storage box */
-    public const string DEPOT_NAME = "depot"; 
+    public const string DEPOT_NAME = "depot";
     public static short DEPOT_ID = 4;
     /* Large storage box, great for mounting things on */
-    public const string CACHE_NAME = "cache"; 
+    public const string CACHE_NAME = "cache";
     public static short CACHE_ID = 5;
     /* Extra large box, great for misc */
-    public const string BAY_NAME = "bay"; 
+    public const string BAY_NAME = "bay";
     public static short BAY_ID = 6;
     /* Main thrust-providing system (RCS being considered)*/
-    public const string ENGINE_NAME = "engine"; 
+    public const string ENGINE_NAME = "engine";
     public static short ENGINE_ID = 7;
     /* Where the Object supports construction off of itself */
-    public static Point[][] MOUNT_POINTS = { 
+    public static Point[][] MOUNT_POINTS = {
         /* BRIDGE */
         new Point[] { new Point (-1, -2), new Point (0, 2), new Point (0, -2), new Point (1, -2) },
         /* STRUT */
@@ -70,7 +70,7 @@ public static class ComponentConstants {
         new Point[] { new Point (-1, 2), new Point (-1, 1), new Point (-1, 0), new Point (-1, -1), new Point (-1, -2), new Point (0, -2), new Point (0, 2), new Point (0, 1), new Point (0, 0), new Point (0, -1), new Point (1, 2), new Point (1, 1), new Point (1, 0), new Point (1, -1), new Point (1, -2) },
         /* ENGINE */
         new Point[] { new Point (-1, 0), new Point (0, 0), new Point (1, 0), new Point (-1, 1), new Point (0, 1), new Point (1, 1) }
-    };    
+    };
 
     /* String to ID */
     public static short getComponentID (string type) {
@@ -119,28 +119,46 @@ public class ComponentObject {
 
     public Point position;
 
+
     //If connected_at.Count == 0, disconnected from a ship
 
+    public List<ComponentObject> connected_components;
 
-
-    // List<ComponentObject> connected_components;
-
-    public ComponentObject() { }
-    public ComponentObject(string type, ComponentEditor obj) {
+    public ComponentObject () { }
+    public ComponentObject (string type, ComponentEditor obj) {
         this.type = type;
         this.id = ComponentConstants.getComponentID (type);
         this.obj = obj;
+        connected_components = new List<ComponentObject> ();
     }
     public ComponentObject (string type, Point position) {
         this.type = type;
         this.position = position;
 
         this.id = ComponentConstants.getComponentID (type);
+        connected_components = new List<ComponentObject> ();
 
         // connected_components = new List<ComponentObject>();
         // for (int i = 0; i < connectors.Length; i++) {
         //     connected_components.Add(connectors[i]);
         // }
+    }
+
+    public void addConnectedComponent (ComponentObject component) {
+        if (connected_components.Contains (component) == false) {
+            connected_components.Add (component);
+        }
+    }
+
+    public bool disconnectComponent (ComponentObject component) {
+        if (connected_components.Contains (component)) {
+            connected_components.Remove (component);
+            return connected_components.Count == 0; //if no other connected components, disconnect is TRUE
+        }
+        return false;
+    }
+    public bool isConnected () {
+        return connected_components.Count > 0;
     }
 }
 

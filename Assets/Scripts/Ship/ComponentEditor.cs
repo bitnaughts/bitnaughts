@@ -14,15 +14,21 @@ public class ComponentEditor : MonoBehaviour {
 
 	bool clickedOverComponent = false;
 
+	Vector2 drift = new Vector2(0,0);
+
 	// Use this for initialization
 	void Start () {
 		component = new ComponentObject (type, this);
+		if (type == "bridge") {
+
+		}
+		else {
+			drift = new Vector2(Random.value * .005f - .0025f, Random.value * .005f - .0025f);
+		}
 		//change this via UI (if double-click on a owned ship, set "ship" to that ship...)
 		//ship = GameObject.Find ("Ship").GetComponent<ShipEditor> ().ship;
-
 	}
 
-	// Update is called once per frame
 	void Update () {
 		Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		if (Input.GetMouseButtonUp (0)) {
@@ -40,12 +46,19 @@ public class ComponentEditor : MonoBehaviour {
 			this.transform.position = position;
 			if (ShipManager.getSelectedShip ().isPlaceable (type, new Point ((short) position.x, (short) position.y))) {
 				this.transform.position = new Vector2 ((int) position.x, (int) position.y);
-				this.GetComponent<SpriteRenderer> ().color = new Color (255, 255, 255);
-			} else this.GetComponent<SpriteRenderer> ().color = new Color (255, 0, 0);
+			}
+		}
+		else {
+				if (!component.isConnected ()) {
+					this.transform.Translate(drift);
+				}
 		}
 
-		if (ship != null) {
+		if (component.isConnected ()) {
 			this.GetComponent<SpriteRenderer> ().color = new Color (0, 255, 0);
+		}
+		else {
+			this.GetComponent<SpriteRenderer> ().color = new Color (255, 255, 255);
 		}
 	}
 	void OnMouseEnter () {
