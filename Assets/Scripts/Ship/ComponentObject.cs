@@ -73,6 +73,25 @@ public static class ComponentConstants {
         new Point[] { new Point (-1, 0), new Point (0, 0), new Point (1, 0), new Point (-1, 1), new Point (0, 1), new Point (1, 1) }
     };
 
+     public static short[] WEIGHT = {
+        /* BRIDGE */
+        5,
+        /* STRUT */
+        1,
+        /* GIRDER */
+        3,
+        /* SILO */
+        1,
+        /* DEPOT */
+        2,
+        /* CACHE */
+        5,
+        /* BAY */
+        7,
+        /* ENGINE */
+        5
+    };
+
     /* String to ID */
     public static short getComponentID (string type) {
         switch (type) {
@@ -104,6 +123,12 @@ public static class ComponentConstants {
         return MOUNT_POINTS[type];
     }
 
+    public static short getWeight (string type) {
+        return getWeight (getComponentID (type));
+    }
+    public static short getWeight (short type) {
+        return WEIGHT[type];
+    }
     public static bool isStructural (string type) {
         return isStructural (getComponentID (type));
     }
@@ -119,7 +144,6 @@ public class ComponentObject {
     public ComponentEditor obj;
 
     public Point position;
-
 
     //If connected_at.Count == 0, disconnected from a ship
 

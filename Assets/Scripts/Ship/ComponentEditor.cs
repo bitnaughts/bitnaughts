@@ -78,13 +78,13 @@ public class ComponentEditor : MonoBehaviour {
 			if (type == "engine") {
 				this.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
                 ParticleSystem.EmissionModule emitter = this.transform.GetChild(0).GetComponent<ParticleSystem>().emission;
-				emitter.rateOverTime = Mathf.Abs(Input.GetAxis("Vertical") * 100f); 
+				emitter.rateOverTime = Mathf.Abs(Input.GetAxis("Vertical") * 300f); 
 				//this.transform.GetChild(0).GetComponent<ParticleSystem>().emission = emitter;
 			}
 
 		} else {
 			if (type == "engine") {
-				this.transform.GetChild(0).GetComponent<ParticleSystem>().Pause();
+				this.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
 			}
 			this.GetComponent<SpriteRenderer> ().color = new Color (255, 255, 255);
 			this.transform.parent = ShipManager.holder.transform;

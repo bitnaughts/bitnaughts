@@ -10,6 +10,9 @@ public class ShipObject {
 
     public GameObject ship;
 
+    public int thrust;
+    public int weight;
+
     // public List<Point> attach_points;
     public List<Point> mount_points;
     public List<Point> occupied_points;
@@ -20,7 +23,7 @@ public class ShipObject {
         this.components = new List<ComponentObject> ();
         this.occupied_points = new List<Point> ();
         this.components.Add (new ComponentObject ("bridge", new Point (0, 0)));
-        updatePoints ();
+        update ();
     }
 
     public bool isPlaceable (ComponentObject component) {
@@ -53,11 +56,9 @@ public class ShipObject {
     }
 
     public void place (ComponentObject component, Point position) {
-        // place(ComponentConstants.getComponentID (type), position, ship);\\
         component.position = position;
         components.Add (component);
-        // findOccupiedPoints (id, position);
-        updatePoints ();
+        update ();
     }
 
     public void remove (ComponentObject component) {
@@ -68,41 +69,26 @@ public class ShipObject {
         }
         component.connected_components = new List<ComponentObject> ();
         components.Remove (component);
-        updatePoints ();
-
-        //for structural
-        // set all components to not-connected
-        // recursicely iterate across componets, if connected, set to connected
-        // end
-        // for all not-connected, remove component
-        // update points
-
-        //for non structural, remove if not over any mount points
-
-        // if (ComponentConstants.isStructural (component.id)) {
-        //     for (int i = 0; i < components.Count; i++) {
-        //         if (ComponentConstants.isStructural (components[i].id)) {
-        //             if (!isPlaceable (components[i].id, components[i].position)) {
-        //                 remove (components[i]);
-        //                 i--;
-        //             }
-        //         }
-        //     }
-
-        // for (int i = 0; i < components.Count; i++) {
-        //     if (!ComponentConstants.isStructural (components[i].id)) {
-        //         if (!isPlaceable (components[i].id, components[i].position)) {
-        //             remove (components[i]);
-        //             i--;
-        //         }
-        //     }
-        // }
-        //}
+        update ();
     }
 
     public bool isConnected (ComponentObject component) {
 
         return false;
+    }
+
+    public void update() {
+        updatePoints();
+        updateStats();
+    }
+
+    public void updateStats() {
+        weight = 0;
+        thrust = 0;
+        for (int i = 0; i < components.Count; i++) {
+            weight += ComponentConstants.getWeight(components[i].id);
+            if (components[i].type == "engine") thrust += 20;
+        }
     }
 
     public void updatePoints () {
@@ -119,7 +105,6 @@ public class ShipObject {
 
                 Point potential_mount_point = components[i].position + component_mount_points[j];
                 /* Structural Components provide mounting points, unless two structural components overlap */
-                //if (ComponentConstants.isStructural (components[i].id)) {
                 bool is_unique = true;
                 for (int k = 0; k < mount_points.Count; k++) {
                     if (mount_points[k] == potential_mount_point) {
@@ -142,7 +127,7 @@ public class ShipObject {
 
         for (int i = 0; i < components.Count; i++) {
             if (components[i].id != 0 && components[i].connected_components.Count == 0) {
-                if (ComponentConstants.isStructural (components[i].id)) remove (components[i]);
+                remove (components[i]);
             }
         }
     }
@@ -160,7 +145,6 @@ public class ShipObject {
     }
 
     public override string ToString () {
-        //updatePoints ();
         string output = "Ship(" + name + "):\n";
         for (int i = 0; i < components.Count; i++) {
             output += "-> Component(" + components[i].id + ", " + components[i].position + "): \n";
