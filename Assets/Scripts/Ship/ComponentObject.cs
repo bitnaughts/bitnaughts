@@ -13,6 +13,7 @@ public class Point {
     public static Point operator + (Point left, Point right) {
         return new Point ((short) (left.x + right.x), (short) (left.y + right.y));
     }
+
     public static Point operator - (Point left, Point right) {
         return new Point ((short) (left.x - right.x), (short) (left.y - right.y));
     }

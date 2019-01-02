@@ -29,23 +29,36 @@ public class ComponentEditor : MonoBehaviour {
 	}
 
 	void Update () {
-		Camera.main.ScreenToWorldPoint (Input.mousePosition);
+		// Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		if (Input.GetMouseButtonUp (0)) {
 			if (clickedOverComponent == true) {
+				this.transform.parent = ShipManager.getSelectedShip ().ship.transform;
 				//for all ShipManager.getSelectedShip()s
-				if (ShipManager.getSelectedShip ().isPlaceable (type, new Point ((short) this.transform.position.x, (short) this.transform.position.y))) {
-					ShipManager.getSelectedShip ().place (component, new Point ((short) this.transform.position.x, (short) this.transform.position.y));
+				if (ShipManager.getSelectedShip ().isPlaceable (type, new Point ((short) this.transform.localPosition.x, (short) this.transform.localPosition.y))) {
+					ShipManager.getSelectedShip ().place (component, new Point ((short) this.transform.localPosition.x, (short) this.transform.localPosition.y));
 					ship = ShipManager.getSelectedShip ();
-				} 
+				//	gameObject.AddComponent<BoxCollider2D>();
+				} else {
+					// gameObject.AddComponent<SphereCollider>();
+					this.transform.parent = ShipManager.holder.transform;
+			//		gameObject.AddComponent<BoxCollider2D>();
+				}
 			}
 			clickedOverComponent = false;
 		}
 		if (clickedOverComponent && Input.GetMouseButton (0)) {
+			Destroy(this.GetComponent<Rigidbody2D>());
+			//Destroy(this.GetComponent<BoxCollider2D>());
+			this.transform.parent = ShipManager.getSelectedShip ().ship.transform;
+			this.transform.rotation = ShipManager.getSelectedShip ().ship.transform.rotation;
 
 			Vector2 position = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			this.transform.position = position;
+
+			position = this.transform.localPosition; //addVectors (position, ShipManager.getSelectedShip ().ship.transform.position);
+
 			if (ShipManager.getSelectedShip ().isPlaceable (type, new Point ((short) position.x, (short) position.y))) {
-				this.transform.position = new Vector2 ((int) position.x, (int) position.y);
+				this.transform.localPosition = new Vector2 ((int) position.x, (int) position.y);
 			}
 		} else {
 			if (!component.isConnected ()) {
@@ -55,12 +68,31 @@ public class ComponentEditor : MonoBehaviour {
 
 		if (type == "bridge" || component.isConnected ()) {
 			this.GetComponent<SpriteRenderer> ().color = new Color (0, 255, 0);
-			this.transform.parent = ship.ship.transform;
-			this.transform.rotation = ship.ship.transform.rotation; 
+			if (ship != null) {
+				this.transform.parent = ship.ship.transform;
+				this.transform.rotation = ship.ship.transform.rotation;
+				this.transform.localPosition = new Vector2 (component.position.x, component.position.y);
+				
+				//this.GetComponent<Rigidbody2D> ().simulated = false;
+			}
+			if (type == "engine") {
+				this.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
+                ParticleSystem.EmissionModule emitter = this.transform.GetChild(0).GetComponent<ParticleSystem>().emission;
+				emitter.rateOverTime = Mathf.Abs(Input.GetAxis("Vertical") * 100f); 
+				//this.transform.GetChild(0).GetComponent<ParticleSystem>().emission = emitter;
+			}
 
 		} else {
+			if (type == "engine") {
+				this.transform.GetChild(0).GetComponent<ParticleSystem>().Pause();
+			}
 			this.GetComponent<SpriteRenderer> ().color = new Color (255, 255, 255);
 			this.transform.parent = ShipManager.holder.transform;
+			if (this.GetComponent<Rigidbody2D>() == null) 
+			{
+				gameObject.AddComponent<Rigidbody2D>();
+			}
+
 		}
 	}
 	void OnMouseEnter () {
@@ -92,4 +124,7 @@ public class ComponentEditor : MonoBehaviour {
 		}
 	}
 
+	public Vector2 addVectors (Vector2 left, Vector2 right) {
+		return new Vector2 (left.x + right.x, left.y + right.y);
+	}
 }
