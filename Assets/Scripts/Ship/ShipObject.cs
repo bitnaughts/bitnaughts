@@ -8,12 +8,15 @@ public class ShipObject {
 
     public List<ComponentObject> components;
 
+    public GameObject ship;
+
     // public List<Point> attach_points;
     public List<Point> mount_points;
     public List<Point> occupied_points;
 
-    public ShipObject (string name) {
+    public ShipObject (string name, GameObject ship) {
         this.name = name;
+        this.ship = ship;
         this.components = new List<ComponentObject> ();
         this.occupied_points = new List<Point> ();
         this.components.Add (new ComponentObject ("bridge", new Point (0, 0)));
@@ -59,11 +62,11 @@ public class ShipObject {
 
     public void remove (ComponentObject component) {
         for (int i = 0; i < components.Count; i++) {
-            if (components[i].disconnectComponent(component)) {
+            if (components[i].disconnectComponent (component)) {
                 remove (components[i]);
             }
         }
-        component.connected_components = new List<ComponentObject>();
+        component.connected_components = new List<ComponentObject> ();
         components.Remove (component);
         updatePoints ();
 
@@ -95,7 +98,6 @@ public class ShipObject {
         //     }
         // }
         //}
-        updatePoints ();
     }
 
     public bool isConnected (ComponentObject component) {
@@ -110,38 +112,37 @@ public class ShipObject {
 
         for (int i = 0; i < components.Count; i++) {
 
-            components[i].connected_components = new List<ComponentObject>();
+            components[i].connected_components = new List<ComponentObject> ();
             Point[] component_mount_points = ComponentConstants.getComponentMountPoints (components[i].id);
 
             for (int j = 0; j < component_mount_points.Length; j++) {
 
                 Point potential_mount_point = components[i].position + component_mount_points[j];
                 /* Structural Components provide mounting points, unless two structural components overlap */
-                if (ComponentConstants.isStructural (components[i].id)) {
-                    bool is_unique = true;
-                    for (int k = 0; k < mount_points.Count; k++) {
-                        if (mount_points[k] == potential_mount_point) {
-                            /* Two structural components are connected! */
-                            ComponentObject responsible_component = findResponsibleComponent (mount_points[k]);
-                            components[i].addConnectedComponent (responsible_component);
+                //if (ComponentConstants.isStructural (components[i].id)) {
+                bool is_unique = true;
+                for (int k = 0; k < mount_points.Count; k++) {
+                    if (mount_points[k] == potential_mount_point) {
+                        /* Two structural components are connected! */
+                        ComponentObject responsible_component = findResponsibleComponent (mount_points[k]);
+                        components[i].addConnectedComponent (responsible_component);
 
-                            occupied_points.Add (potential_mount_point);
-                            is_unique = false;
-                            break;
-                        }
+                        occupied_points.Add (potential_mount_point);
+                        is_unique = false;
+                        break;
                     }
-                    if (is_unique) {
-                        mount_points.Add (potential_mount_point);
-                    }
-                    /* Non-structural components only block placement of other components */
-                } else {
-                    occupied_points.Add (potential_mount_point);
                 }
+                if (ComponentConstants.isStructural (components[i].id) && is_unique) {
+                    mount_points.Add (potential_mount_point);
+                }
+                /* Non-structural components only block placement of other components */
+                else occupied_points.Add (potential_mount_point);
             }
         }
+
         for (int i = 0; i < components.Count; i++) {
             if (components[i].id != 0 && components[i].connected_components.Count == 0) {
-                remove(components[i]);
+                if (ComponentConstants.isStructural (components[i].id)) remove (components[i]);
             }
         }
     }
@@ -159,7 +160,7 @@ public class ShipObject {
     }
 
     public override string ToString () {
-        updatePoints ();
+        //updatePoints ();
         string output = "Ship(" + name + "):\n";
         for (int i = 0; i < components.Count; i++) {
             output += "-> Component(" + components[i].id + ", " + components[i].position + "): \n";

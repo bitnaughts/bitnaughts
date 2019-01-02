@@ -12,7 +12,7 @@ public class ShipEditor : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () { 
-        ship = new ShipObject("tester");
+        ship = new ShipObject("tester", this.transform.gameObject);
 
     }
 	

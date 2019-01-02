@@ -14,16 +14,15 @@ public class ComponentEditor : MonoBehaviour {
 
 	bool clickedOverComponent = false;
 
-	Vector2 drift = new Vector2(0,0);
+	Vector2 drift = new Vector2 (0, 0);
 
 	// Use this for initialization
 	void Start () {
 		component = new ComponentObject (type, this);
 		if (type == "bridge") {
 
-		}
-		else {
-			drift = new Vector2(Random.value * .005f - .0025f, Random.value * .005f - .0025f);
+		} else {
+			drift = new Vector2 (Random.value * .005f - .0025f, Random.value * .005f - .0025f);
 		}
 		//change this via UI (if double-click on a owned ship, set "ship" to that ship...)
 		//ship = GameObject.Find ("Ship").GetComponent<ShipEditor> ().ship;
@@ -37,28 +36,31 @@ public class ComponentEditor : MonoBehaviour {
 				if (ShipManager.getSelectedShip ().isPlaceable (type, new Point ((short) this.transform.position.x, (short) this.transform.position.y))) {
 					ShipManager.getSelectedShip ().place (component, new Point ((short) this.transform.position.x, (short) this.transform.position.y));
 					ship = ShipManager.getSelectedShip ();
-				}
+				} 
 			}
 			clickedOverComponent = false;
 		}
 		if (clickedOverComponent && Input.GetMouseButton (0)) {
+
 			Vector2 position = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			this.transform.position = position;
 			if (ShipManager.getSelectedShip ().isPlaceable (type, new Point ((short) position.x, (short) position.y))) {
 				this.transform.position = new Vector2 ((int) position.x, (int) position.y);
 			}
-		}
-		else {
-				if (!component.isConnected ()) {
-					this.transform.Translate(drift);
-				}
+		} else {
+			if (!component.isConnected ()) {
+				this.transform.Translate (drift);
+			}
 		}
 
-		if (component.isConnected ()) {
+		if (type == "bridge" || component.isConnected ()) {
 			this.GetComponent<SpriteRenderer> ().color = new Color (0, 255, 0);
-		}
-		else {
+			this.transform.parent = ship.ship.transform;
+			this.transform.rotation = ship.ship.transform.rotation; 
+
+		} else {
 			this.GetComponent<SpriteRenderer> ().color = new Color (255, 255, 255);
+			this.transform.parent = ShipManager.holder.transform;
 		}
 	}
 	void OnMouseEnter () {
@@ -80,7 +82,6 @@ public class ComponentEditor : MonoBehaviour {
 				ship.remove (component);
 				ship = null;
 			}
-
 		}
 
 	}
