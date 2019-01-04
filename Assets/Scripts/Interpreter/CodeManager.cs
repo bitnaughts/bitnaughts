@@ -29,7 +29,7 @@ public class CodeManager : MonoBehaviour {
     }
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
     public void Compiler_compile(string line)
-    {
+    { /*
         //Master Switch
         switch (line)
         {
@@ -55,6 +55,18 @@ public class CodeManager : MonoBehaviour {
                 switch (line)
                 {
                     case "isFunction":
+                        string function = "";
+                        string[] parameter;
+                        switch (function) {
+                            case "Abs":
+                                return Mathf.Abs(parameter[0]);
+                            case "Round":
+                                return Mathf.Round(parameter[0]);
+                            case "Floor":
+                                return Mathf.Floor(parameter[0]);
+                            case "Ceil":
+                                return Mathf.Ceil(parameter[0]);
+                        }
                         // Fire();
                         // Fire(10);
                         // Subroutines...
