@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class ScriptObject : MonoBehaviour {
+public class ScriptObject {
 
-	// Use this for initialization
-	void Start () {
-		
+	short pointer; //tracks what line is being processed
+	Stack<short> backlog; 
+	string[] script;
+
+	public ScriptObject (string text) {
+		this.script = text.Split('\n');
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	public ScriptObject (string[] script) {
+		this.script = script;
 	}
 }
