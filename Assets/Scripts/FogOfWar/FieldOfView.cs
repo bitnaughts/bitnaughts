@@ -77,7 +77,7 @@ public class FieldOfView : MonoBehaviour
         for (int i = 0; i <= stepCount; i++)
         {
                                             /////Z? used to be y
-            float angle = transform.eulerAngles.y - viewAngle / 2 + stepAngleSize * i;
+            float angle = transform.eulerAngles.z - viewAngle / 2 + stepAngleSize * i;
             ViewCastInfo newViewCast = ViewCast(angle);
 
             if (i > 0)
@@ -110,7 +110,7 @@ public class FieldOfView : MonoBehaviour
         vertices[0] = Vector3.zero;
         for (int i = 0; i < vertexCount - 1; i++)
         {
-            vertices[i + 1] = transform.InverseTransformPoint(viewPoints[i]) + Vector3.forward * maskCutawayDst;
+            vertices[i + 1] = transform.InverseTransformPoint(viewPoints[i]) + Vector3.up * maskCutawayDst;
 
             if (i < vertexCount - 2)
             {
