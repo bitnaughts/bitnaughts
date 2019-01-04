@@ -22,7 +22,7 @@ public class ComponentEditor : MonoBehaviour {
 		if (type == "bridge") {
 
 		} else {
-			drift = new Vector2 (Random.value * .005f - .0025f, Random.value * .005f - .0025f);
+			// drift = new Vector2 (Random.value * .005f - .0025f, Random.value * .005f - .0025f);
 		}
 		//change this via UI (if double-click on a owned ship, set "ship" to that ship...)
 		//ship = GameObject.Find ("Ship").GetComponent<ShipEditor> ().ship;
@@ -67,7 +67,7 @@ public class ComponentEditor : MonoBehaviour {
 		}
 
 		if (type == "bridge" || component.isConnected ()) {
-			this.GetComponent<SpriteRenderer> ().color = new Color (0, 255, 0);
+			//this.GetComponent<SpriteRenderer> ().color = new Color (0, 255, 0);
 			if (ship != null) {
 				this.transform.parent = ship.ship.transform;
 				this.transform.rotation = ship.ship.transform.rotation;
@@ -84,9 +84,9 @@ public class ComponentEditor : MonoBehaviour {
 
 		} else {
 			if (type == "engine") {
-				this.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
+				// this.transform.GetChild(0).GetComponent<ParticleSystem>().Stop();
 			}
-			this.GetComponent<SpriteRenderer> ().color = new Color (255, 255, 255);
+			//this.GetComponent<SpriteRenderer> ().color = new Color (255, 255, 255);
 			this.transform.parent = ShipManager.holder.transform;
 			if (this.GetComponent<Rigidbody2D>() == null) 
 			{

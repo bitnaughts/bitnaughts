@@ -13,7 +13,7 @@ public class CameraManager : MonoBehaviour {
 	void Update () {
 		if (ShipManager.getSelectedShip () != null) {
 
-			this.transform.position = new Vector3 (ShipManager.getSelectedShip ().ship.transform.position.x, ShipManager.getSelectedShip ().ship.transform.position.y, -20);
+			//this.transform.position = new Vector3 (ShipManager.getSelectedShip ().ship.transform.position.x, ShipManager.getSelectedShip ().ship.transform.position.y, -20);
 			this.GetComponent<Camera> ().orthographicSize -= Input.GetAxis ("Mouse ScrollWheel");
 		}
 	}
