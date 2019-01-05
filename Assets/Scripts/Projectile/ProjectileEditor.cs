@@ -13,7 +13,7 @@ public class ProjectileEditor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		this.transform.Translate (new Vector2 (0, Input.GetAxis ("Vertical") * .05f));
+		this.transform.Translate (new Vector2 (0, .5f));
 		this.transform.Rotate (new Vector3 (0, 0, -Input.GetAxis ("Horizontal")));
     }
 }

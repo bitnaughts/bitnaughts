@@ -75,6 +75,11 @@ public class ComponentEditor : MonoBehaviour {
 				
 				//this.GetComponent<Rigidbody2D> ().simulated = false;
 			}
+			if (type == "silo") {
+				if (Input.GetKey(KeyCode.E)) {
+					Instantiate(Resources.Load("missile") as GameObject, this.transform.position,  this.transform.rotation);
+				}
+			}
 			if (type == "engine") {
 				this.transform.GetChild(0).GetComponent<ParticleSystem>().Play();
                 ParticleSystem.EmissionModule emitter = this.transform.GetChild(0).GetComponent<ParticleSystem>().emission;
