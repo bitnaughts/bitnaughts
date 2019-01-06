@@ -68,9 +68,14 @@ public class Interpreter {
         LESS_THAN = 12,
         LESS_THAN_EQUAL = 13,
         AND = 14,
-        OR = 15;
+        OR = 15,
+        MODULUS = 16,
+        TIMES = 17,
+        DIVIDE = 18,
+        ADD = 19,
+        SUBTRACT = 20;
 
-    public static string[] OPERATORS = { "=", "++", "--", "+=", "-=", "*=", "/=", "%=", "==", "!=", ">", ">=", "<", "<=", "&&", "||" };
+    public static string[] OPERATORS = { "=", "++", "--", "+=", "-=", "*=", "/=", "%=", "==", "!=", ">", ">=", "<", "<=", "&&", "||", "%", "*", "/", "+", "-" };
 
     public static string[] ARITHMETIC_OPERATORS = { "%", "*", "/", "+", "-" };
     private GameObject obj;
@@ -168,54 +173,88 @@ public class Interpreter {
                 }
             }
         }
-
-        Stack<string> operations = new Stack<string> ();
-
-        string output;
-        for (int i = 0; i < parts.Length; i++) {
-            output += parts[i];
-        }
-        return output;
+        return parts[0];
     }
 
     public string evaluate (string left, string arithmetic_operator, string right) {
         /* e.g. ["12", "*", "4"] ==> ["48"] */
-        string left_type = getVariableType (left), right_type = getVariableType (right);
-        switch (left_type) {
-            case VARIABLE_TYPES[BOOLEAN]:
-                switch (arithmetic_operator) {
-                    case OPERATORS[EQUAL_TO]:
-                        return (bool.Parse (left) == bool.Parse (right)).ToString ();
-                    case OPERATORS[AND]:
-                        return (bool.Parse (left) && bool.Parse (right)).ToString ();
-                    case OPERATORS[OR]:
-                        return (bool.Parse (left) || bool.Parse (right)).ToString ();
-                }
-                break;
-            case VARIABLE_TYPES[INTEGER]:
-                break;
-            case VARIABLE_TYPES[FLOAT]:
-                break;
-            case VARIABLE_TYPES[STRING]:
-                break;
-        }
+        string left_type = getVariableType (left, true), right_type = getVariableType (right, false);
         if (left_type == right_type) {
-
+            switch (left_type) {
+                case VARIABLE_TYPES[BOOLEAN]:
+                    return evaulateBooleans (left_bool, arithmetic_operator, right_bool) + "";
+                case VARIABLE_TYPES[INTEGER]:
+                    return evaluateIntegers (left_int, arithmetic_operator, right_int) + "";
+                case VARIABLE_TYPES[FLOAT]:
+                    return evaluateFloats (left_float, arithmetic_operator, right_float) + "";
+                    //...
+                case VARIABLE_TYPES[STRING]:
+                    return evaulateString (left_bool, arithmetic_operator, right_bool) + "";
+            }
         }
+
     }
+    public bool evaulateBooleans (bool left, string arithmetic_operator, bool right) {
+        switch (arithmetic_operator) {
+            case OPERATORS[EQUAL_TO]:
+                return left == right;
+            case OPERATORS[AND]:
+                return left && right;
+            case OPERATORS[OR]:
+                return left || right;
+        }
+        return false;
+    }
+    public int evaluateIntegers (int left, string arithmetic_operator, int right) {
+        switch (arithmetic_operator) {
+            case OPERATORS[MODULUS]:
+                return (left % right).ToString ();
+            case OPERATORS[TIMES]:
+                return (left * right).ToString ();
+            case OPERATORS[DIVIDE]:
+                return (left / right).ToString ();
+            case OPERATORS[ADD]:
+                return (left + right).ToString ();
+            case OPERATORS[SUBTRACT]:
+                return (left - right).ToString ();
+        }
+        return 0;
+    }
+    public float evaluateFloats (float left, string arithmetic_operator, float right) {
+        switch (arithmetic_operator) {
+            case OPERATORS[MODULUS]:
+                return (left % right).ToString ();
+            case OPERATORS[TIMES]:
+                return (left * right).ToString ();
+            case OPERATORS[DIVIDE]:
+                return (left / right).ToString ();
+            case OPERATORS[ADD]:
+                return (left + right).ToString ();
+            case OPERATORS[SUBTRACT]:
+                return (left - right).ToString ();
+        }
+        break;
+    }
+    public string evaulateString (string left, string arithmetic_operator, string right) {
+        switch (arithmetic_operator) {
+            case OPERATORS[ADD]:
+                return (left + right).ToString ();
+        }
+        break;
+    }
+
     public string getVariableType (string input, bool left) {
         if (left) {
+            if (bool.TryParse (input, left_bool)) return VARIABLE_TYPES[BOOLEAN];
             if (int.TryParse (input, left_int)) return VARIABLE_TYPES[INTEGER];
             if (float.TryParse (input, left_float)) return VARIABLE_TYPES[FLOAT];
-            if (bool.TryParse (input, left_bool)) return VARIABLE_TYPES[BOOLEAN];
             //...
         } else {
+            if (bool.TryParse (input, right_bool)) return VARIABLE_TYPES[BOOLEAN];
             if (int.TryParse (input, right_int)) return VARIABLE_TYPES[INTEGER];
             if (float.TryParse (input, right_float)) return VARIABLE_TYPES[FLOAT];
-            if (bool.TryParse (input, right_bool)) return VARIABLE_TYPES[BOOLEAN];
             //...
         }
-
         return VARIABLE_TYPES[STRING];
     }
 }
