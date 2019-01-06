@@ -131,7 +131,7 @@ public class Interpreter {
     }
 
     private void setVariable (string type, string name, string value) {
-        int index = indexOfVariable (variable_name);
+        int index = indexOfVariable (name);
         if (index != -1) {
             if (value != "") {
                 value = cast (parse (value), type);
