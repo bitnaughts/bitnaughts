@@ -8,12 +8,14 @@ public class ScriptObject {
 	Stack<short> backlog; 
 	string[] script;
 
-	float tick_rate = 10;
+	ProcessorObject processor;
 	float time = 0;
 
 	public ScriptObject (GameObject obj) {
 		this.obj = obj;
 		script = null;
+		
+		processor = new ProcessorObject();
 	}
 	public ScriptObject (string text) {
 		this.script = text.Split('\n');
@@ -24,8 +26,8 @@ public class ScriptObject {
 
 	public void tick(float deltaTime) {
 		time += deltaTime;
-		if (time >= tick_rate) {
-			time -= tick_rate;
+		if (time >= processor.tick_speed) {
+			time -= processor.tick_speed;
 			/* Execute a line */
 			Interpreter.interpret(script[pointer++]);
 		}
