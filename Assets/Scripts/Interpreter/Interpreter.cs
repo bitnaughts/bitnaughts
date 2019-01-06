@@ -2,7 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CodeManager : MonoBehaviour {
+public static class Interpreter {
+
+    /*
+        NOTES:
+            all variables will be stored in tuples: (string value, string type)
+    
+     */
+
     /*     
     public List<string> integers_within_editting_scope = new List<string>();
     public List<string> doubles_within_editting_scope = new List<string>();
@@ -19,17 +26,9 @@ public class CodeManager : MonoBehaviour {
     public List<VariableObject<string>> strings = new List<VariableObject<string>>();
     */
 
-    public void Compiler_compile(List<string> lines_in)
-    {
-       //for (current_line = 0; current_line < lines_in.Count; current_line++)
-        {
-            //Introduce delay for a "penalty" of large codes, increase speed of code by level of computer
-           // Compiler_compile(lines_in[current_line]);
-        }
-    }
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
-    public void Compiler_compile(string line)
-    { /*
+    public static void interpret(string line)
+    { 
         //Master Switch
         switch (line)
         {
@@ -55,18 +54,18 @@ public class CodeManager : MonoBehaviour {
                 switch (line)
                 {
                     case "isFunction":
-                        string function = "";
-                        string[] parameter;
-                        switch (function) {
-                            case "Abs":
-                                return Mathf.Abs(parameter[0]);
-                            case "Round":
-                                return Mathf.Round(parameter[0]);
-                            case "Floor":
-                                return Mathf.Floor(parameter[0]);
-                            case "Ceil":
-                                return Mathf.Ceil(parameter[0]);
-                        }
+                        // string function = "";
+                        // string[] parameter;
+                        // switch (function) {
+                        //     case "Abs":
+                        //         return Mathf.Abs(parameter[0]);
+                        //     case "Round":
+                        //         return Mathf.Round(parameter[0]);
+                        //     case "Floor":
+                        //         return Mathf.Floor(parameter[0]);
+                        //     case "Ceil":
+                        //         return Mathf.Ceil(parameter[0]);
+                        // }
                         // Fire();
                         // Fire(10);
                         // Subroutines...
@@ -213,14 +212,4 @@ public class CodeManager : MonoBehaviour {
             }
         }*/
     }
-
-
-    void Start () {
-		
-	}
-
-
-	void Update () {
-		
-	}
 }
