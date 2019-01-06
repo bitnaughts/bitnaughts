@@ -45,7 +45,7 @@ public class Interpreter {
         INTEGER = 1,
         FLOAT = 2,
         STRING = 3;
-    public static string[] VARIABLE_TYPES = {
+    private const IReadOnlyList<string> VARIABLE_TYPES = {
         "bool",
         "int",
         "float",
@@ -53,45 +53,45 @@ public class Interpreter {
         "Vector2"
     };
 
-    const byte EQUALS = 0,
-        INCREMENT = 1,
-        DECREMENT = 2,
-        ADDITION = 3,
-        SUBTRACTION = 4,
-        MULTIPLICATION = 5,
-        DIVISION = 6,
-        MODULO = 7,
-        EQUAL_TO = 8,
-        NOT_EQUAL = 9,
-        GREATER_THAN = 10,
-        GREATER_THAN_EQUAL = 11,
-        LESS_THAN = 12,
-        LESS_THAN_EQUAL = 13,
-        AND = 14,
-        OR = 15,
-        MODULUS = 16,
-        TIMES = 17,
-        DIVIDE = 18,
-        ADD = 19,
-        SUBTRACT = 20;
+    private enum OPERATORS {
+        EQUALS = "=",
+        INCREMENT = "++",
+        DECREMENT = "--",
+        ADDITION = "+=",
+        SUBTRACTION = "-=",
+        MULTIPLICATION = "*=",
+        DIVISION = "/=",
+        MODULO = "%=",
+        EQUAL_TO = "==",
+        NOT_EQUAL = "!=",
+        GREATER_THAN = ">",
+        GREATER_THAN_EQUAL = ">=",
+        LESS_THAN = "<",
+        LESS_THAN_EQUAL = "<=",
+        AND = "&&",
+        OR = "||",
+        MODULUS = "%",
+        TIMES = "*",
+        DIVIDE = "/",
+        ADD = "+",
+        SUBTRACT = "-"
+        };
 
-    public static string[] OPERATORS = { "=", "++", "--", "+=", "-=", "*=", "/=", "%=", "==", "!=", ">", ">=", "<", "<=", "&&", "||", "%", "*", "/", "+", "-" };
+        private const IReadOnlyList<string> ARITHMETIC_OPERATORS = { "%", "*", "/", "+", "-" };
+        private GameObject obj;
 
-    public static string[] ARITHMETIC_OPERATORS = { "%", "*", "/", "+", "-" };
-    private GameObject obj;
+        private List<VariableObject> variables;
+        private string[] script;
 
-    private List<VariableObject> variables;
-    private string[] script;
+        private short pointer; //tracks what line is being processed
 
-    private short pointer; //tracks what line is being processed
+        int left_int, right_int;
+        float left_float, right_float;
+        bool left_bool, right_bool;
 
-    int left_int, right_int;
-    float left_float, right_float;
-    bool left_bool, right_bool;
+        // Stack<short> backlog; 
 
-    // Stack<short> backlog; 
-
-    public Interpreter (string[] script, GameObject obj) {
+        public Interpreter (string[] script, GameObject obj) {
         this.script = script;
         this.obj = obj;
 
@@ -156,14 +156,13 @@ public class Interpreter {
         }
 
     }
-    public string parse (string input) {
-        /* e.g. "valueX + function(valueX);" */
-        //string output = input;
+    private string parse (string input) {
+
         List<string> parts = input.Split (' ');
 
         /* EVALUATE PARATHESIS AND FUNCTIONS RECURSIVELY */
         /* e.g. "12 + function(2) * 4" ==> "12 + 4 * 4" */
-        for (int part = 1; part < parts.Count - 1; part++) {
+        for (int part = 0; part < parts.Count; part++) {
             if (parts[part].Contains ("(")) {
 
                 string parts_to_be_condensed = parts[part];
@@ -172,24 +171,27 @@ public class Interpreter {
                     parts_to_be_condensed += " " + parts[part];
                 }
                 if (parts[part].IndexOf ("(") == 0) {
-                    parts[parts] = parse (parts_to_be_condensed); 
+                    parts[parts] = parse (parts_to_be_condensed);
                 } else {
                     //to support user-made functions, or functions that require interpreted lines of code to be executed first, will require logic here to allow for putting this parse in a stack to be popped on the "return" of said function
                     parts[parts] = evaluateFunction (parse (parts_to_be_condensed));
                 }
             }
+            //todo: remove ")" (once scanned) and ";"s (useless)
         }
 
         /* PEMDAS REST OF OPERATIONS */
-        /* e.g. ["12", "+", 4, "*", "4"] ==> ["12", "+", "16"] ==> "28"*/
-        for (int operation = 0; operation < ARITHMETIC_OPERATORS.Length; operation++) {
-            string current_operation = ARITHMETIC_OPERATORS[operation];
-            for (int part = 1; part < parts.Count - 1; part++) {
+        /* e.g. ["12", "+", 4, "*", "4"] ==> ["12", "+", "16"] ==> ["28"]*/
+        if (parts.Count > 1) {
+            for (int operation = 0; operation < ARITHMETIC_OPERATORS.Length; operation++) {
+                string current_operation = ARITHMETIC_OPERATORS[operation];
+                for (int part = 1; part < parts.Count - 1; part++) {
 
-                if (parts[part] == current_operation) {
-                    parts[part - 1] = evaluateOperation (parts[part - 1], parts[part], parts[part + 1]);
-                    parts.RemoveRange (part, 2);
-                    part -= 1;
+                    if (parts[part] == current_operation) {
+                        parts[part - 1] = evaluateOperation (parts[part - 1], parts[part], parts[part + 1]);
+                        parts.RemoveRange (part, 2);
+                        part -= 2;
+                    }
                 }
             }
         }
@@ -197,84 +199,101 @@ public class Interpreter {
         return parts[0];
     }
 
-    public string evaluateFunction (string function, string parameter) {
+    private string evaluateFunction (string function, string parameter) {
+        if (function.IndexOf ("Mathf") == 0) {
+            return evaluateMathf (function, parameter);
+        }
+        //...
+
+        return "";
+    }
+    private string evaluateMathf (string function, string parameter) {
         switch (function) {
             case "Mathf.Abs":
-                return Mathf.Abs(float.Parse(parameter));
+                return Mathf.Abs (float.Parse (parameter)) + "";
+                //...
         }
         return "";
     }
-    public string evaluateOperation (string left, string arithmetic_operator, string right) {
+    private string evaluateOperation (string left, string arithmetic_operator, string right) {
         /* e.g. ["12", "*", "4"] ==> ["48"] */
         string left_type = getVariableType (left, true), right_type = getVariableType (right, false);
         if (left_type == right_type) {
             switch (left_type) {
-                case VARIABLE_TYPES[BOOLEAN]:
+                case VARIABLE_TYPES.BOOLEAN:
                     return evaulateBooleans (left_bool, arithmetic_operator, right_bool) + "";
-                case VARIABLE_TYPES[INTEGER]:
+                case VARIABLE_TYPES.INTEGER:
                     return evaluateIntegers (left_int, arithmetic_operator, right_int) + "";
-                case VARIABLE_TYPES[FLOAT]:
+                case VARIABLE_TYPES.FLOAT:
                     return evaluateFloats (left_float, arithmetic_operator, right_float) + "";
                     //...
-                case VARIABLE_TYPES[STRING]:
+                case VARIABLE_TYPES.STRING:
                     return evaulateString (left_bool, arithmetic_operator, right_bool) + "";
+                default:
+                    return "";
             }
         }
-        return "";
     }
-    public bool evaulateBooleans (bool left, string arithmetic_operator, bool right) {
+    private bool evaulateBooleans (bool left, string arithmetic_operator, bool right) {
         switch (arithmetic_operator) {
-            case OPERATORS[EQUAL_TO]:
+            case OPERATORS.EQUAL_TO:
                 return left == right;
-            case OPERATORS[AND]:
+            case OPERATORS.AND:
                 return left && right;
-            case OPERATORS[OR]:
+            case OPERATORS.OR:
                 return left || right;
+            default:
+                return "";
         }
-        return false;
     }
-    public int evaluateIntegers (int left, string arithmetic_operator, int right) {
+    private int evaluateIntegers (int left, string arithmetic_operator, int right) {
         switch (arithmetic_operator) {
-            case OPERATORS[MODULUS]:
+            case OPERATORS.MODULUS:
                 return left % right;
-            case OPERATORS[TIMES]:
+            case OPERATORS.TIMES:
                 return left * right;
-            case OPERATORS[DIVIDE]:
+            case OPERATORS.DIVIDE:
                 return left / right;
-            case OPERATORS[ADD]:
+            case OPERATORS.ADD:
                 return left + right;
-            case OPERATORS[SUBTRACT]:
+            case OPERATORS.SUBTRACT:
                 return left - right;
+            default:
+                return false;
+
         }
-        return 0;
     }
-    public float evaluateFloats (float left, string arithmetic_operator, float right) {
+    private float evaluateFloats (float left, string arithmetic_operator, float right) {
         switch (arithmetic_operator) {
-            case OPERATORS[MODULUS]:
+            case OPERATORS.MODULUS:
                 return left % right;
-            case OPERATORS[TIMES]:
+            case OPERATORS.TIMES:
                 return left * right;
-            case OPERATORS[DIVIDE]:
+            case OPERATORS.DIVIDE:
                 return left / right;
-            case OPERATORS[ADD]:
+            case OPERATORS.ADD:
                 return left + right;
-            case OPERATORS[SUBTRACT]:
+            case OPERATORS.SUBTRACT:
                 return left - right;
+            default:
+                return 0;
+
         }
-        return 0;
     }
-    public string evaulateString (string left, string arithmetic_operator, string right) {
+    private string evaulateString (string left, string arithmetic_operator, string right) {
         switch (arithmetic_operator) {
-            case OPERATORS[ADD]:
+            case OPERATORS.ADD:
                 return left + right;
+            default:
+                return 0;
+
         }
-        return "";
     }
 
-    public string getVariableType (string input) {
+    private string getVariableType (string input) {
         getVariableType (input, true);
     }
-    public string getVariableType (string input, bool left) {
+    private string getVariableType (string input, bool left) {
         if (left) {
             if (bool.TryParse (input, out left_bool)) return VARIABLE_TYPES[BOOLEAN];
             if (int.TryParse (input, out left_int)) return VARIABLE_TYPES[INTEGER];
