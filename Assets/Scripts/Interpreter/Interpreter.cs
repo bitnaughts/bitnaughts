@@ -125,13 +125,20 @@ public class Interpreter {
                     setVariable (variable_type, variable_name, variable_value);
                     break;
                 default:
+                    int index = -1;
+                    index = isVariable(line_parts[0]);
+                    if (index != -1) {
+                        /* e.g. "i = 10 * i;" */
+                    }
+                    // index = isFunction(line_parts[0]);
+
                     break;
             }
         }
     }
 
     private void setVariable (string type, string name, string value) {
-        int index = indexOfVariable (name);
+        int index = isVariable (name);
         if (index != -1) {
             if (value != "") {
                 value = cast (parse (value), type);
@@ -310,13 +317,21 @@ public class Interpreter {
         return Variables.STRING;
     }
 
-    private int indexOfVariable (string name) {
+    private int isVariable (string name) { //add checks for "i++", "i;" (ignore characters when checking if match)
         for (int i = 0; i < variables.Count; i++) {
             if (variables[i].name == name) {
                 return i;
             }
         }
         return -1;
+    }
+    private bool isFunction (string name) { //add checks for "i++", "i;" (ignore characters when checking if match)
+        // for (int i = 0; i < functions.Count; i++) {
+        //     if (functions[i] == name) {
+        //         return true;
+        //     }
+        // }
+        return false;
     }
 
     public override string ToString () {
