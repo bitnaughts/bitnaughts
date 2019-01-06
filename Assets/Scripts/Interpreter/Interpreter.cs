@@ -1,5 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 public class VariableObject {
@@ -41,57 +46,20 @@ public class VariableObject {
 }
 public class Interpreter {
 
-    const byte BOOLEAN = 0,
-        INTEGER = 1,
-        FLOAT = 2,
-        STRING = 3;
-    private const IReadOnlyList<string> VARIABLE_TYPES = {
-        "bool",
-        "int",
-        "float",
-        "string",
-        "Vector2"
-    };
+    private GameObject obj;
 
-    private enum OPERATORS {
-        EQUALS = "=",
-        INCREMENT = "++",
-        DECREMENT = "--",
-        ADDITION = "+=",
-        SUBTRACTION = "-=",
-        MULTIPLICATION = "*=",
-        DIVISION = "/=",
-        MODULO = "%=",
-        EQUAL_TO = "==",
-        NOT_EQUAL = "!=",
-        GREATER_THAN = ">",
-        GREATER_THAN_EQUAL = ">=",
-        LESS_THAN = "<",
-        LESS_THAN_EQUAL = "<=",
-        AND = "&&",
-        OR = "||",
-        MODULUS = "%",
-        TIMES = "*",
-        DIVIDE = "/",
-        ADD = "+",
-        SUBTRACT = "-"
-        };
+    private List<VariableObject> variables;
+    private string[] script;
 
-        private const IReadOnlyList<string> ARITHMETIC_OPERATORS = { "%", "*", "/", "+", "-" };
-        private GameObject obj;
+    private short pointer; //tracks what line is being processed
 
-        private List<VariableObject> variables;
-        private string[] script;
+    int left_int, right_int;
+    float left_float, right_float;
+    bool left_bool, right_bool;
 
-        private short pointer; //tracks what line is being processed
+    // Stack<short> backlog; 
 
-        int left_int, right_int;
-        float left_float, right_float;
-        bool left_bool, right_bool;
-
-        // Stack<short> backlog; 
-
-        public Interpreter (string[] script, GameObject obj) {
+    public Interpreter (string[] script, GameObject obj) {
         this.script = script;
         this.obj = obj;
 
@@ -158,7 +126,7 @@ public class Interpreter {
     }
     private string parse (string input) {
 
-        List<string> parts = input.Split (' ');
+        List<string> parts = input.Split(' ').ToList<string>();
 
         /* EVALUATE PARATHESIS AND FUNCTIONS RECURSIVELY */
         /* e.g. "12 + function(2) * 4" ==> "12 + 4 * 4" */
@@ -171,10 +139,11 @@ public class Interpreter {
                     parts_to_be_condensed += " " + parts[part];
                 }
                 if (parts[part].IndexOf ("(") == 0) {
-                    parts[parts] = parse (parts_to_be_condensed);
+                    parts[part] = parse (parts_to_be_condensed);
                 } else {
                     //to support user-made functions, or functions that require interpreted lines of code to be executed first, will require logic here to allow for putting this parse in a stack to be popped on the "return" of said function
-                    parts[parts] = evaluateFunction (parse (parts_to_be_condensed));
+                    string function= parts[part].Substring(0, parts[part].IndexOf("("));
+                    parts[part] = evaluateFunction (function, parse (parts_to_be_condensed));
                 }
             }
             //todo: remove ")" (once scanned) and ";"s (useless)
@@ -183,10 +152,9 @@ public class Interpreter {
         /* PEMDAS REST OF OPERATIONS */
         /* e.g. ["12", "+", 4, "*", "4"] ==> ["12", "+", "16"] ==> ["28"]*/
         if (parts.Count > 1) {
-            for (int operation = 0; operation < ARITHMETIC_OPERATORS.Length; operation++) {
-                string current_operation = ARITHMETIC_OPERATORS[operation];
+            for (int operation = 0; operation < Operators.PEMDAS.Length; operation++) {
+                string current_operation = Operators.PEMDAS[operation];
                 for (int part = 1; part < parts.Count - 1; part++) {
-
                     if (parts[part] == current_operation) {
                         parts[part - 1] = evaluateOperation (parts[part - 1], parts[part], parts[part + 1]);
                         parts.RemoveRange (part, 2);
@@ -220,60 +188,59 @@ public class Interpreter {
         string left_type = getVariableType (left, true), right_type = getVariableType (right, false);
         if (left_type == right_type) {
             switch (left_type) {
-                case VARIABLE_TYPES.BOOLEAN:
+                case Variables.BOOLEAN:
                     return evaulateBooleans (left_bool, arithmetic_operator, right_bool) + "";
-                case VARIABLE_TYPES.INTEGER:
+                case Variables.INTEGER:
                     return evaluateIntegers (left_int, arithmetic_operator, right_int) + "";
-                case VARIABLE_TYPES.FLOAT:
+                case Variables.FLOAT:
                     return evaluateFloats (left_float, arithmetic_operator, right_float) + "";
                     //...
-                case VARIABLE_TYPES.STRING:
-                    return evaulateString (left_bool, arithmetic_operator, right_bool) + "";
-                default:
-                    return "";
+                case Variables.STRING:
+                    return evaulateString (left, arithmetic_operator, right) + "";
             }
         }
+        return "";
     }
     private bool evaulateBooleans (bool left, string arithmetic_operator, bool right) {
         switch (arithmetic_operator) {
-            case OPERATORS.EQUAL_TO:
+            case Operators.EQUAL_TO:
                 return left == right;
-            case OPERATORS.AND:
+            case Operators.AND:
                 return left && right;
-            case OPERATORS.OR:
+            case Operators.OR:
                 return left || right;
             default:
-                return "";
+                return false;
         }
     }
     private int evaluateIntegers (int left, string arithmetic_operator, int right) {
         switch (arithmetic_operator) {
-            case OPERATORS.MODULUS:
+            case Operators.MODULUS:
                 return left % right;
-            case OPERATORS.TIMES:
+            case Operators.TIMES:
                 return left * right;
-            case OPERATORS.DIVIDE:
+            case Operators.DIVIDE:
                 return left / right;
-            case OPERATORS.ADD:
+            case Operators.ADD:
                 return left + right;
-            case OPERATORS.SUBTRACT:
+            case Operators.SUBTRACT:
                 return left - right;
             default:
-                return false;
+                return 0;
 
         }
     }
     private float evaluateFloats (float left, string arithmetic_operator, float right) {
         switch (arithmetic_operator) {
-            case OPERATORS.MODULUS:
+            case Operators.MODULUS:
                 return left % right;
-            case OPERATORS.TIMES:
+            case Operators.TIMES:
                 return left * right;
-            case OPERATORS.DIVIDE:
+            case Operators.DIVIDE:
                 return left / right;
-            case OPERATORS.ADD:
+            case Operators.ADD:
                 return left + right;
-            case OPERATORS.SUBTRACT:
+            case Operators.SUBTRACT:
                 return left - right;
             default:
                 return 0;
@@ -282,32 +249,33 @@ public class Interpreter {
     }
     private string evaulateString (string left, string arithmetic_operator, string right) {
         switch (arithmetic_operator) {
-            case OPERATORS.ADD:
+            case Operators.ADD:
                 return left + right;
             default:
-                return 0;
+                return "";
 
         }
     }
 
     private string getVariableType (string input) {
-        getVariableType (input, true);
+       return getVariableType (input, true);
     }
     private string getVariableType (string input, bool left) {
         if (left) {
-            if (bool.TryParse (input, out left_bool)) return VARIABLE_TYPES[BOOLEAN];
-            if (int.TryParse (input, out left_int)) return VARIABLE_TYPES[INTEGER];
-            if (float.TryParse (input, out left_float)) return VARIABLE_TYPES[FLOAT];
+            if (bool.TryParse (input, out left_bool)) return Variables.BOOLEAN;
+            if (int.TryParse (input, out left_int)) return Variables.INTEGER;
+            if (float.TryParse (input, out left_float)) return Variables.FLOAT;
             //...
         } else {
-            if (bool.TryParse (input, out right_bool)) return VARIABLE_TYPES[BOOLEAN];
-            if (int.TryParse (input, out right_int)) return VARIABLE_TYPES[INTEGER];
-            if (float.TryParse (input, out right_float)) return VARIABLE_TYPES[FLOAT];
+            if (bool.TryParse (input, out right_bool)) return Variables.BOOLEAN;
+            if (int.TryParse (input, out right_int)) return Variables.INTEGER;
+            if (float.TryParse (input, out right_float)) return Variables.FLOAT;
             //...
         }
-        return VARIABLE_TYPES[STRING];
+        return Variables.STRING;
     }
 }
+
 // string[] parameter;
 // switch (function) {
 //     case "Abs":
