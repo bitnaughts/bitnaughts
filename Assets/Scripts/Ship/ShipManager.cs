@@ -26,10 +26,10 @@ public class ShipManager : MonoBehaviour {
 
 		GameObject.Find("Output").GetComponent<Text>().text = selected_ship.ToString();
 		if (counter++ < 200) {
-	Instantiate (ship_prefabs[(prefab_counter++ % 7) + 1], new Vector2 ((Random.value * 100) - 50, (Random.value * 100) - 50), Quaternion.identity);
+	Instantiate (ship_prefabs[(prefab_counter++ % 7) + 1], new Vector2 ((Random.value * 100) - 50, (Random.value * 100) - 50), Quaternion.Euler(0,0,0));
 		}
 		else if (counter++ % 50 == 0) {
-			Instantiate (ship_prefabs[(prefab_counter++ % 7) + 1], new Vector2 ((Random.value * 100) - 50, (Random.value * 100) - 50), Quaternion.identity);
+			Instantiate (ship_prefabs[(prefab_counter++ % 7) + 1], new Vector2 ((Random.value * 100) - 50, (Random.value * 100) - 50), Quaternion.Euler(0, 0, 0));
 		}
 
 	}
