@@ -114,19 +114,33 @@ public class Interpreter {
                         variable_value += line_parts[i];
                     }
                     /* e.g. "122;" */
-                    variable_value = parse (variable_type, variable_value);
+                    variable_value = cast (parse (variable_value), variable_type);
                     variables.Add (new VariableObject (variable_type, variable_name, value));
                 }
                 break;
             default:
-
                 break;
         }
 
     }
+    private string cast (string input, string cast_type) {
+        if (getVariableType (input) == cast_type) {
+            switch (cast_type) {
+                case Variables.BOOLEAN:
+                    return left_bool + "";
+                case Variables.INTEGER:
+                    return left_int + "";
+                case Variables.FLOAT:
+                    return left_float + "";
+                case Variables.STRING:
+                    return input;
+            }
+        }
+        return "";
+    }
     private string parse (string input) {
 
-        List<string> parts = input.Split(' ').ToList<string>();
+        List<string> parts = input.Split (' ').ToList<string> ();
 
         /* EVALUATE PARATHESIS AND FUNCTIONS RECURSIVELY */
         /* e.g. "12 + function(2) * 4" ==> "12 + 4 * 4" */
@@ -142,7 +156,7 @@ public class Interpreter {
                     parts[part] = parse (parts_to_be_condensed);
                 } else {
                     //to support user-made functions, or functions that require interpreted lines of code to be executed first, will require logic here to allow for putting this parse in a stack to be popped on the "return" of said function
-                    string function= parts[part].Substring(0, parts[part].IndexOf("("));
+                    string function = parts[part].Substring (0, parts[part].IndexOf ("("));
                     parts[part] = evaluateFunction (function, parse (parts_to_be_condensed));
                 }
             }
@@ -227,7 +241,6 @@ public class Interpreter {
                 return left - right;
             default:
                 return 0;
-
         }
     }
     private float evaluateFloats (float left, string arithmetic_operator, float right) {
@@ -244,7 +257,6 @@ public class Interpreter {
                 return left - right;
             default:
                 return 0;
-
         }
     }
     private string evaulateString (string left, string arithmetic_operator, string right) {
@@ -253,12 +265,11 @@ public class Interpreter {
                 return left + right;
             default:
                 return "";
-
         }
     }
 
     private string getVariableType (string input) {
-       return getVariableType (input, true);
+        return getVariableType (input, true);
     }
     private string getVariableType (string input, bool left) {
         if (left) {
