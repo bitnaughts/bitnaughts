@@ -114,28 +114,37 @@ public class Interpreter {
                 case "float":
                 case "string":
                 case "Vector2":
+                    /* e.g. ["int", "i", "=", "123;"] */
+                    /*      [ 0   ,  1,   2,   3 ...] */
                     string variable_type = line_parts[0];
                     string variable_name = line_parts[1];
-                    if (variableExists (variable_name)) {
-
-                    } else {
-                        if (line_parts.Length == 2) {
-                            /* e.g. "int i;" */
-                            variables.Add (new VariableObject (variable_type, variable_name, ""));
-                        } else {
-                            /* e.g. "int i = 122;" */
-                            string variable_value = "";
-                            for (int i = 3; i < line_parts.Length; i++) {
-                                variable_value += line_parts[i];
-                            }
-                            /* e.g. "122;" */
-                            variable_value = cast (parse (variable_value), variable_type);
-                            variables.Add (new VariableObject (variable_type, variable_name, variable_value));
-                        }
+                    string variable_value = "";
+                    for (int i = 3; i < line_parts.Length; i++) {
+                        variable_value += line_parts[i];
                     }
+                    setVariable (variable_type, variable_name, variable_value);
                     break;
                 default:
                     break;
+            }
+        }
+    }
+
+    private void setVariable (string type, string name, string value) {
+        int index = indexOfVariable (variable_name);
+        if (index != -1) {
+            if (value != "") {
+                value = cast (parse (value), type);
+                variables[index].value = value;
+            }
+        } else {
+            if (value != "") {
+                /* e.g. "int i = 122;" */
+                value = cast (parse (value), type);
+                variables.Add (new VariableObject (type, name, value));
+            } else {
+                /* e.g. "int i;" */
+                variables.Add (new VariableObject (type, name, ""));
             }
         }
     }
@@ -301,13 +310,13 @@ public class Interpreter {
         return Variables.STRING;
     }
 
-    private bool variableExists(string name) {
+    private int indexOfVariable (string name) {
         for (int i = 0; i < variables.Count; i++) {
             if (variables[i].name == name) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     public override string ToString () {
