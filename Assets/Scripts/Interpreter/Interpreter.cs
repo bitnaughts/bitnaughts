@@ -156,27 +156,55 @@ public class Interpreter {
         }
 
     }
-    public string parse (string cast_type, string input) {
+    public string parse (string input) {
         /* e.g. "valueX + function(valueX);" */
         //string output = input;
-
-        //PEMDAS
         List<string> parts = input.Split (' ');
+
+        /* EVALUATE PARATHESIS AND FUNCTIONS RECURSIVELY */
+        /* e.g. "12 + function(2) * 4" ==> "12 + 4 * 4" */
+        for (int part = 1; part < parts.Count - 1; part++) {
+            if (parts[part].Contains ("(")) {
+
+                string parts_to_be_condensed = parts[part];
+                while (parts[part].Contains (")") == false) {
+                    part++;
+                    parts_to_be_condensed += " " + parts[part];
+                }
+                if (parts[part].IndexOf ("(") == 0) {
+                    parts[parts] = parse (parts_to_be_condensed); 
+                } else {
+                    //to support user-made functions, or functions that require interpreted lines of code to be executed first, will require logic here to allow for putting this parse in a stack to be popped on the "return" of said function
+                    parts[parts] = evaluateFunction (parse (parts_to_be_condensed));
+                }
+            }
+        }
+
+        /* PEMDAS REST OF OPERATIONS */
+        /* e.g. ["12", "+", 4, "*", "4"] ==> ["12", "+", "16"] ==> "28"*/
         for (int operation = 0; operation < ARITHMETIC_OPERATORS.Length; operation++) {
             string current_operation = ARITHMETIC_OPERATORS[operation];
             for (int part = 1; part < parts.Count - 1; part++) {
-                /* e.g. ["12", "+", 4, "*", "4"] ==> ["12", "+", "16"] */
+
                 if (parts[part] == current_operation) {
-                    parts[part - 1] = evaluate (parts[part - 1], parts[part], parts[part + 1]);
+                    parts[part - 1] = evaluateOperation (parts[part - 1], parts[part], parts[part + 1]);
                     parts.RemoveRange (part, 2);
                     part -= 1;
                 }
             }
         }
+        //RETURN FULLY SIMPLIFIED VALUE
         return parts[0];
     }
 
-    public string evaluate (string left, string arithmetic_operator, string right) {
+    public string evaluateFunction (string function, string parameter) {
+        switch (function) {
+            case "Mathf.Abs":
+                return Mathf.Abs(float.Parse(parameter));
+        }
+        return "";
+    }
+    public string evaluateOperation (string left, string arithmetic_operator, string right) {
         /* e.g. ["12", "*", "4"] ==> ["48"] */
         string left_type = getVariableType (left, true), right_type = getVariableType (right, false);
         if (left_type == right_type) {
@@ -192,7 +220,7 @@ public class Interpreter {
                     return evaulateString (left_bool, arithmetic_operator, right_bool) + "";
             }
         }
-
+        return "";
     }
     public bool evaulateBooleans (bool left, string arithmetic_operator, bool right) {
         switch (arithmetic_operator) {
@@ -208,51 +236,54 @@ public class Interpreter {
     public int evaluateIntegers (int left, string arithmetic_operator, int right) {
         switch (arithmetic_operator) {
             case OPERATORS[MODULUS]:
-                return (left % right).ToString ();
+                return left % right;
             case OPERATORS[TIMES]:
-                return (left * right).ToString ();
+                return left * right;
             case OPERATORS[DIVIDE]:
-                return (left / right).ToString ();
+                return left / right;
             case OPERATORS[ADD]:
-                return (left + right).ToString ();
+                return left + right;
             case OPERATORS[SUBTRACT]:
-                return (left - right).ToString ();
+                return left - right;
         }
         return 0;
     }
     public float evaluateFloats (float left, string arithmetic_operator, float right) {
         switch (arithmetic_operator) {
             case OPERATORS[MODULUS]:
-                return (left % right).ToString ();
+                return left % right;
             case OPERATORS[TIMES]:
-                return (left * right).ToString ();
+                return left * right;
             case OPERATORS[DIVIDE]:
-                return (left / right).ToString ();
+                return left / right;
             case OPERATORS[ADD]:
-                return (left + right).ToString ();
+                return left + right;
             case OPERATORS[SUBTRACT]:
-                return (left - right).ToString ();
+                return left - right;
         }
-        break;
+        return 0;
     }
     public string evaulateString (string left, string arithmetic_operator, string right) {
         switch (arithmetic_operator) {
             case OPERATORS[ADD]:
-                return (left + right).ToString ();
+                return left + right;
         }
-        break;
+        return "";
     }
 
+    public string getVariableType (string input) {
+        getVariableType (input, true);
+    }
     public string getVariableType (string input, bool left) {
         if (left) {
-            if (bool.TryParse (input, left_bool)) return VARIABLE_TYPES[BOOLEAN];
-            if (int.TryParse (input, left_int)) return VARIABLE_TYPES[INTEGER];
-            if (float.TryParse (input, left_float)) return VARIABLE_TYPES[FLOAT];
+            if (bool.TryParse (input, out left_bool)) return VARIABLE_TYPES[BOOLEAN];
+            if (int.TryParse (input, out left_int)) return VARIABLE_TYPES[INTEGER];
+            if (float.TryParse (input, out left_float)) return VARIABLE_TYPES[FLOAT];
             //...
         } else {
-            if (bool.TryParse (input, right_bool)) return VARIABLE_TYPES[BOOLEAN];
-            if (int.TryParse (input, right_int)) return VARIABLE_TYPES[INTEGER];
-            if (float.TryParse (input, right_float)) return VARIABLE_TYPES[FLOAT];
+            if (bool.TryParse (input, out right_bool)) return VARIABLE_TYPES[BOOLEAN];
+            if (int.TryParse (input, out right_int)) return VARIABLE_TYPES[INTEGER];
+            if (float.TryParse (input, out right_float)) return VARIABLE_TYPES[FLOAT];
             //...
         }
         return VARIABLE_TYPES[STRING];
