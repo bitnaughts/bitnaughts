@@ -2,18 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class InterpreterConstants {
-    static string[] VARIABLE_TYPES = {
-        "bool",
-        "int",
-        "float",
-        "string",
-        "Vector2"
-    };
-    static string[] EVALUATORS = { "==", ">", "<", "<=", ">=", "!=" };
-    static string[] OPERATORS = { "=", "++", "--", "+=", "-=", "*=", "/=", "%=" };
-}
-
 public class VariableObject {
 
     private string type;
@@ -53,12 +41,48 @@ public class VariableObject {
 }
 public class Interpreter {
 
+    const byte BOOLEAN = 0,
+        INTEGER = 1,
+        FLOAT = 2,
+        STRING = 3;
+    public static string[] VARIABLE_TYPES = {
+        "bool",
+        "int",
+        "float",
+        "string",
+        "Vector2"
+    };
+
+    const byte EQUALS = 0,
+        INCREMENT = 1,
+        DECREMENT = 2,
+        ADDITION = 3,
+        SUBTRACTION = 4,
+        MULTIPLICATION = 5,
+        DIVISION = 6,
+        MODULO = 7,
+        EQUAL_TO = 8,
+        NOT_EQUAL = 9,
+        GREATER_THAN = 10,
+        GREATER_THAN_EQUAL = 11,
+        LESS_THAN = 12,
+        LESS_THAN_EQUAL = 13,
+        AND = 14,
+        OR = 15;
+
+    public static string[] OPERATORS = { "=", "++", "--", "+=", "-=", "*=", "/=", "%=", "==", "!=", ">", ">=", "<", "<=", "&&", "||" };
+
+    public static string[] ARITHMETIC_OPERATORS = { "%", "*", "/", "+", "-" };
     private GameObject obj;
 
     private List<VariableObject> variables;
     private string[] script;
 
     private short pointer; //tracks what line is being processed
+
+    int left_int, right_int;
+    float left_float, right_float;
+    bool left_bool, right_bool;
 
     // Stack<short> backlog; 
 
@@ -120,7 +144,6 @@ public class Interpreter {
                     variable_value = parse (variable_type, variable_value);
                     variables.Add (new VariableObject (variable_type, variable_name, value));
                 }
-
                 break;
             default:
 
@@ -128,15 +151,73 @@ public class Interpreter {
         }
 
     }
-    public string parse(string cast_type, string input) {
+    public string parse (string cast_type, string input) {
         /* e.g. "valueX + function(valueX);" */
-        string output = input;
+        //string output = input;
 
+        //PEMDAS
+        List<string> parts = input.Split (' ');
+        for (int operation = 0; operation < ARITHMETIC_OPERATORS.Length; operation++) {
+            string current_operation = ARITHMETIC_OPERATORS[operation];
+            for (int part = 1; part < parts.Count - 1; part++) {
+                /* e.g. ["12", "+", 4, "*", "4"] ==> ["12", "+", "16"] */
+                if (parts[part] == current_operation) {
+                    parts[part - 1] = evaluate (parts[part - 1], parts[part], parts[part + 1]);
+                    parts.RemoveRange (part, 2);
+                    part -= 1;
+                }
+            }
+        }
 
+        Stack<string> operations = new Stack<string> ();
 
+        string output;
+        for (int i = 0; i < parts.Length; i++) {
+            output += parts[i];
+        }
         return output;
     }
 
+    public string evaluate (string left, string arithmetic_operator, string right) {
+        /* e.g. ["12", "*", "4"] ==> ["48"] */
+        string left_type = getVariableType (left), right_type = getVariableType (right);
+        switch (left_type) {
+            case VARIABLE_TYPES[BOOLEAN]:
+                switch (arithmetic_operator) {
+                    case OPERATORS[EQUAL_TO]:
+                        return (bool.Parse (left) == bool.Parse (right)).ToString ();
+                    case OPERATORS[AND]:
+                        return (bool.Parse (left) && bool.Parse (right)).ToString ();
+                    case OPERATORS[OR]:
+                        return (bool.Parse (left) || bool.Parse (right)).ToString ();
+                }
+                break;
+            case VARIABLE_TYPES[INTEGER]:
+                break;
+            case VARIABLE_TYPES[FLOAT]:
+                break;
+            case VARIABLE_TYPES[STRING]:
+                break;
+        }
+        if (left_type == right_type) {
+
+        }
+    }
+    public string getVariableType (string input, bool left) {
+        if (left) {
+            if (int.TryParse (input, left_int)) return VARIABLE_TYPES[INTEGER];
+            if (float.TryParse (input, left_float)) return VARIABLE_TYPES[FLOAT];
+            if (bool.TryParse (input, left_bool)) return VARIABLE_TYPES[BOOLEAN];
+            //...
+        } else {
+            if (int.TryParse (input, right_int)) return VARIABLE_TYPES[INTEGER];
+            if (float.TryParse (input, right_float)) return VARIABLE_TYPES[FLOAT];
+            if (bool.TryParse (input, right_bool)) return VARIABLE_TYPES[BOOLEAN];
+            //...
+        }
+
+        return VARIABLE_TYPES[STRING];
+    }
 }
 // string[] parameter;
 // switch (function) {
