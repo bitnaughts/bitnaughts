@@ -24,7 +24,7 @@ public class ShipManager : MonoBehaviour {
 	void Update () {
 		if (selected_ship == null) selected_ship = GameObject.Find ("Ship").GetComponent<ShipEditor> ().ship;
 
-		GameObject.Find("Output").GetComponent<Text>().text = selected_ship.ToString();
+		//GameObject.Find("Output").GetComponent<Text>().text = selected_ship.ToString();
 		if (counter++ < 200) {
 	Instantiate (ship_prefabs[(prefab_counter++ % 7) + 1], new Vector2 ((Random.value * 100) - 50, (Random.value * 100) - 50), Quaternion.Euler(0,0,0));
 		}

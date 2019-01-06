@@ -10,13 +10,10 @@ public class ScriptObject {
 	private Interpreter interpreter;
 	float time = 0;
 
-	public ScriptObject (GameObject obj) {
-		init (obj, null);
-	}
-	public ScriptObject (string text) {
+	public ScriptObject (GameObject obj, string text) {
 		init (null, text.Split ('\n'));
 	}
-	public ScriptObject (string[] script) {
+	public ScriptObject (GameObject obj, string[] script) {
 		init (null, script);
 	}
 	public void init (GameObject obj, string[] script) {
@@ -41,4 +38,9 @@ public class ScriptObject {
 			interpreter.interpretLine ();
 		}
 	}
+	public override string ToString () {
+		string output = "";
+		output += interpreter.ToString();    
+        return output;
+    }
 }
