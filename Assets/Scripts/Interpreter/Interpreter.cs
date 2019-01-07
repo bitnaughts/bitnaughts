@@ -13,7 +13,6 @@ public class VariableObject {
     public string name;
     /* For Primitive Data Types, value == value, otherwise value holds ToString() */
     public string value;
-
     VariableObject[] fields;
 
     public VariableObject (string type) {
@@ -60,6 +59,7 @@ public class Interpreter {
     private GameObject obj;
 
     private List<VariableObject> variables;
+    private Stack<int> scope_tracker;
     private string[] script;
 
     private int pointer; //tracks what line is being processed
@@ -67,6 +67,7 @@ public class Interpreter {
     int left_int, right_int;
     float left_float, right_float;
     bool left_bool, right_bool;
+    string variable_type, variable_name, variable_value;
 
     // Stack<short> backlog; 
 
@@ -77,32 +78,57 @@ public class Interpreter {
 
         pointer = 0;
         variables = new List<VariableObject> ();
+        scope_tracker = new Stack<int> ();
     }
 
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
     public void interpretLine () {
         if (script.Length > 0) {
+            debugger += "LINE: " + script[pointer] + "\n\n";
             string line = script[pointer];
             string[] line_parts = line.Split (' ');
+            int pointer_saved = pointer;
 
             switch (line_parts[0]) {
-                case "{": //this shouldn't be possible if linting to "if () {" lines
-                case "}":
+                case Operators.CLOSING_BRACKET:
+                    if (scope_tracker.Count > 0) {
+                        pointer = scope_tracker.Pop ();
+                    }
                     //scope control:
                     //update visible variables?
-                    pointer = pointer + 1; //find new pointer position, might be going back to loop, skip else, etc
-                    interpretLine (); //does not cost anything in interpreter, recalls
+                    //find new pointer position, might be going back to loop, skip else, etc
+                    //does not cost anything in interpreter, recalls
                     break;
                 case "if":
-                case "for":
                 case "while":
-                    /* e.g. "for (int i = 0; i < 10; i++) {" */
-                    string parameter = "";
+                    /* e.g. "while (i < 10) {" */
+                    string condition = "";
                     for (int i = 1; i < line_parts.Length - 1; i++) {
-                        parameter += line_parts[i];
+                        condition += line_parts[i];
                     }
-                    /* e.g. "(int i = 0; i < 10; i++)" */
+                    /* e.g. "(i < 10)" */
+                    condition = condition.Substring (1, condition.Length - 2);
+                    condition = cast (parse (condition), Variables.BOOLEAN);
+                    if (bool.Parse (condition) == true) {
+                        if (line_parts[0] == "while") scope_tracker.Push (pointer);
+                    }
+                    else {
+                        int bracket_counter = 1;
+                        while (bracket_counter > 0) {
+                            pointer++;
+                            if (script[pointer].Contains("{")) {
+                                bracket_counter++;
+                            }
+                            if (script[pointer].Contains("}")) {
+                                bracket_counter--;
+                            }
+                        }
+                    }
 
+                    debugger += condition;
+                    break;
+                case "for":
+                    /* e.g. "for (int i = 0; i < 10; i++) {" */
                     break;
                 case "break":
                 case "continue":
@@ -110,16 +136,15 @@ public class Interpreter {
                     //break => go to current loop's } 
                     //continue => go to current loop's { [where ++ and conditionals are also checked]
                     break;
-                case "bool":
-                case "int":
-                case "float":
-                case "string":
-                case "Vector2":
+                case Variables.BOOLEAN:
+                case Variables.INTEGER:
+                case Variables.FLOAT:
+                case Variables.STRING:
                     /* e.g. ["int", "i", "=", "123;"] */
                     /*      [ 0   ,  1,   2,   3 ...] */
-                    string variable_type = line_parts[0];
-                    string variable_name = line_parts[1];
-                    string variable_value = "";
+                    variable_type = line_parts[0];
+                    variable_name = line_parts[1];
+                    variable_value = "";
 
                     for (int i = 3; i < line_parts.Length; i++) {
                         variable_value += scrubSymbols (line_parts[i]) + " ";
@@ -128,37 +153,46 @@ public class Interpreter {
                     setVariable (variable_type, variable_name, variable_value);
                     break;
                 default:
+                    int index = indexOfVariable (line_parts[0]);
+                    debugger += index + ", " + line_parts[0];
+                    if (index != -1) {
+                        /* e.g. "i = 10;" */
+                        variable_value = "";
+                        for (int i = 2; i < line_parts.Length; i++) {
+                            variable_value += scrubSymbols (line_parts[i]) + " ";
+                        }
+                        setVariable (index, variable_value);
+                    }
                     break;
             }
-            pointer++;
-            pointer %= script.Length;
+            if (pointer == pointer_saved) {
+                pointer++;
+                if (pointer == script.Length) {
+                    pointer = 0;
+                    variables = new List<VariableObject> ();
+                }
+            }
         }
     }
-
+    private void setVariable (int index, string value) {
+        if (value != "") {
+            value = cast (parse (value), variables[index].type);
+            variables[index].value = value;
+        }
+    }
     private void setVariable (string type, string name, string value) {
-        int index = indexOfVariable (name);
-
-        if (index != -1) {
-            /* Variable already exists, update value if provided */
-            if (value != "") {
-                value = cast (parse (value), type);
-                variables[index].value = value;
-            }
-
+        /* Variable does not exist, initialize it */
+        if (value != "") {
+            /* e.g. "int i = 122;" */
+            value = cast (parse (value), type);
+            variables.Add (new VariableObject (type, name, value));
         } else {
-            /* Variable does not exist, initialize it */
-            if (value != "") {
-                /* e.g. "int i = 122;" */
-                value = cast (parse (value), type);
-                variables.Add (new VariableObject (type, name, value));
-            } else {
-                /* e.g. "int i;" */
-                variables.Add (new VariableObject (type, name, ""));
-            }
+            /* e.g. "int i;" */
+            variables.Add (new VariableObject (type, name, ""));
         }
     }
+
     private string cast (string input, string cast_type) {
-        debugger += "\n" + input + "\n";
         if (getVariableType (input) == cast_type) {
             switch (cast_type) {
                 case Variables.BOOLEAN:
@@ -213,7 +247,7 @@ public class Interpreter {
                 }
                 // debugger += current_operation + ": ";
                 for (int part = 0; part < parts.Count - 1; part++) {
-                     debugger += ">" + parts[part] + "<";
+                    debugger += ">" + parts[part] + "<";
                 }
                 debugger += "\n";
             }
@@ -312,10 +346,16 @@ public class Interpreter {
         return getVariableType (input, true);
     }
     private string getVariableType (string input, bool left) {
+
+        int index = indexOfVariable (input);
+        if (index != -1) {
+            input = variables[index].value;
+        }
         if (left) {
             if (bool.TryParse (input, out left_bool)) return Variables.BOOLEAN;
             if (int.TryParse (input, out left_int)) return Variables.INTEGER;
             if (float.TryParse (input, out left_float)) return Variables.FLOAT;
+
             //...
         } else {
             if (bool.TryParse (input, out right_bool)) return Variables.BOOLEAN;
@@ -344,7 +384,7 @@ public class Interpreter {
     }
 
     public override string ToString () {
-        string output = "DEBUG: " + debugger + "\n\n";
+        string output = debugger + "\n\n";
         debugger = "";
         for (int i = 0; i < variables.Count; i++) {
             output += "-> Variable(" + variables[i].ToString () + ")\n";
@@ -352,174 +392,3 @@ public class Interpreter {
         return output;
     }
 }
-
-/* if (line.IndexOf("
-                while (") == 0)
- {
-     string condition = (" (" + Parser_splitStringBetween(line, " (", ")
-                        ") + ")
-                    ");
-     //  print(condition);
-     if (Compiler_booleanEvaluation(condition))
-     {
-         tasks.Push(new TaskObject(current_line, Compiler_findMatchingBracket(current_line), condition, "
-                    "));
-     }
-     else
-     {
-         current_line = Compiler_findNextInstanceOf(current_line, "
-                }
-                ");
-     }
- }
- if (line.IndexOf("
-                for (") == 0)
- {
-     Compiler_addVariable(Parser_splitStringBetween(line, " (", ";
-                        ") + ";
-                        ");
-     string condition = (" (" + Parser_splitStringBetween(line, ";
-                            ", ";
-                            ") + ")
-                        ");
-     if (Compiler_booleanEvaluation(condition))
-     {
-         tasks.Push(new TaskObject(current_line, Compiler_findMatchingBracket(current_line), condition, (Parser_splitStringBetween(line, Parser_splitStringBetween(line, ";
-                        ", ";
-                        "), ")
-                    ") + ";
-                    ").Substring(2)));
-     }
-     else
-     {
-         current_line = Compiler_findNextInstanceOf(current_line, "
-                }
-                ");
-     }
- }
- if (tasks.Count != 0)
- {
-     if (current_line == tasks.Peek().ending_line)
-     {
-         current_line = Compiler_doEndOfTask(tasks.Peek());
-         if (current_line == tasks.Peek().ending_line) tasks.Pop();
-     }
- }
-
- if (line.IndexOf("
-                if (") == 0)
- {
-     next_else = false; //Used to know if an "
-                    else " is linked to an if/will be executed           
-     if (!Compiler_booleanEvaluation(line))
-     {
-         //Jump past If Statement
-         current_line = Compiler_findMatchingBracket(current_line);//Compiler_findNextInstanceOf(current_line, "
-                }
-                ");
-         //Enter next else if available
-         next_else = true;
-     }
- }
- if (line.IndexOf("
-                else ") == 0)
- {
-     if (next_else == false)
-     {
-         current_line = Compiler_findMatchingBracket(current_line);
-     }
-
- }
-
- //Variable statements
- for (int types_of_PDTs = 0; types_of_PDTs < list_of_PDTs.Length; types_of_PDTs++)
- {
-     //DECLARING A NEW VARIABLE OF TYPE (list_of_PDTs[types_of_PDTs])
-     if (line.IndexOf(list_of_PDTs[types_of_PDTs] + "
-                ") == 0)
-     {
-         Compiler_addVariable(line);
-     }
- }
- //Looks for a simple statement that is modifying variables
- Compiler_modifyVariable(line);
-
- if (line.IndexOf("
-                System.out.print ") == 0)
- {
-     string output = Parser_splitStringBetween(line, " (", ")
-                ");
-     print(output);
-     output = Compiler_evaluateExpression(output);
-     print(output);
-     if (line.IndexOf("
-                System.out.println ") == 0)
-     {
-         Display_pushConsoleText(output + "\
-                n ");
-     }
-     else Display_pushConsoleText(output);
- }
- if (line.IndexOf("
-                Iterate (") == 0)
- {
-     //Iterate(Phone.Vibrate);
-     if (line.Contains("
-                        Vibrate "))
-     {
-         if (LevelManager.vibrating) Vibration.Vibrate(10);
-     }
-     else if (line.Contains("
-                        Position "))
-     {
-
-         string type = Parser_splitStringBetween(line, " (", ", ");
-         type = type.Substring(1, type.Length - 2);
-         string pos = Parser_splitStringBetween(line, ", new Position (", ")
-                            ");
-
-         string x = Compiler_evaluateExpression(pos.Remove(pos.IndexOf(", ")));
-         string y = Compiler_evaluateExpression(pos.Substring(pos.IndexOf(", ") + 1));
-
-         Vector2 position = new Vector2(float.Parse(x), float.Parse(y));
-         position /= 6;
-         GameObject obj = Instantiate(Resources.Load(type), position, this.transform.rotation) as GameObject;
-         obj.transform.SetParent(this.transform);
-
-         //obj.GetComponent<SpriteRenderer>().color = new Color(Random.value, Random.value, Random.value);
-     }
-     else
-     {
-         string output = Parser_splitStringBetween(line, " (", ")
-                            ");
-         output = output.Substring(1, output.Length - 2);
-         Instantiate(Resources.Load(output), this.transform.position, this.transform.rotation);
-     }
- }
- if (line.IndexOf("
-                            ClearIterations ();
-                            ") == 0)
- {
-     for (int i = 0; i < this.transform.childCount; i++)
-     {
-         Destroy(this.transform.GetChild(i).gameObject);
-     }
- }
- if (line.IndexOf("
-                            IterateArduino (new Color (") == 0)
- {//lines.Add("
-                                    IterateArduino (new Color (1, 1, 1));
-                                    ");
-
-     string message = Parser_splitStringBetween(line, " (new Color (", ")
-                                        ");//1,1,1
-     string[] values = message.Split (',');
-     for (int i = 0; i < values.Length; i++)
-     {
-         int val = int.Parse (Compiler_evaluateExpression (values[i]));
-         if (val > 255) val = 255;
-         if (val < 0) val = 0;
-         bluetooth_module.message = byte.Parse (val.ToString ());
-         bluetooth_module.send ();
-     }
- }*/

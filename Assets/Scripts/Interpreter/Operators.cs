@@ -19,7 +19,8 @@
         TIMES = "*",
         DIVIDE = "/",
         ADD = "+",
-        SUBTRACT = "-";
+        SUBTRACT = "-",
+        CLOSING_BRACKET = "}";
 
     public static readonly string[][] PEMDAS = {
         new string[] { "%" },
@@ -28,5 +29,5 @@
         new string[] { "==", "!=", ">", ">=", "<", "<=" },
         new string[] { "&&", "||" }
     };
-    
+
 }
