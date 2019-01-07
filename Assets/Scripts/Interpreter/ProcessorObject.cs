@@ -3,7 +3,7 @@
 	public float tick_speed;
 
 	public ProcessorObject () {
-		tick_speed = .011f; //in seconds
+		tick_speed = .5f; //in seconds
 	}
 	public ProcessorObject (float tick_speed) {
 		this.tick_speed = tick_speed;

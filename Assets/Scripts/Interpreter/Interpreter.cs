@@ -111,15 +111,14 @@ public class Interpreter {
                     condition = cast (parse (condition), Variables.BOOLEAN);
                     if (bool.Parse (condition) == true) {
                         if (line_parts[0] == "while") scope_tracker.Push (pointer);
-                    }
-                    else {
+                    } else {
                         int bracket_counter = 1;
                         while (bracket_counter > 0) {
                             pointer++;
-                            if (script[pointer].Contains("{")) {
+                            if (script[pointer].Contains ("{")) {
                                 bracket_counter++;
                             }
-                            if (script[pointer].Contains("}")) {
+                            if (script[pointer].Contains ("}")) {
                                 bracket_counter--;
                             }
                         }
@@ -196,11 +195,11 @@ public class Interpreter {
         if (getVariableType (input) == cast_type) {
             switch (cast_type) {
                 case Variables.BOOLEAN:
-                    return left_bool + "";
+                    return left_bool.ToString();
                 case Variables.INTEGER:
-                    return left_int + "";
+                    return left_int.ToString();
                 case Variables.FLOAT:
-                    return left_float + "";
+                    return left_float.ToString();
                 case Variables.STRING:
                     return input;
             }
@@ -278,65 +277,79 @@ public class Interpreter {
         if (left_type == right_type) {
             switch (left_type) {
                 case Variables.BOOLEAN:
-                    return evaulateBooleans (left_bool, arithmetic_operator, right_bool) + "";
+                    return evaulateBooleans (left_bool, arithmetic_operator, right_bool);
                 case Variables.INTEGER:
-                    return evaluateIntegers (left_int, arithmetic_operator, right_int) + "";
+                    return evaluateIntegers (left_int, arithmetic_operator, right_int);
                 case Variables.FLOAT:
-                    return evaluateFloats (left_float, arithmetic_operator, right_float) + "";
+                    return evaluateFloats (left_float, arithmetic_operator, right_float);
                 case Variables.STRING:
-                    return evaulateString (left, arithmetic_operator, right) + "";
+                    return evaulateString (left, arithmetic_operator, right);
             }
         }
         return "";
     }
-    private bool evaulateBooleans (bool left, string arithmetic_operator, bool right) {
+    private string evaulateBooleans (bool left, string arithmetic_operator, bool right) {
         switch (arithmetic_operator) {
             case Operators.EQUAL_TO:
-                return left == right;
+                return (left == right).ToString();
             case Operators.AND:
-                return left && right;
+                return (left && right).ToString();
             case Operators.OR:
-                return left || right;
+                return (left || right).ToString();
             default:
-                return false;
+                return "";
         }
     }
-    private int evaluateIntegers (int left, string arithmetic_operator, int right) {
+    private string evaluateIntegers (int left, string arithmetic_operator, int right) {
         switch (arithmetic_operator) {
             case Operators.MODULUS:
-                return left % right;
+                return (left % right).ToString();
             case Operators.TIMES:
-                return left * right;
+                return (left * right).ToString();
             case Operators.DIVIDE:
-                return left / right;
+                return (left / right).ToString();
             case Operators.ADD:
-                return left + right;
+                return (left + right).ToString();
             case Operators.SUBTRACT:
-                return left - right;
+                return (left - right).ToString();
+            case Operators.EQUAL_TO:
+                return (left == right).ToString();
+            case Operators.GREATER_THAN:
+                return (left > right).ToString();
+            case Operators.GREATER_THAN_EQUAL:
+                return (left >= right).ToString();
+            case Operators.LESS_THAN:
+                return (left < right).ToString();
+            case Operators.LESS_THAN_EQUAL:
+                return (left <= right).ToString();
             default:
-                return 0;
+                return "";
         }
     }
-    private float evaluateFloats (float left, string arithmetic_operator, float right) {
+    private string evaluateFloats (float left, string arithmetic_operator, float right) {
         switch (arithmetic_operator) {
             case Operators.MODULUS:
-                return left % right;
+                return (left % right).ToString();
             case Operators.TIMES:
-                return left * right;
+                return (left * right).ToString();
             case Operators.DIVIDE:
-                return left / right;
+                return (left / right).ToString();
             case Operators.ADD:
-                return left + right;
+                return (left + right).ToString();
             case Operators.SUBTRACT:
-                return left - right;
+                return (left - right).ToString();
+            case Operators.EQUAL_TO:
+                return (left == right).ToString();
             default:
-                return 0;
+                return "";
         }
     }
     private string evaulateString (string left, string arithmetic_operator, string right) {
         switch (arithmetic_operator) {
             case Operators.ADD:
                 return left + right;
+            case Operators.EQUAL_TO:
+                return left == right;
             default:
                 return "";
         }
