@@ -30,13 +30,15 @@ public class ScriptObject {
 	public void setProcessor (ProcessorObject processor) {
 		this.processor = processor;
 	}
-	public void tick (float deltaTime) {
+	public bool tick (float deltaTime) {
 		time += deltaTime;
 		if (time >= processor.tick_speed) {
 			time -= processor.tick_speed;
 			/* Execute a line */
 			interpreter.interpretLine ();
+			return true;
 		}
+		return false;
 	}
 	public override string ToString () {
 		string output = "";

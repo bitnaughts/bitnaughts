@@ -13,7 +13,7 @@
         GREATER_THAN_EQUAL = ">=",
         LESS_THAN = "<",
         LESS_THAN_EQUAL = "<=",
-        AND =  "&&",
+        AND = "&&",
         OR = "||",
         MODULUS = "%",
         TIMES = "*",
@@ -21,5 +21,12 @@
         ADD = "+",
         SUBTRACT = "-";
 
-    public static readonly string[] PEMDAS = {"%", "*", "/", "+", "-", "==", "!=", ">", ">=","<", "<=", "&&", "||"};
+    public static readonly string[][] PEMDAS = {
+        new string[] { "%" },
+        new string[] { "*", "/" },
+        new string[] { "+", "-" },
+        new string[] { "==", "!=", ">", ">=", "<", "<=" },
+        new string[] { "&&", "||" }
+    };
+    
 }

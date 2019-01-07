@@ -56,6 +56,7 @@ public class VariableObject {
 }
 public class Interpreter {
 
+    string debugger = "";
     private GameObject obj;
 
     private List<VariableObject> variables;
@@ -119,25 +120,33 @@ public class Interpreter {
                     string variable_type = line_parts[0];
                     string variable_name = line_parts[1];
                     string variable_value = "";
+
                     for (int i = 3; i < line_parts.Length; i++) {
-                        variable_value += line_parts[i];
+                        variable_value += scrubSymbols (line_parts[i]) + " ";
                     }
+
                     setVariable (variable_type, variable_name, variable_value);
                     break;
                 default:
                     break;
             }
+            pointer++;
+            pointer %= script.Length;
         }
     }
 
     private void setVariable (string type, string name, string value) {
         int index = indexOfVariable (name);
+
         if (index != -1) {
+            /* Variable already exists, update value if provided */
             if (value != "") {
                 value = cast (parse (value), type);
                 variables[index].value = value;
             }
+
         } else {
+            /* Variable does not exist, initialize it */
             if (value != "") {
                 /* e.g. "int i = 122;" */
                 value = cast (parse (value), type);
@@ -149,6 +158,7 @@ public class Interpreter {
         }
     }
     private string cast (string input, string cast_type) {
+        debugger += "\n" + input + "\n";
         if (getVariableType (input) == cast_type) {
             switch (cast_type) {
                 case Variables.BOOLEAN:
@@ -191,18 +201,25 @@ public class Interpreter {
         /* PEMDAS REST OF OPERATIONS */
         /* e.g. ["12", "+", 4, "*", "4"] ==> ["12", "+", "16"] ==> ["28"]*/
         if (parts.Count > 1) {
-            for (int operation = 0; operation < Operators.PEMDAS.Length; operation++) {
-                string current_operation = Operators.PEMDAS[operation];
+            for (int operation_set = 0; operation_set < 5; operation_set++) {
                 for (int part = 1; part < parts.Count - 1; part++) {
-                    if (parts[part] == current_operation) {
-                        parts[part - 1] = evaluateOperation (parts[part - 1], parts[part], parts[part + 1]);
-                        parts.RemoveRange (part, 2);
-                        part -= 2;
+                    for (int operation = 0; operation < Operators.PEMDAS[operation_set].Length; operation++) {
+                        if (parts[part] == Operators.PEMDAS[operation_set][operation]) {
+                            parts[part - 1] = evaluateOperation (parts[part - 1], parts[part], parts[part + 1]);
+                            parts.RemoveRange (part, 2);
+                            part--;
+                        }
                     }
                 }
+                // debugger += current_operation + ": ";
+                for (int part = 0; part < parts.Count - 1; part++) {
+                     debugger += ">" + parts[part] + "<";
+                }
+                debugger += "\n";
             }
         }
         //RETURN FULLY SIMPLIFIED VALUE
+        debugger += "END: " + parts[0] + "\n";
         return parts[0];
     }
 
@@ -211,7 +228,6 @@ public class Interpreter {
             return evaluateMathf (function, parameter);
         }
         //...
-
         return "";
     }
     private string evaluateMathf (string function, string parameter) {
@@ -310,6 +326,14 @@ public class Interpreter {
         return Variables.STRING;
     }
 
+    private string scrubSymbols (string input) {
+        string output = input;
+        if (input.Contains (";")) {
+            output = input.Remove (input.IndexOf (";"), 1);
+        }
+        return output;
+    }
+
     private int indexOfVariable (string name) {
         for (int i = 0; i < variables.Count; i++) {
             if (variables[i].name == name) {
@@ -320,7 +344,8 @@ public class Interpreter {
     }
 
     public override string ToString () {
-        string output = "";
+        string output = "DEBUG: " + debugger + "\n\n";
+        debugger = "";
         for (int i = 0; i < variables.Count; i++) {
             output += "-> Variable(" + variables[i].ToString () + ")\n";
         }
