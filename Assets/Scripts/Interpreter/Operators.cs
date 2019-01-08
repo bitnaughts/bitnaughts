@@ -20,7 +20,9 @@
         DIVIDE = "/",
         ADD = "+",
         SUBTRACT = "-",
-        CLOSING_BRACKET = "}";
+        CLOSING_BRACKET = "}",
+        BREAK = "break;",
+        CONTINUE = "continue;";
 
     public static readonly string[][] PEMDAS = {
         new string[] { "%" },

@@ -7,52 +7,6 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-public class VariableObject {
-
-    public string type;
-    public string name;
-    /* For Primitive Data Types, value == value, otherwise value holds ToString() */
-    public string value;
-    VariableObject[] fields;
-
-    public VariableObject (string type) {
-        init (type, "", "");
-    }
-    public VariableObject (string type, string name) {
-        init (type, name, "");
-    }
-    public VariableObject (string type, string name, string value) {
-        init (type, name, value);
-    }
-    public void init (string type, string name, string value) {
-        this.type = type;
-        this.name = name;
-        this.value = value;
-
-        switch (type) {
-            case "Vector2":
-                fields = new VariableObject[] {
-                    new VariableObject ("float", "x", value.Split (',') [0]),
-                    new VariableObject ("float", "y", value.Split (',') [1])
-                };
-                break;
-            default:
-                fields = null;
-                break;
-        }
-    }
-    public override string ToString () {
-        string output = type + " " + name + " = " + value;
-        if (fields != null) {
-
-            for (int i = 0; i < fields.Length; i++) {
-                output += "-> -> Field(" + fields[i].ToString () + ")\n";
-            }
-        }
-        return output;
-    }
-
-}
 public class Interpreter {
 
     string debugger = "";
@@ -61,15 +15,16 @@ public class Interpreter {
     private List<VariableObject> variables;
     private Stack<int> scope_tracker;
     private string[] script;
-
     private int pointer; //tracks what line is being processed
 
     int left_int, right_int;
     float left_float, right_float;
     bool left_bool, right_bool;
     string variable_type, variable_name, variable_value;
-
-    // Stack<short> backlog; 
+    string parameter;
+    string variable_initialization;
+    string condition;
+    string variable_modifier;
 
     public Interpreter (string[] script, GameObject obj) {
         if (script == null) script = new string[] { };
@@ -90,78 +45,82 @@ public class Interpreter {
             int pointer_saved = pointer;
 
             switch (line_parts[0]) {
+                case Operators.BREAK:
                 case Operators.CLOSING_BRACKET:
                     if (scope_tracker.Count > 0) {
                         pointer = scope_tracker.Pop ();
                     }
                     break;
+                case Operators.CONTINUE:
+                    if (scope_tracker.Count > 0) {
+                        pointer = scope_tracker.Peek ();
+                    }
+                    break;
                 case "if":
                 case "while":
                     /* e.g. "while (i < 10) {" */
-                    string condition = "";
+                    condition = "";
                     for (int i = 1; i < line_parts.Length - 1; i++) {
                         condition += line_parts[i] + " ";
                     }
                     /* e.g. "(i < 10)" */
                     condition = condition.Substring (1, condition.Length - 3);
-                     debugger += "\n("+condition+")\n";
-                      debugger += "\n("+parse (condition)+")\n";
                     condition = cast (parse (condition), Variables.BOOLEAN);
-                    debugger += "\n("+condition+")\n";
-                    // if (true) {
                     if (bool.Parse (condition) == true) {
-                        if (line_parts[0] == "while") scope_tracker.Push (pointer);
-                    } else {
-                        int bracket_counter = 1;
-                        while (bracket_counter > 0) {
-                            pointer++;
-                            if (script[pointer].Contains ("{")) {
-                                bracket_counter++;
-                            }
-                            if (script[pointer].Contains ("}")) {
-                                bracket_counter--;
-                            }
+                        /* e.g. "true", execute within brackets */
+                        if (line_parts[0] == "while") {
+                            scope_tracker.Push (pointer);
                         }
+                    } else {
+                        /* e.g. "false", skip to reciprocal closing bracket */
+                        skipScope ();
                     }
-
-                    // debugger += condition;
                     break;
                 case "for":
                     /* e.g. "for (int i = 0; i < 10; i++) {" */
-                    break;
-                case "break":
-                case "continue":
-                    //scope-flow control?
-                    //break => go to current loop's } 
-                    //continue => go to current loop's { [where ++ and conditionals are also checked]
+                    parameter = "";
+                    for (int i = 1; i < line_parts.Length - 1; i++) {
+                        parameter += line_parts[i] + " ";
+                    }
+                    /* e.g. "(int i = 0; i < 10; i++)" */
+                    parameter = parameter.Substring (1, parameter.Length - 3);
+                    /* e.g. "int i = 0; i < 10; i++" */
+                    variable_initialization = parameter.Split (';') [0];
+                    condition = parameter.Split (';') [1];
+                    variable_modifier = parameter.Split (';') [2];
+                    /* e.g. ["int i = 0", "i < 10", "i++"] */
+                    if (isVariable (variable_initialization.Split (' ') [1])) {
+                        /* Is not the first time for loop has run */
+                        setVariable (variable_modifier);
+                    } else {
+                        /* Run first part of for loop for first iteration */
+                        declareVariable (variable_initialization);
+                    }
+                    condition = cast (parse (condition), Variables.BOOLEAN);
+                    if (bool.Parse (condition) == true) {
+                        /* e.g. "true", execute within brackets */
+                        scope_tracker.Push (pointer);
+                    } else {
+                        /* e.g. "false", skip to reciprocal closing bracket */
+                        skipScope ();
+                    }
                     break;
                 case Variables.BOOLEAN:
                 case Variables.INTEGER:
                 case Variables.FLOAT:
                 case Variables.STRING:
-                    /* e.g. ["int", "i", "=", "123;"] */
-                    /*      [ 0   ,  1,   2,   3 ...] */
-                    variable_type = line_parts[0];
-                    variable_name = line_parts[1];
-                    variable_value = "";
-
-                    for (int i = 3; i < line_parts.Length; i++) {
-                        variable_value += scrubSymbols (line_parts[i]) + " ";
-                    }
-
-                    setVariable (variable_type, variable_name, variable_value);
+                    declareVariable (line_parts);
                     break;
                 default:
-                    int index = indexOfVariable (line_parts[0]);
-                    // debugger += index + ", " + line_parts[0];
-                    if (index != -1) {
+
+                    if (setVariable (line_parts)) {
+                        /* Check if line is referring to a variable */
                         /* e.g. "i = 10;" */
-                        variable_value = "";
-                        for (int i = 2; i < line_parts.Length; i++) {
-                            variable_value += scrubSymbols (line_parts[i]) + " ";
-                        }
-                        setVariable (index, variable_value);
+                    } else if (evaluateFunction ("test", "test")) {
+                        /* Check if line is preferring to a function */
+                        /* e.g. "this.flyTowards(enemy);" */
                     }
+
                     break;
             }
             if (pointer == pointer_saved) {
@@ -173,8 +132,35 @@ public class Interpreter {
                 }
             }
             return false;
+        } else return true;
+    }
+    private void declareVariable (string line) {
+        declareVariable (line.Split (' '));
+    }
+    private void declareVariable (string[] parts) {
+        /* e.g. ["int", "i", "=", "123;"] */
+        /*      [ 0   ,  1,   2,   3 ...] */
+        variable_type = parts[0];
+        variable_name = parts[1];
+        variable_value = "";
+        for (int i = 3; i < parts.Length; i++) {
+            variable_value += scrubSymbols (parts[i]) + " ";
         }
-        else return true;
+        setVariable (variable_type, variable_name, variable_value);
+    }
+    private bool setVariable (string line) {
+        return setVariable (line.Split (' '));
+    }
+    private bool setVariable (string[] parts) {
+        int index = indexOfVariable (line_parts[0]);
+        if (index != -1) {
+            variable_value = "";
+            for (int i = 2; i < parts.Length; i++) {
+                variable_value += scrubSymbols (parts[i]) + " ";
+            }
+            setVariable (index, variable_value);
+            return true;
+        } else return false;
     }
     private void setVariable (int index, string value) {
         if (value != "") {
@@ -183,7 +169,7 @@ public class Interpreter {
         }
     }
     private void setVariable (string type, string name, string value) {
-        /* Variable does not exist, initialize it */
+        /* VARIABLE DOES NOT EXIST, INITIALIZE IT */
         if (value != "") {
             /* e.g. "int i = 122;" */
             value = cast (parse (value), type);
@@ -249,7 +235,7 @@ public class Interpreter {
                 }
                 // debugger += current_operation + ": ";
                 // for (int part = 0; part < parts.Count - 1; part++) {
-                    // debugger += ">" + parts[part] + "<";
+                // debugger += ">" + parts[part] + "<";
                 // }
                 // debugger += "\n";
             }
@@ -355,6 +341,18 @@ public class Interpreter {
                 return "";
         }
     }
+    private int skipScope () {
+        int bracket_counter = 1;
+        while (bracket_counter > 0) {
+            pointer++;
+            if (script[pointer].Contains ("{")) {
+                bracket_counter++;
+            }
+            if (script[pointer].Contains ("}")) {
+                bracket_counter--;
+            }
+        }
+    }
     private string evaulateString (string left, string arithmetic_operator, string right) {
         switch (arithmetic_operator) {
             case Operators.ADD:
@@ -398,6 +396,9 @@ public class Interpreter {
         return output;
     }
 
+    public bool isVariable (string name) {
+        return indexOfVariable (name) != -1;
+    }
     private int indexOfVariable (string name) {
         for (int i = 0; i < variables.Count; i++) {
             if (variables[i].name == name) {
