@@ -10,6 +10,9 @@ public class ScriptObject {
 	private Interpreter interpreter;
 	float time = 0;
 
+	bool ran_this_tick = false;
+	bool finished = false;
+
 	public ScriptObject (GameObject obj, string text) {
 		init (null, text.Split ('\n'));
 	}
@@ -31,14 +34,16 @@ public class ScriptObject {
 		this.processor = processor;
 	}
 	public bool tick (float deltaTime) {
+		if (finished) return false;
+		ran_this_tick = false;		 
 		time += deltaTime;
-		if (time >= processor.tick_speed) {
+		while (time >= processor.tick_speed) {
 			time -= processor.tick_speed;
 			/* Execute a line */
-			interpreter.interpretLine ();
-			return true;
+			finished = interpreter.interpretLine ();
+			ran_this_tick = true;
 		}
-		return false;
+		return ran_this_tick;
 	}
 	public override string ToString () {
 		string output = "";

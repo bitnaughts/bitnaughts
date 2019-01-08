@@ -8,7 +8,7 @@ public class ProjectileEditor : MonoBehaviour {
 
     ProjectileObject projectile;
 
-    string testScript = "int angle = 0;\nbool value = false;\nwhile (angle < 360) {\nangle = angle + 1;\n}\n";
+    string testScript = "int angle = 1;\n\nwhile (true) {\nangle = angle + 10;\n}\n";
 
 
     // Start is called before the first frame update
@@ -21,6 +21,7 @@ public class ProjectileEditor : MonoBehaviour {
 
         if (script.tick (Time.deltaTime)) {
             GameObject.Find ("Output").GetComponent<Text> ().text = script.ToString ();
+            GameObject.Find ("Output2").GetComponent<Text> ().text = testScript;
         }
 
         //this.transform.Translate (new Vector2 (0, .5f));

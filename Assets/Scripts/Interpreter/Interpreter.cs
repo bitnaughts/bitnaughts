@@ -82,9 +82,9 @@ public class Interpreter {
     }
 
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
-    public void interpretLine () {
-        if (script.Length > 0) {
-            debugger += "LINE: " + script[pointer] + "\n\n";
+    public bool interpretLine () {
+        if (script.Length > 0 && pointer >= 0 && pointer < script.Length) {
+            debugger += "LINE: " + script[pointer] + "\n";
             string line = script[pointer];
             string[] line_parts = line.Split (' ');
             int pointer_saved = pointer;
@@ -94,21 +94,21 @@ public class Interpreter {
                     if (scope_tracker.Count > 0) {
                         pointer = scope_tracker.Pop ();
                     }
-                    //scope control:
-                    //update visible variables?
-                    //find new pointer position, might be going back to loop, skip else, etc
-                    //does not cost anything in interpreter, recalls
                     break;
                 case "if":
                 case "while":
                     /* e.g. "while (i < 10) {" */
                     string condition = "";
                     for (int i = 1; i < line_parts.Length - 1; i++) {
-                        condition += line_parts[i];
+                        condition += line_parts[i] + " ";
                     }
                     /* e.g. "(i < 10)" */
-                    condition = condition.Substring (1, condition.Length - 2);
+                    condition = condition.Substring (1, condition.Length - 3);
+                     debugger += "\n("+condition+")\n";
+                      debugger += "\n("+parse (condition)+")\n";
                     condition = cast (parse (condition), Variables.BOOLEAN);
+                    debugger += "\n("+condition+")\n";
+                    // if (true) {
                     if (bool.Parse (condition) == true) {
                         if (line_parts[0] == "while") scope_tracker.Push (pointer);
                     } else {
@@ -124,7 +124,7 @@ public class Interpreter {
                         }
                     }
 
-                    debugger += condition;
+                    // debugger += condition;
                     break;
                 case "for":
                     /* e.g. "for (int i = 0; i < 10; i++) {" */
@@ -153,7 +153,7 @@ public class Interpreter {
                     break;
                 default:
                     int index = indexOfVariable (line_parts[0]);
-                    debugger += index + ", " + line_parts[0];
+                    // debugger += index + ", " + line_parts[0];
                     if (index != -1) {
                         /* e.g. "i = 10;" */
                         variable_value = "";
@@ -167,11 +167,14 @@ public class Interpreter {
             if (pointer == pointer_saved) {
                 pointer++;
                 if (pointer == script.Length) {
-                    pointer = 0;
-                    variables = new List<VariableObject> ();
+                    return true; //trigger deletion of script object, script done
+                    //pointer = 0;
+                    //variables = new List<VariableObject> ();
                 }
             }
+            return false;
         }
+        else return true;
     }
     private void setVariable (int index, string value) {
         if (value != "") {
@@ -195,11 +198,11 @@ public class Interpreter {
         if (getVariableType (input) == cast_type) {
             switch (cast_type) {
                 case Variables.BOOLEAN:
-                    return left_bool.ToString();
+                    return left_bool.ToString ();
                 case Variables.INTEGER:
-                    return left_int.ToString();
+                    return left_int.ToString ();
                 case Variables.FLOAT:
-                    return left_float.ToString();
+                    return left_float.ToString ();
                 case Variables.STRING:
                     return input;
             }
@@ -234,7 +237,7 @@ public class Interpreter {
         /* PEMDAS REST OF OPERATIONS */
         /* e.g. ["12", "+", 4, "*", "4"] ==> ["12", "+", "16"] ==> ["28"]*/
         if (parts.Count > 1) {
-            for (int operation_set = 0; operation_set < 5; operation_set++) {
+            for (int operation_set = 0; operation_set < Operators.PEMDAS.Length; operation_set++) {
                 for (int part = 1; part < parts.Count - 1; part++) {
                     for (int operation = 0; operation < Operators.PEMDAS[operation_set].Length; operation++) {
                         if (parts[part] == Operators.PEMDAS[operation_set][operation]) {
@@ -245,14 +248,14 @@ public class Interpreter {
                     }
                 }
                 // debugger += current_operation + ": ";
-                for (int part = 0; part < parts.Count - 1; part++) {
-                    debugger += ">" + parts[part] + "<";
-                }
-                debugger += "\n";
+                // for (int part = 0; part < parts.Count - 1; part++) {
+                    // debugger += ">" + parts[part] + "<";
+                // }
+                // debugger += "\n";
             }
         }
         //RETURN FULLY SIMPLIFIED VALUE
-        debugger += "END: " + parts[0] + "\n";
+        // debugger += "END: " + parts[0] + "\n";
         return parts[0];
     }
 
@@ -291,11 +294,11 @@ public class Interpreter {
     private string evaulateBooleans (bool left, string arithmetic_operator, bool right) {
         switch (arithmetic_operator) {
             case Operators.EQUAL_TO:
-                return (left == right).ToString();
+                return (left == right).ToString ();
             case Operators.AND:
-                return (left && right).ToString();
+                return (left && right).ToString ();
             case Operators.OR:
-                return (left || right).ToString();
+                return (left || right).ToString ();
             default:
                 return "";
         }
@@ -303,25 +306,25 @@ public class Interpreter {
     private string evaluateIntegers (int left, string arithmetic_operator, int right) {
         switch (arithmetic_operator) {
             case Operators.MODULUS:
-                return (left % right).ToString();
+                return (left % right).ToString ();
             case Operators.TIMES:
-                return (left * right).ToString();
+                return (left * right).ToString ();
             case Operators.DIVIDE:
-                return (left / right).ToString();
+                return (left / right).ToString ();
             case Operators.ADD:
-                return (left + right).ToString();
+                return (left + right).ToString ();
             case Operators.SUBTRACT:
-                return (left - right).ToString();
+                return (left - right).ToString ();
             case Operators.EQUAL_TO:
-                return (left == right).ToString();
+                return (left == right).ToString ();
             case Operators.GREATER_THAN:
-                return (left > right).ToString();
+                return (left > right).ToString ();
             case Operators.GREATER_THAN_EQUAL:
-                return (left >= right).ToString();
+                return (left >= right).ToString ();
             case Operators.LESS_THAN:
-                return (left < right).ToString();
+                return (left < right).ToString ();
             case Operators.LESS_THAN_EQUAL:
-                return (left <= right).ToString();
+                return (left <= right).ToString ();
             default:
                 return "";
         }
@@ -329,17 +332,25 @@ public class Interpreter {
     private string evaluateFloats (float left, string arithmetic_operator, float right) {
         switch (arithmetic_operator) {
             case Operators.MODULUS:
-                return (left % right).ToString();
+                return (left % right).ToString ();
             case Operators.TIMES:
-                return (left * right).ToString();
+                return (left * right).ToString ();
             case Operators.DIVIDE:
-                return (left / right).ToString();
+                return (left / right).ToString ();
             case Operators.ADD:
-                return (left + right).ToString();
+                return (left + right).ToString ();
             case Operators.SUBTRACT:
-                return (left - right).ToString();
+                return (left - right).ToString ();
             case Operators.EQUAL_TO:
-                return (left == right).ToString();
+                return (left == right).ToString ();
+            case Operators.GREATER_THAN:
+                return (left > right).ToString ();
+            case Operators.GREATER_THAN_EQUAL:
+                return (left >= right).ToString ();
+            case Operators.LESS_THAN:
+                return (left < right).ToString ();
+            case Operators.LESS_THAN_EQUAL:
+                return (left <= right).ToString ();
             default:
                 return "";
         }
@@ -349,7 +360,7 @@ public class Interpreter {
             case Operators.ADD:
                 return left + right;
             case Operators.EQUAL_TO:
-                return left == right;
+                return (left == right).ToString ();
             default:
                 return "";
         }
