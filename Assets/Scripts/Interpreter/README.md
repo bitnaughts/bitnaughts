@@ -12,3 +12,15 @@ if (i < 100) {
         this.rotation = i;
     }
 }
+
+
+
+1 class MissileObject {
+2   int angle = 0;
+3   Vector2 positon = this.position;
+4   Vector2 target = enemies[0].position;
+5   while (true) {
+6      float angle = Vector2.angle(position,target)
+7      this.RotateTowards(angle);
+8   }
+9 }

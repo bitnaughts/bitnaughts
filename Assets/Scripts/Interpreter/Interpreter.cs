@@ -234,7 +234,6 @@ public class Interpreter {
         return Operators.EMPTY;
     }
     private void evaluateCondition (string input, string type) {
-        debugger += cast (parse (input), Variables.BOOLEAN) + " should be parseable!";
         input = cast (parse (input), Variables.BOOLEAN);
 
         if (bool.Parse (input) == true) {
