@@ -1,5 +1,6 @@
 ﻿public static class Operators {
-    public const string EQUALS = "=",
+    public const string EMPTY = "",
+        EQUALS = "=",
         INCREMENT = "++",
         DECREMENT = "--",
         ADDITION = "+=",
@@ -20,12 +21,20 @@
         DIVIDE = "/",
         ADD = "+",
         SUBTRACT = "-",
+        OPENING_BRACKET = "{",
         CLOSING_BRACKET = "}",
+        OPENING_PARENTHESIS = "(",
+        CLOSING_PARENTHESIS = ")",
+        END_LINE = ";",
+
         BREAK = "break;",
         CONTINUE = "continue;",
         IF = "if",
         WHILE = "while",
         FOR = "for";
+
+    public const char END_LINE_CHAR = ';';
+
 
     public static readonly string[][] PEMDAS = {
         new string[] { "%" },
