@@ -122,34 +122,14 @@ public class Interpreter {
         }
         string variable_name = parts[0];
         string variable_operator = parts[1];
-        int index = indexOfVariable (variable_name);
-        if (index != -1) {
-            variable_value = Operators.EMPTY;
-            if (variable_operator != Operators.EQUALS) {
-                switch (variable_operator) {
-                    case Operators.ADDITION:
-                        variable_value = variable_name + " " + Operators.ADD + " " + Operators.OPENING_PARENTHESIS;
-                        break;
-                    case Operators.SUBTRACTION:
-                        variable_value = variable_name + " " + Operators.SUBTRACT + " " + Operators.OPENING_PARENTHESIS;
-                        break;
-                    case Operators.MULTIPLICATION:
-                        variable_value = variable_name + " " + Operators.TIMES + " " + Operators.OPENING_PARENTHESIS;
-                        break;
-                    case Operators.DIVISION:
-                        variable_value = variable_name + " " + Operators.DIVIDE + " " + Operators.OPENING_PARENTHESIS;
-                        break;
-                    case Operators.MODULO:
-                        variable_value = variable_name + " " + Operators.MODULUS + " " + Operators.OPENING_PARENTHESIS;
-                        break;
-                }
-            }
+        int index;
+        if (isVariable (variable_name, out index)) {
+            variable_value = Evaluator.simplifyCondensedOperators (variable_name, variable_operator);
             for (int i = 2; i < parts.Length; i++) {
                 variable_value += scrubSymbols (parts[i]);
                 if (i != parts.Length - 1) variable_value += " ";
                 else if (variable_operator != Operators.EQUALS) variable_value += Operators.CLOSING_PARENTHESIS;
             }
-
             setVariable (index, variable_value);
             return true;
         } else return false;
@@ -165,18 +145,20 @@ public class Interpreter {
     }
 
     private string cast (string input, string cast_type) {
-        if (input != Operators.EMPTY && Evaluator.getVariableType (input) == cast_type) {
+        if (input != Operators.EMPTY && Evaluator.getType (getValue (input)) == cast_type) {
             switch (cast_type) {
                 case Variables.BOOLEAN:
-                    return bool.Parse(input).ToString();
+                    return bool.Parse (input).ToString ();
                 case Variables.INTEGER:
-                    return int.Parse(input).ToString();
+                    return int.Parse (input).ToString ();
                 case Variables.FLOAT:
-                    return float.Parse(input).ToString();
+                    return float.Parse (input).ToString ();
                 case Variables.STRING:
                     return input;
             }
         }
+        //add cases to convert floats to ints, etc? 
+        //but, preferrably implement casting (int.Parse...)
         return Operators.EMPTY;
     }
     private string parse (string input) {
@@ -207,8 +189,10 @@ public class Interpreter {
                 for (int operation_set = 0; operation_set < Operators.PEMDAS.Length; operation_set++) {
                     for (int part = 1; part < parts.Count - 1; part++) {
                         for (int operation = 0; operation < Operators.PEMDAS[operation_set].Length; operation++) {
-                            if (parts[part] == Operators.PEMDAS[operation_set][operation]) {
-                                parts[part - 1] = Evaluator.simplify (parts[part - 1], parts[part], parts[part + 1]);
+                            string operation_type = parts[part];
+                            if (operation_type == Operators.PEMDAS[operation_set][operation]) {
+                                string left = getValue (parts[part - 1]), right = getValue (parts[part + 1]);
+                                parts[part-1] = Evaluator.simplify (left, operation_type, right);
                                 parts.RemoveRange (part, 2);
                                 part--;
                             }
@@ -222,7 +206,9 @@ public class Interpreter {
         return Operators.EMPTY;
     }
     private void evaluateCondition (string input, string type) {
+        debugger += cast(parse(input), Variables.BOOLEAN) + " should be parseable!";
         input = cast (parse (input), Variables.BOOLEAN);
+        
         if (bool.Parse (input) == true) {
             /* e.g. "true", execute within brackets */
             if (type == Operators.WHILE || type == Operators.FOR) {
@@ -231,20 +217,11 @@ public class Interpreter {
         } else { skipScope (); }
 
     }
-    private void skipScope () {
-        int bracket_counter = 1;
-        while (bracket_counter > 0) {
-            pointer++;
-            if (script[pointer].Contains (Operators.OPENING_BRACKET)) bracket_counter++;
-            else if (script[pointer].Contains (Operators.CLOSING_BRACKET)) bracket_counter--;
-        }
-    }
+   
 
     private string scrubSymbols (string input) {
         string output = input;
-        if (input.Contains (Operators.END_LINE)) {
-            output = input.Remove (input.IndexOf (Operators.END_LINE), 1);
-        }
+        if (input.Contains (Operators.END_LINE)) output = input.Remove (input.IndexOf (Operators.END_LINE), 1);
         return output;
     }
 
@@ -264,24 +241,37 @@ public class Interpreter {
         }
         return new string[] { };
     }
-
     public bool isVariable (string name) {
-        return indexOfVariable (name) != -1;
+        return getIndexOfVariable (name) != -1;
     }
-    private int indexOfVariable (string name) {
-        for (int i = 0; i < variables.Count; i++) {
-            if (variables[i].name == name) {
-                return i;
-            }
-        }
+    public bool isVariable (string name, out int index) {
+        index = getIndexOfVariable (name);
+        return index != -1;
+    }
+    private int getIndexOfVariable (string name) {
+        for (int i = 0; i < variables.Count; i++)
+            if (variables[i].name == name) return i;
         return -1;
     }
     private int closeScope (bool isContinuing) {
         if (scope_tracker.Count > 0) {
-            if (isContinuing) return scope_tracker.Pop ();
-            else return scope_tracker.Peek ();
+            if (isContinuing) return scope_tracker.Peek ();
+            else return scope_tracker.Pop ();
         }
         return -1;
+    }
+     private void skipScope () {
+        int bracket_counter = 1;
+        while (bracket_counter > 0) {
+            pointer++;
+            if (script[pointer].Contains (Operators.OPENING_BRACKET)) bracket_counter++;
+            else if (script[pointer].Contains (Operators.CLOSING_BRACKET)) bracket_counter--;
+        }
+    }
+    private string getValue (string input) {
+        int index;
+        if (isVariable (input, out index)) return variables[index].value;
+        return input;
     }
 
     public override string ToString () {

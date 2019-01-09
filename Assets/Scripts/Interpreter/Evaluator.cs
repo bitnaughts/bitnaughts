@@ -9,52 +9,31 @@ using UnityEngine;
 
 public class Evaluator {
 
-    private static int left_int, right_int;
-    private static float left_float, right_float;
-    private static bool left_bool, right_bool;
+    private static int int_result;
+    private static float float_result;
+    private static bool bool_result;
 
-    public static string simplifyFunction (string function, string parameter) {
-        if (function.IndexOf ("Mathf") == 0) {
-            return simplifyMathf (function, parameter);
-        }
-        if (function.IndexOf ("this") == 0) {
-            return simplifyControlFunctions (function, parameter);
-        }
-        //...
-        return "";
-    }
-    public static string simplifyControlFunctions (string function, string parameter) {
-        switch (function) {
-            case "this.rotate":
-                return Mathf.Abs (float.Parse (parameter)) + "";
-                //...
-        }
-        return "";
-    }
-    public static string simplifyMathf (string function, string parameter) {
-        switch (function) {
-            case "Mathf.Abs":
-                return Mathf.Abs (float.Parse (parameter)) + "";
-                //...
-        }
-        return "";
-    }
     public static string simplify (string left, string arithmetic_operator, string right) {
         /* e.g. ["12", "*", "4"] ==> ["48"] */
-        string left_type = getVariableType (left, true), right_type = getVariableType (right, false);
+        string left_type = getType (left), right_type = getType (right);
         if (left_type == right_type) {
             switch (left_type) {
                 case Variables.BOOLEAN:
-                    return simplifyBooleans (left_bool, arithmetic_operator, right_bool);
+                    return simplifyBooleans (bool.Parse (left), arithmetic_operator, bool.Parse (right));
                 case Variables.INTEGER:
-                    return simplifyIntegers (left_int, arithmetic_operator, right_int);
+                    return simplifyIntegers (int.Parse (left), arithmetic_operator, int.Parse (right));
                 case Variables.FLOAT:
-                    return simplifyFloats (left_float, arithmetic_operator, right_float);
+                    return simplifyFloats (float.Parse (left), arithmetic_operator, float.Parse (right));
                 case Variables.STRING:
                     return simplifyString (left, arithmetic_operator, right);
             }
         }
-        return "";
+        if ((left_type == Variables.FLOAT && right_type == Variables.INTEGER) || (right_type == Variables.FLOAT && left_type == Variables.INTEGER)) {
+            /* AUTO TYPE CASTING INTEGERS IN FLOAT CALCULATIONS, e.g. "12 / 1.0" == "12.0", not "12" */
+            return simplifyFloats (float.Parse (left), arithmetic_operator, float.Parse (right));
+        }
+        /* CASTS NOT HANDLED, e.g. "true + 1.0", TREAT AS STRINGS */
+        return simplifyString (left, arithmetic_operator, right);
     }
     public static string simplifyBooleans (bool left, string arithmetic_operator, bool right) {
         switch (arithmetic_operator) {
@@ -132,28 +111,56 @@ public class Evaluator {
         }
 
     }
-    public static string getVariableType (string input) {
-        return getVariableType (input, true);
-    }
-    public static string getVariableType (string input, bool left) {
-
-        int index = indexOfVariable (input);
-        if (index != -1) {
-            input = variables[index].value;
-        }
-        if (left) {
-            if (bool.TryParse (input, out left_bool)) return Variables.BOOLEAN;
-            if (int.TryParse (input, out left_int)) return Variables.INTEGER;
-            if (float.TryParse (input, out left_float)) return Variables.FLOAT;
-
-            //...
-        } else {
-            if (bool.TryParse (input, out right_bool)) return Variables.BOOLEAN;
-            if (int.TryParse (input, out right_int)) return Variables.INTEGER;
-            if (float.TryParse (input, out right_float)) return Variables.FLOAT;
-            //...
-        }
+    public static string getType (string input) {
+        if (bool.TryParse (input, out bool_result)) return Variables.BOOLEAN;
+        if (int.TryParse (input, out int_result)) return Variables.INTEGER;
+        if (float.TryParse (input, out float_result)) return Variables.FLOAT;
         return Variables.STRING;
     }
 
+    public static string simplifyFunction (string function, string parameter) {
+        if (function.IndexOf ("Mathf") == 0) {
+            return simplifyMathf (function, parameter);
+        }
+        if (function.IndexOf ("this") == 0) {
+            return simplifyControlFunctions (function, parameter);
+        }
+        //...
+        return "";
+    }
+    public static string simplifyControlFunctions (string function, string parameter) {
+        switch (function) {
+            case "this.rotate":
+                return Mathf.Abs (float.Parse (parameter)) + "";
+                //...
+        }
+        return "";
+    }
+    public static string simplifyMathf (string function, string parameter) {
+        switch (function) {
+            case "Mathf.Abs":
+                return Mathf.Abs (float.Parse (parameter)) + "";
+                //...
+        }
+        return "";
+    }
+    public static string simplifyCondensedOperators (string variable_name, string arithmetic_operator) {
+        switch (arithmetic_operator) {
+            case Operators.EQUALS:
+                return Operators.EMPTY;
+            case Operators.ADDITION:
+                return variable_name + " " + Operators.ADD + " " + Operators.OPENING_PARENTHESIS;
+            case Operators.SUBTRACTION:
+                return variable_name + " " + Operators.SUBTRACT + " " + Operators.OPENING_PARENTHESIS;
+            case Operators.MULTIPLICATION:
+                return variable_name + " " + Operators.TIMES + " " + Operators.OPENING_PARENTHESIS;
+            case Operators.DIVISION:
+                return variable_name + " " + Operators.DIVIDE + " " + Operators.OPENING_PARENTHESIS;
+            case Operators.MODULO:
+                return variable_name + " " + Operators.MODULUS + " " + Operators.OPENING_PARENTHESIS;
+            default:
+                return Operators.EMPTY;
+        }
+
+    }
 }
