@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 
 public class Interpreter {
@@ -84,12 +81,35 @@ public class Interpreter {
                     declareVariable (line_parts);
                     break;
                 default:
-                    if (setVariable (line_parts)) {
-                        /* Check if line is referring to a variable */
-                        /* e.g. "i = 10;" */
-                    } else if (false) /* Evaluator.evaluateFunction ("test", "test");*/ {
-                        /* Check if line is preferring to a function */
-                        /* e.g. "this.flyTowards(enemy);" */
+                    if (isVariable (line_parts[0])) {
+                        /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
+                        setVariable (line_parts);
+                    } else {
+                        if (line_parts[0].Contains (".")) {
+                            /* e.g. "Console.WriteLine("test")" */
+                            string class_name = line_parts[0].Split ('.') [0];
+                            string function_name = line_parts[0].Split ('.') [1].Split ('(') [0];
+                            string function_parameters = "";
+                            /* e.g. "Console", "WriteLine" */
+                            switch (class_name) {
+                                case "Console":
+                                    Referencer.consoleManager.execute(function_name, function_parameters);
+                                    break;
+                                case "Application":
+                                    break;
+                                case "Mathf":
+                                    break;
+                            }
+                        }
+
+                        /* CHECK IF LINE REFERS TO A FUNCTION, e.g. "Console.WriteLine("Test");" */
+                        /*
+
+                            switch className
+
+                         */
+                        //how to handle the many various "action" functions people could call, e.g. Console.log, this.rotate(), etc.
+
                     }
                     break;
             }
@@ -103,7 +123,6 @@ public class Interpreter {
     }
     private void declareVariable (string[] parts) {
         /* e.g. ["int", "i", "=", "123;"] */
-        /*      [ 0   ,  1,   2,   3 ...] */
         variable_type = parts[0];
         variable_name = parts[1];
         variable_value = Operators.EMPTY;
@@ -112,10 +131,10 @@ public class Interpreter {
         }
         setVariable (variable_type, variable_name, variable_value);
     }
-    private bool setVariable (string line) {
-        return setVariable (line.Split (' '));
+    private void setVariable (string line) {
+        setVariable (line.Split (' '));
     }
-    private bool setVariable (string[] parts) {
+    private void setVariable (string[] parts) {
         if (parts.Length == 1) {
             /* e.g. "i++;" */
             parts = splitIncrement (parts[0]);
@@ -131,8 +150,7 @@ public class Interpreter {
                 else if (variable_operator != Operators.EQUALS) variable_value += Operators.CLOSING_PARENTHESIS;
             }
             setVariable (index, variable_value);
-            return true;
-        } else return false;
+        }
     }
     private void setVariable (int index, string value) {
         if (value != Operators.EMPTY) {
@@ -164,10 +182,20 @@ public class Interpreter {
     private string parse (string input) {
         if (input != Operators.EMPTY) {
             List<string> parts = input.Split (' ').ToList<string> ();
-            /* EVALUATE PARATHESIS AND FUNCTIONS RECURSIVELY, e.g. "12 + function(2) * 4" ==> "12 + 4 * 4" */
+            /* EVALUATE PARENTHESIS AND FUNCTIONS RECURSIVELY, e.g. "12 + function(2) * 4" ==> "12 + 4 * 4" */
+
+            //this section is still untested and requires thorough testing
+            //for edge cases with parenthesis, e.g. "Mathf.Abs((2 + 1) * 2)"
+            //
+            //I think this logic isn't the best suited for parenthesis
+            //Fix:
+            //find deepest set of parenthesis, combine spaces to parameters[], parse each parameter in parameters (for ","s in functions)
+            //in the end, "2 * (2 + 2)" = "2 * 4"
+            //or with functions, "2 * Mathf.Abs(2 + 2)" = "2 * Mathf.Abs(4)"...
+            //If function preceeds ()s, keep parenthesis, else return parse(parameter)
+
             for (int part = 0; part < parts.Count; part++) {
                 if (parts[part].Contains (Operators.OPENING_PARENTHESIS)) {
-
                     string parts_to_be_condensed = parts[part];
                     while (parts[part].Contains (Operators.CLOSING_PARENTHESIS) == false) {
                         part++;
@@ -214,7 +242,7 @@ public class Interpreter {
             if (type == Operators.WHILE || type == Operators.FOR) {
                 scope_tracker.Push (pointer);
             } else if (type == Operators.IF) {
-                scope_tracker.Push (getPointerTo(pointer, Operators.CLOSING_BRACKET));
+                scope_tracker.Push (getPointerTo (pointer, Operators.CLOSING_BRACKET));
             }
         } else { skipScope (); }
 
@@ -259,7 +287,7 @@ public class Interpreter {
             if (isContinuing) return scope_tracker.Peek ();
             else {
                 /* REMOVE VARIABLES DEFINED IN PREVIOUS SCOPE, e.g. "if (i < 10) { int j = 10; }" */
-                variables = GarbageCollector.removeBetween (getPointerTo(pointer, Operators.OPENING_BRACKET), pointer, variables);
+                variables = GarbageCollector.removeBetween (getPointerTo (pointer, Operators.OPENING_BRACKET), pointer, variables);
 
                 //need logic for if statements being different
                 // if an if closes, it needs to collect any possible garbage, but not go back to start of if statement
@@ -290,7 +318,7 @@ public class Interpreter {
         return starting_pointer;
     }
     private void skipScope () {
-        pointer = getPointerTo(pointer, Operators.CLOSING_BRACKET);
+        pointer = getPointerTo (pointer, Operators.CLOSING_BRACKET);
     }
     private string getValue (string input) {
         int index;

@@ -2,6 +2,7 @@
 
 ## Examples
 
+Console.Open(this.script);
 int i = 0;
 if (i < 100) {
 

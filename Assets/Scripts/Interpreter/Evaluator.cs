@@ -122,12 +122,16 @@ public class Evaluator {
         if (function.IndexOf ("Mathf") == 0) {
             return simplifyMathf (function, parameter);
         }
+        if (function.IndexOf ("Console") == 0) {
+            return simplifyControlFunctions (function, parameter);
+        }
         if (function.IndexOf ("this") == 0) {
             return simplifyControlFunctions (function, parameter);
         }
         //...
         return "";
     }
+    
     public static string simplifyControlFunctions (string function, string parameter) {
         switch (function) {
             case "this.rotate":
