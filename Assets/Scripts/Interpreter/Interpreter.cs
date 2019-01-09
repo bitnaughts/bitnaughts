@@ -13,7 +13,7 @@ public class Interpreter {
     private GameObject obj;
 
     private List<VariableObject> variables;
-    private Stack<int> scope_tracker;
+    private Stack<int> scope_tracker; //if statements could push their scope to their reciprocal "}"?
     private string[] script;
     private int pointer; //tracks what line is being processed
 
@@ -141,7 +141,7 @@ public class Interpreter {
     }
     private void setVariable (string type, string name, string value) {
         /* VARIABLE DOES NOT EXIST, INITIALIZE IT, e.g. "int i = 122;" */
-        variables.Add (new VariableObject (type, name, cast (parse (value), type)));
+        variables.Add (new VariableObject (type, name, cast (parse (value), type), pointer));
     }
 
     private string cast (string input, string cast_type) {
@@ -192,7 +192,7 @@ public class Interpreter {
                             string operation_type = parts[part];
                             if (operation_type == Operators.PEMDAS[operation_set][operation]) {
                                 string left = getValue (parts[part - 1]), right = getValue (parts[part + 1]);
-                                parts[part-1] = Evaluator.simplify (left, operation_type, right);
+                                parts[part - 1] = Evaluator.simplify (left, operation_type, right);
                                 parts.RemoveRange (part, 2);
                                 part--;
                             }
@@ -206,18 +206,19 @@ public class Interpreter {
         return Operators.EMPTY;
     }
     private void evaluateCondition (string input, string type) {
-        debugger += cast(parse(input), Variables.BOOLEAN) + " should be parseable!";
+        debugger += cast (parse (input), Variables.BOOLEAN) + " should be parseable!";
         input = cast (parse (input), Variables.BOOLEAN);
-        
+
         if (bool.Parse (input) == true) {
             /* e.g. "true", execute within brackets */
             if (type == Operators.WHILE || type == Operators.FOR) {
                 scope_tracker.Push (pointer);
+            } else if (type == Operators.IF) {
+                scope_tracker.Push (getPointerTo(pointer, Operators.CLOSING_BRACKET));
             }
         } else { skipScope (); }
 
     }
-   
 
     private string scrubSymbols (string input) {
         string output = input;
@@ -256,17 +257,40 @@ public class Interpreter {
     private int closeScope (bool isContinuing) {
         if (scope_tracker.Count > 0) {
             if (isContinuing) return scope_tracker.Peek ();
-            else return scope_tracker.Pop ();
+            else {
+                /* REMOVE VARIABLES DEFINED IN PREVIOUS SCOPE, e.g. "if (i < 10) { int j = 10; }" */
+                variables = GarbageCollector.removeBetween (getPointerTo(pointer, Operators.OPENING_BRACKET), pointer, variables);
+
+                //need logic for if statements being different
+                // if an if closes, it needs to collect any possible garbage, but not go back to start of if statement
+                return scope_tracker.Pop ();
+            }
         }
         return -1;
     }
-     private void skipScope () {
+
+    private int getPointerTo (int starting_pointer, string target) {
         int bracket_counter = 1;
-        while (bracket_counter > 0) {
-            pointer++;
-            if (script[pointer].Contains (Operators.OPENING_BRACKET)) bracket_counter++;
-            else if (script[pointer].Contains (Operators.CLOSING_BRACKET)) bracket_counter--;
+        switch (target) {
+            case Operators.CLOSING_BRACKET:
+                while (bracket_counter > 0) {
+                    starting_pointer++;
+                    if (script[starting_pointer].Contains (Operators.OPENING_BRACKET)) bracket_counter++;
+                    else if (script[starting_pointer].Contains (Operators.CLOSING_BRACKET)) bracket_counter--;
+                }
+                return starting_pointer;
+            case Operators.OPENING_BRACKET:
+                while (bracket_counter > 0) {
+                    starting_pointer--;
+                    if (script[starting_pointer].Contains (Operators.OPENING_BRACKET)) bracket_counter--;
+                    else if (script[starting_pointer].Contains (Operators.CLOSING_BRACKET)) bracket_counter++;
+                }
+                return starting_pointer;
         }
+        return starting_pointer;
+    }
+    private void skipScope () {
+        pointer = getPointerTo(pointer, Operators.CLOSING_BRACKET);
     }
     private string getValue (string input) {
         int index;
