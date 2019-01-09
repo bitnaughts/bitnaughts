@@ -45,6 +45,8 @@ public class Interpreter {
             int pointer_saved = pointer;
 
             switch (line_parts[0]) {
+                case "":
+                    break;
                 case Operators.BREAK:
                 case Operators.CLOSING_BRACKET:
                     if (scope_tracker.Count > 0) {
@@ -122,11 +124,25 @@ public class Interpreter {
         return setVariable (line.Split (' '));
     }
     private bool setVariable (string[] parts) {
+        if (parts.Length == 1) {
+            /* e.g. "i++;" */
+            parts = splitIncrement (parts[0]);
+        }
         int index = indexOfVariable (parts[0]);
         if (index != -1) {
             variable_value = "";
             for (int i = 2; i < parts.Length; i++) {
                 variable_value += scrubSymbols (parts[i]) + " ";
+            }
+            if (parts[1] != Operators.EQUALS) {
+                switch (parts[1]) {
+                    case Operators.ADDITION:
+                        variable_value += Operators.ADD + " " + parts[0];
+                        break;
+                    case Operators.SUBTRACTION:
+                        variable_value += Operators.SUBTRACT + " " + parts[0];
+                        break;
+                }
             }
             setVariable (index, variable_value);
             return true;
@@ -229,7 +245,19 @@ public class Interpreter {
         if (function.IndexOf ("Mathf") == 0) {
             return evaluateMathf (function, parameter);
         }
+        if (function.IndexOf("this") == 0) {
+            return evaluateControlFunctions();
+        }
+
         //...
+        return "";
+    }
+    private string evaluateControlFunctions (string function, string parameter) {
+        switch (function) {
+            case "this.rotate":
+                return Mathf.Abs (float.Parse (parameter)) + "";
+                //...
+        }
         return "";
     }
     private string evaluateMathf (string function, string parameter) {
@@ -374,6 +402,23 @@ public class Interpreter {
             output = input.Remove (input.IndexOf (";"), 1);
         }
         return output;
+    }
+
+    private string[] splitIncrement (string input) {
+        string variable_name, variable_operation;
+        input = input.Split (';') [0]; //remove ; if there
+
+        variable_name = input.Substring (0, input.Length - 2);
+        variable_operation = input.Substring (input.Length - 2);
+
+        switch (variable_operation) {
+            case Operators.INCREMENT:
+                return new string[] { variable_name, "=", variable_name, "+", "1" };
+            case Operators.DECREMENT:
+                return new string[] { variable_name, "=", variable_name, "-", "1" };
+
+        }
+        return new string[] {};
     }
 
     public bool isVariable (string name) {
