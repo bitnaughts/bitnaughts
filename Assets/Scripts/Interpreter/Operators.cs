@@ -22,7 +22,10 @@
         SUBTRACT = "-",
         CLOSING_BRACKET = "}",
         BREAK = "break;",
-        CONTINUE = "continue;";
+        CONTINUE = "continue;",
+        IF = "if",
+        WHILE = "while",
+        FOR = "for";
 
     public static readonly string[][] PEMDAS = {
         new string[] { "%" },

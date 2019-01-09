@@ -56,54 +56,32 @@ public class Interpreter {
                         pointer = scope_tracker.Peek ();
                     }
                     break;
-                case "if":
-                case "while":
+                case Operators.IF:
+                case Operators.WHILE:
                     /* e.g. "while (i < 10) {" */
                     condition = "";
-                    for (int i = 1; i < line_parts.Length - 1; i++) {
-                        condition += line_parts[i] + " ";
-                    }
+                    for (int i = 1; i < line_parts.Length - 1; i++) condition += line_parts[i] + " ";
                     /* e.g. "(i < 10)" */
-                    condition = condition.Substring (1, condition.Length - 3);
-                    condition = cast (parse (condition), Variables.BOOLEAN);
-                    if (bool.Parse (condition) == true) {
-                        /* e.g. "true", execute within brackets */
-                        if (line_parts[0] == "while") {
-                            scope_tracker.Push (pointer);
-                        }
-                    } else {
-                        /* e.g. "false", skip to reciprocal closing bracket */
-                        skipScope ();
-                    }
+                    evaluateCondition (condition.Substring (1, condition.Length - 3), line_parts[0]);
                     break;
-                case "for":
+                case Operators.FOR:
                     /* e.g. "for (int i = 0; i < 10; i++) {" */
                     parameter = "";
-                    for (int i = 1; i < line_parts.Length - 1; i++) {
-                        parameter += line_parts[i] + " ";
-                    }
+                    for (int i = 1; i < line_parts.Length - 1; i++) parameter += line_parts[i] + " ";
                     /* e.g. "(int i = 0; i < 10; i++)" */
                     parameter = parameter.Substring (1, parameter.Length - 3);
                     /* e.g. "int i = 0; i < 10; i++" */
-                    variable_initialization = parameter.Split (';') [0];
-                    condition = parameter.Split (';') [1];
-                    variable_modifier = parameter.Split (';') [2];
+                    string[] parameters = parameter.Split (';');
+                    variable_initialization = parameters[0];
+                    condition = parameters[1].Substring (1);
+                    variable_modifier = parameters[2].Substring (1);
                     /* e.g. ["int i = 0", "i < 10", "i++"] */
                     if (isVariable (variable_initialization.Split (' ') [1])) {
-                        /* Is not the first time for loop has run */
-                        setVariable (variable_modifier);
+                        setVariable (variable_modifier); /* Is not the first time for loop has run */
                     } else {
-                        /* Run first part of for loop for first iteration */
-                        declareVariable (variable_initialization);
+                        declareVariable (variable_initialization); /* Run first part of for loop for first iteration */
                     }
-                    condition = cast (parse (condition), Variables.BOOLEAN);
-                    if (bool.Parse (condition) == true) {
-                        /* e.g. "true", execute within brackets */
-                        scope_tracker.Push (pointer);
-                    } else {
-                        /* e.g. "false", skip to reciprocal closing bracket */
-                        skipScope ();
-                    }
+                    evaluateCondition (condition, line_parts[0]);
                     break;
                 case Variables.BOOLEAN:
                 case Variables.INTEGER:
@@ -112,25 +90,17 @@ public class Interpreter {
                     declareVariable (line_parts);
                     break;
                 default:
-
                     if (setVariable (line_parts)) {
                         /* Check if line is referring to a variable */
                         /* e.g. "i = 10;" */
-                    } else if (evaluateFunction ("test", "test")) {
+                    } else if (false) evaluateFunction ("test", "test"); {
                         /* Check if line is preferring to a function */
                         /* e.g. "this.flyTowards(enemy);" */
                     }
-
                     break;
             }
-            if (pointer == pointer_saved) {
-                pointer++;
-                if (pointer == script.Length) {
-                    return true; //trigger deletion of script object, script done
-                    //pointer = 0;
-                    //variables = new List<VariableObject> ();
-                }
-            }
+            if (pointer == pointer_saved) pointer++; //step line
+            if (pointer >= script.Length) return true; //script done
             return false;
         } else return true;
     }
@@ -152,7 +122,7 @@ public class Interpreter {
         return setVariable (line.Split (' '));
     }
     private bool setVariable (string[] parts) {
-        int index = indexOfVariable (line_parts[0]);
+        int index = indexOfVariable (parts[0]);
         if (index != -1) {
             variable_value = "";
             for (int i = 2; i < parts.Length; i++) {
@@ -243,6 +213,16 @@ public class Interpreter {
         //RETURN FULLY SIMPLIFIED VALUE
         // debugger += "END: " + parts[0] + "\n";
         return parts[0];
+    }
+    private void evaluateCondition (string input, string type) {
+        input = cast (parse (input), Variables.BOOLEAN);
+        if (bool.Parse (input) == true) {
+            /* e.g. "true", execute within brackets */
+            if (type == "while" || type == "for") {
+                scope_tracker.Push (pointer);
+            }
+        } else { skipScope (); }
+
     }
 
     private string evaluateFunction (string function, string parameter) {
@@ -341,7 +321,7 @@ public class Interpreter {
                 return "";
         }
     }
-    private int skipScope () {
+    private void skipScope () {
         int bracket_counter = 1;
         while (bracket_counter > 0) {
             pointer++;

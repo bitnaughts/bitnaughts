@@ -8,7 +8,7 @@ public class ProjectileEditor : MonoBehaviour {
 
     ProjectileObject projectile;
 
-    string testScript = "int angle = 1;\n\nwhile (true) {\nangle = angle + 1;\nif (angle % 2 == 0) {\nangle = angle + 100;\n}\n}\n";
+    string testScript = "int angle = 1;\n\nfor (int i = 0; i < 10; i++) {\nangle = angle + 1;\nif (angle % 2 == 0) {\nangle = angle + 100;\n}\n}\n";
 
 
     // Start is called before the first frame update
