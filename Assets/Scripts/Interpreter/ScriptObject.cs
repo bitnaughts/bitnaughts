@@ -14,13 +14,14 @@ public class ScriptObject {
 	bool finished = false;
 
 	public ScriptObject (GameObject obj, string text) {
-		init (null, text.Split ('\n'));
+		init (obj, text.Split ('\n'));
 	}
 	public ScriptObject (GameObject obj, string[] script) {
-		init (null, script);
+		init (obj, script);
 	}
 	public void init (GameObject obj, string[] script) {
 		this.obj = obj;
+		this.script = script;
 		interpreter = new Interpreter (script, obj);
 		processor = new ProcessorObject ();
 	}
@@ -33,10 +34,11 @@ public class ScriptObject {
 	public void setProcessor (ProcessorObject processor) {
 		this.processor = processor;
 	}
-	public bool tick (float deltaTime) {
+	public bool tick (float delta_time, float tick_speed) {
+		processor.setSpeed(tick_speed);
 		if (finished) return false;
 		ran_this_tick = false;		 
-		time += deltaTime;
+		time += delta_time;
 		while (time >= processor.tick_speed) {
 			time -= processor.tick_speed;
 			/* Execute a line */
@@ -45,6 +47,20 @@ public class ScriptObject {
 		}
 		return ran_this_tick;
 	}
+	public int getCurrentLine() {
+		return interpreter.getPointer();
+	}
+	public string[] getScript()  {
+		return script;
+	}
+	public string getFormattedScript() {
+		string output = "";
+		for (int i = 0; i < script.Length; i++) {
+			output += i + " " + script[i] + "\n";
+		}
+		return output;
+	}
+	
 	public override string ToString () {
 		string output = "";
 		output += interpreter.ToString();    
