@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public static class Referencer {
     public static ConsoleManager consoleManager;
+    public static Slider codeSpeedTester;
 
 }

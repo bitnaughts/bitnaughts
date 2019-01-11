@@ -8,5 +8,8 @@
 	public ProcessorObject (float tick_speed) {
 		this.tick_speed = tick_speed;
 	}
+	public void setSpeed (float tick_speed) {
+		this.tick_speed = tick_speed;
+	}
 
 }

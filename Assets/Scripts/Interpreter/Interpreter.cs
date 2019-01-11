@@ -41,6 +41,16 @@ public class Interpreter {
             switch (line_parts[0]) {
                 case Operators.EMPTY:
                     break;
+                case Operators.LIBRARY_IMPORT:
+                    switch (scrubSymbols(line_parts[1])) {
+                        case Classes.CONSOLE:
+                            Referencer.consoleManager.execute ("Open", "", obj);
+                            break;
+                        case Classes.PLOTTER:
+
+                            break;
+                    }
+                    break;
                 case Operators.BREAK:
                 case Operators.CLOSING_BRACKET:
                 case Operators.CONTINUE:
@@ -89,11 +99,14 @@ public class Interpreter {
                             /* e.g. "Console.WriteLine("test")" */
                             string class_name = line_parts[0].Split ('.') [0];
                             string function_name = line_parts[0].Split ('.') [1].Split ('(') [0];
-                            string function_parameters = "";
+                            string function_parameters = line.Substring (line.IndexOf ("(") + 1);
+                            function_parameters = function_parameters.Substring (0, function_parameters.Length - 2);
+                            function_parameters = parse (function_parameters);
+
                             /* e.g. "Console", "WriteLine" */
                             switch (class_name) {
                                 case "Console":
-                                    Referencer.consoleManager.execute(function_name, function_parameters);
+                                    Referencer.consoleManager.execute (function_name, function_parameters, obj);
                                     break;
                                 case "Application":
                                     break;
@@ -286,7 +299,7 @@ public class Interpreter {
             if (isContinuing) return scope_tracker.Peek ();
             else {
                 /* REMOVE VARIABLES DEFINED IN PREVIOUS SCOPE, e.g. "if (i < 10) { int j = 10; }" */
-                variables = GarbageCollector.removeBetween (getPointerTo (pointer, Operators.OPENING_BRACKET), pointer, variables);
+                //variables = GarbageCollector.removeBetween (getPointerTo (pointer, Operators.OPENING_BRACKET), pointer, variables);
 
                 //need logic for if statements being different
                 // if an if closes, it needs to collect any possible garbage, but not go back to start of if statement
@@ -318,13 +331,16 @@ public class Interpreter {
     }
     private void skipScope () {
         pointer = getPointerTo (pointer, Operators.CLOSING_BRACKET);
+        variables = GarbageCollector.removeBetween (getPointerTo (pointer, Operators.OPENING_BRACKET), pointer, variables);
     }
     private string getValue (string input) {
         int index;
         if (isVariable (input, out index)) return variables[index].value;
         return input;
     }
-
+    public int getPointer () {
+        return pointer;
+    }
     public override string ToString () {
         string output = debugger + "\n\n";
         debugger = Operators.EMPTY;

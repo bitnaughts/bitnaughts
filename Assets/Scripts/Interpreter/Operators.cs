@@ -31,7 +31,8 @@
         CONTINUE = "continue;",
         IF = "if",
         WHILE = "while",
-        FOR = "for";
+        FOR = "for",
+        LIBRARY_IMPORT = "using";
 
     public const char END_LINE_CHAR = ';';
 
