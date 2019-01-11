@@ -1,4 +1,0 @@
-int angle = 0;
-while (true) {
-    angle = angle + 1;
-}

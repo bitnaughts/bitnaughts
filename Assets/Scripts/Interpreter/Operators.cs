@@ -1,6 +1,5 @@
 ﻿public static class Operators {
-    public const string EMPTY = "",
-        EQUALS = "=",
+    public const string EQUALS = "=",
         INCREMENT = "++",
         DECREMENT = "--",
         ADDITION = "+=",
@@ -14,36 +13,13 @@
         GREATER_THAN_EQUAL = ">=",
         LESS_THAN = "<",
         LESS_THAN_EQUAL = "<=",
-        AND = "&&",
+        AND =  "&&",
         OR = "||",
         MODULUS = "%",
         TIMES = "*",
         DIVIDE = "/",
         ADD = "+",
-        SUBTRACT = "-",
-        OPENING_BRACKET = "{",
-        CLOSING_BRACKET = "}",
-        OPENING_PARENTHESIS = "(",
-        CLOSING_PARENTHESIS = ")",
-        END_LINE = ";",
+        SUBTRACT = "-";
 
-        BREAK = "break;",
-        CONTINUE = "continue;",
-        IF = "if",
-        WHILE = "while",
-        FOR = "for",
-        LIBRARY_IMPORT = "using";
-
-    public const char END_LINE_CHAR = ';';
-
-
-    public static readonly string[][] PEMDAS = {
-        new string[] { "%" },
-        new string[] { "*", "/" },
-        new string[] { "+", "-" },
-        new string[] { "==", "!=", ">", ">=", "<", "<=" },
-        new string[] { "&&" },
-        new string[] { "||" }
-    };
-
+    public static readonly string[] PEMDAS = {"%", "*", "/", "+", "-", "==", "!=", ">", ">=","<", "<=", "&&", "||"};
 }
