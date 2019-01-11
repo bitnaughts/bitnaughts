@@ -11,7 +11,7 @@ public class ConsoleManager : MonoBehaviour {
     Vector2 minimum_window_size = new Vector2 (330, 220);
     void Start () {
         console = GameObject.Find ("Console");
-        console_input = console.transform.GetChild (0).GetChild (0).GetComponent<Text> ();
+        console_input = console.transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetComponent<Text> ();
 
         console.SetActive (false);
     }
