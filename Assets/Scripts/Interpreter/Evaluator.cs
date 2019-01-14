@@ -101,6 +101,8 @@ public class Evaluator {
     }
 
     public static string simplifyString (string left, string arithmetic_operator, string right) {
+        if (left.IndexOf ("\"") == 0) left = left.Substring (1, left.Length - 2);
+        if (right.IndexOf ("\"") == 0) right = right.Substring (1, right.Length - 2);
         switch (arithmetic_operator) {
             case Operators.ADD:
                 return left + right;
@@ -109,44 +111,12 @@ public class Evaluator {
             default:
                 return "";
         }
-
     }
     public static string getType (string input) {
         if (bool.TryParse (input, out bool_result)) return Variables.BOOLEAN;
         if (int.TryParse (input, out int_result)) return Variables.INTEGER;
         if (float.TryParse (input, out float_result)) return Variables.FLOAT;
         return Variables.STRING;
-    }
-
-    public static string simplifyFunction (string function, string parameter) {
-        if (function.IndexOf ("Mathf") == 0) {
-            return simplifyMathf (function, parameter);
-        }
-        if (function.IndexOf ("Console") == 0) {
-            return simplifyControlFunctions (function, parameter);
-        }
-        if (function.IndexOf ("this") == 0) {
-            return simplifyControlFunctions (function, parameter);
-        }
-        //...
-        return "";
-    }
-    
-    public static string simplifyControlFunctions (string function, string parameter) {
-        switch (function) {
-            case "this.rotate":
-                return Mathf.Abs (float.Parse (parameter)) + "";
-                //...
-        }
-        return "";
-    }
-    public static string simplifyMathf (string function, string parameter) {
-        switch (function) {
-            case "Mathf.Abs":
-                return Mathf.Abs (float.Parse (parameter)) + "";
-                //...
-        }
-        return "";
     }
     public static string simplifyCondensedOperators (string variable_name, string arithmetic_operator) {
         switch (arithmetic_operator) {

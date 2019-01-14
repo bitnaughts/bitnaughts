@@ -34,7 +34,7 @@ public class ConsoleManager : MonoBehaviour {
                 if (console_output.text.Split ('\n').Length > 2) {
                     console_output.text = console_output.text.Substring (console_output.text.IndexOf ("\n") + 1);
                 }
-                console_output.text += DateTime.Now.ToString("HH:mm:ss:\t");
+                console_output.text += DateTime.Now.ToString("HH:mm:ss:  ");
                 console_output.text += function_parameters + "\n";
 
                 break;
