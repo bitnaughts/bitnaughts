@@ -12,6 +12,8 @@ public class ScriptObject {
 
 	bool ran_this_tick = false;
 	bool finished = false;
+	int line = 0;
+	bool new_line = true;
 
 	public ScriptObject (GameObject obj, string text) {
 		init (obj, text.Split ('\n'));
@@ -35,11 +37,11 @@ public class ScriptObject {
 		this.processor = processor;
 	}
 	public bool tick (float delta_time, float tick_speed) {
-		processor.setSpeed(tick_speed);
+		processor.setSpeed (tick_speed);
 		if (finished) return false;
-		ran_this_tick = false;		 
+		ran_this_tick = false;
 		time += delta_time;
-		while (time >= processor.tick_speed) {
+		while (time >= processor.tick_speed && !finished) {
 			time -= processor.tick_speed;
 			/* Execute a line */
 			finished = interpreter.interpretLine ();
@@ -47,23 +49,26 @@ public class ScriptObject {
 		}
 		return ran_this_tick;
 	}
-	public int getCurrentLine() {
-		return interpreter.getPointer();
+	public int getCurrentLine () {
+		return interpreter.getPointer ();
 	}
-	public string[] getScript()  {
+	public string[] getScript () {
 		return script;
 	}
-	public string getFormattedScript() {
+	public string getFormattedScript () {
 		string output = "";
-		for (int i = 0; i < script.Length; i++) {
-			output += i + " " + script[i] + "\n";
+		string indents = "\t";
+		for (int line = 0; line < script.Length; line++) {
+			if (script[line].Contains ("}")) indents = indents.Substring (1);
+			output += line + indents + script[line] + "\n";
+			if (script[line].Contains ("{")) indents += "\t";
 		}
 		return output;
 	}
-	
+
 	public override string ToString () {
 		string output = "";
-		output += interpreter.ToString();    
-        return output;
-    }
+		output += interpreter.ToString ();
+		return output;
+	}
 }

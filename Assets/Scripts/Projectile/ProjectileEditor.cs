@@ -10,7 +10,7 @@ public class ProjectileEditor : MonoBehaviour {
     public string testScript; 
 
     void Start () {
-        testScript = "using Console;\nint angle = 1;\nfor (int i = 0; i < 10; i++) {\nfor (int j = 0; j < 10; j++) {\n}\n}\n";
+        testScript = "using Console;\nusing Plotter;\nusing Grapher;\nint angle = 1;\nfor (int i = 0; i < 10; i++) {\nfor (int j = 0; j < 10; j++) {\nConsole.WriteLine(i * j);\n}\n}\n";
         GetComponent<ScriptEditor>().script =  new ScriptObject (this.gameObject, testScript);
     }
 
