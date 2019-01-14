@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,7 +20,7 @@ public class ConsoleManager : MonoBehaviour {
         console_input = console.transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetComponent<Text> ();
         console_output = console.transform.GetChild (2).GetChild (0).GetChild (0).GetChild (0).GetComponent<Text> ();
         console_highlighter = console_input.transform.GetChild (0).gameObject;
-        console.SetActive (false);  
+        // console.SetActive (false);  
     }
 
     public void execute (string function_name, string function_parameters, GameObject obj) {
@@ -30,13 +31,15 @@ public class ConsoleManager : MonoBehaviour {
                 console_input.text = script_to_view.getFormattedScript ();
                 break;
             case Console.WRITE_LINE:
-                if (console_output.text.Split('\n').Length > 2) {
-                    console_output.text = console_output.text.Substring(console_output.text.IndexOf("\n")+1);
+                if (console_output.text.Split ('\n').Length > 2) {
+                    console_output.text = console_output.text.Substring (console_output.text.IndexOf ("\n") + 1);
                 }
+                console_output.text += DateTime.Now.ToString("HH:mm:ss:\t");
                 console_output.text += function_parameters + "\n";
-                
+
                 break;
             case Console.WRITE:
+                console_output.text += DateTime.Now + ":\t";
                 console_output.text += function_parameters;
                 break;
             case Console.UPDATE:

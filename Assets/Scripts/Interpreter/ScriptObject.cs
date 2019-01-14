@@ -60,7 +60,7 @@ public class ScriptObject {
 		string indents = "\t";
 		for (int line = 0; line < script.Length; line++) {
 			if (script[line].Contains ("}")) indents = indents.Substring (1);
-			output += line + indents + script[line] + "\n";
+			output += line + indents + ColorCoder.colorize(script[line]) + "\n";
 			if (script[line].Contains ("{")) indents += "\t";
 		}
 		return output;
