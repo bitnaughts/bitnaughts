@@ -7,18 +7,18 @@ using UnityEngine;
 public class Interpreter {
 
     string debugger = "";
+
     private GameObject obj;
+    private string[] script;
 
     private List<VariableObject> variables;
-    private Stack<int> scope_tracker; //if statements could push their scope to their reciprocal "}"?
-    private string[] script;
+    private List<string> listeners;
+    private Stack<int> scope_tracker;
+
     private int pointer; //tracks what line is being processed
 
-    string variable_type, variable_name, variable_value;
-    string parameter;
-    string variable_initialization;
-    string condition;
-    string variable_modifier;
+    string variable_type, variable_name, variable_value, variable_modifier, variable_initialization;
+    string parameter, condition;
 
     public Interpreter (string[] script, GameObject obj) {
         if (script == null) script = new string[] { };
@@ -28,6 +28,7 @@ public class Interpreter {
         pointer = 0;
         variables = new List<VariableObject> ();
         scope_tracker = new Stack<int> ();
+        listeners = new List<string> ();
     }
 
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
@@ -41,31 +42,32 @@ public class Interpreter {
             switch (line_parts[0]) {
                 case Operators.EMPTY:
                     break;
-                case Operators.LIBRARY_IMPORT:
-                    switch (scrubSymbols(line_parts[1])) {
+                case Keywords.LIBRARY_IMPORT:
+                    listeners.Add (scrubSymbols (line_parts[1]));
+                    switch (scrubSymbols (line_parts[1])) {
                         case Classes.CONSOLE:
-                            Referencer.consoleManager.execute ("Open", "", obj);
+                            Referencer.consoleManager.execute (Console.OPEN, "", obj);
                             break;
                         case Classes.PLOTTER:
 
                             break;
                     }
                     break;
-                case Operators.BREAK:
+                case Keywords.BREAK:
                 case Operators.CLOSING_BRACKET:
-                case Operators.CONTINUE:
+                case Keywords.CONTINUE:
                     /* Find new pointer location when hitting a "end of scope" operation */
-                    pointer = closeScope (line_parts[0] == Operators.CONTINUE);
+                    pointer = closeScope (line_parts[0] == Keywords.CONTINUE);
                     break;
-                case Operators.IF:
-                case Operators.WHILE:
+                case Keywords.IF:
+                case Keywords.WHILE:
                     /* e.g. "while (i < 10) {" */
                     condition = Operators.EMPTY;
                     for (int i = 1; i < line_parts.Length - 1; i++) condition += line_parts[i] + " ";
                     /* e.g. "(i < 10)" */
                     evaluateCondition (condition.Substring (1, condition.Length - 3), line_parts[0]);
                     break;
-                case Operators.FOR:
+                case Keywords.FOR:
                     /* e.g. "for (int i = 0; i < 10; i++) {" */
                     parameter = Operators.EMPTY;
                     for (int i = 1; i < line_parts.Length - 1; i++) parameter += line_parts[i] + " ";
@@ -105,7 +107,7 @@ public class Interpreter {
 
                             /* e.g. "Console", "WriteLine" */
                             switch (class_name) {
-                                case "Console":
+                                case Classes.CONSOLE:
                                     Referencer.consoleManager.execute (function_name, function_parameters, obj);
                                     break;
                                 case "Application":
@@ -127,7 +129,20 @@ public class Interpreter {
                     break;
             }
             if (pointer == pointer_saved) pointer++; //step line
-            if (pointer >= script.Length) return true; //script done
+            if (pointer >= script.Length) return true; //script done]
+
+            /* UPDATING LISTENERS */
+            for (int listener = 0; listener < listeners.Count; listener++) {
+                switch (listeners[listener]) {
+                    case Classes.CONSOLE:
+                        Referencer.consoleManager.execute (Console.UPDATE, pointer + "", obj);
+                        break;
+                    case Classes.PLOTTER:
+
+                        break;
+                }
+            }
+
             return false;
         } else return true;
     }
@@ -251,9 +266,9 @@ public class Interpreter {
 
         if (bool.Parse (input) == true) {
             /* e.g. "true", execute within brackets */
-            if (type == Operators.WHILE || type == Operators.FOR) {
+            if (type == Keywords.WHILE || type == Keywords.FOR) {
                 scope_tracker.Push (pointer);
-            } else if (type == Operators.IF) {
+            } else if (type == Keywords.IF) {
                 scope_tracker.Push (getPointerTo (pointer, Operators.CLOSING_BRACKET));
             }
         } else { skipScope (); }
