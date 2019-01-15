@@ -235,7 +235,7 @@ public class Interpreter {
                         //to support user-made functions, or functions that require interpreted lines of code to be executed first, will require logic here to allow for putting this parse in a stack to be popped on the "return" of said function
                         string function = parts[part].Substring (0, parts[part].IndexOf (Operators.OPENING_PARENTHESIS));
                         /* e.g. Mathf.Abs(-10) == 10 */
-                        parts[part] = Evaluator.simplifyFunction (function, parse (parts_to_be_condensed));
+                        // parts[part] = Evaluator.simplifyFunction (function, parse (parts_to_be_condensed));
                     }
                 }
             }
