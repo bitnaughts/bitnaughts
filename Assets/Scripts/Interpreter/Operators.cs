@@ -1,5 +1,6 @@
 ﻿public static class Operators {
-    public const string EQUALS = "=",
+    public const string EMPTY = "",
+        EQUALS = "=",
         INCREMENT = "++",
         DECREMENT = "--",
         ADDITION = "+=",
@@ -13,7 +14,7 @@
         GREATER_THAN_EQUAL = ">=",
         LESS_THAN = "<",
         LESS_THAN_EQUAL = "<=",
-        AND =  "&&",
+        AND = "&&",
         OR = "||",
         MODULUS = "%",
         TIMES = "*",
