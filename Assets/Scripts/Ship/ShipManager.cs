@@ -19,22 +19,27 @@ public class ShipManager : MonoBehaviour {
 		holder = this.transform.gameObject;
 
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		if (selected_ship == null) selected_ship = GameObject.Find ("Ship").GetComponent<ShipEditor> ().ship;
 
 		//GameObject.Find("Output").GetComponent<Text>().text = selected_ship.ToString();
 		if (counter++ < 200) {
-	Instantiate (ship_prefabs[(prefab_counter++ % 7) + 1], new Vector2 ((Random.value * 100) - 50, (Random.value * 100) - 50), Quaternion.Euler(0,0,0));
-		}
-		else if (counter++ % 50 == 0) {
-			Instantiate (ship_prefabs[(prefab_counter++ % 7) + 1], new Vector2 ((Random.value * 100) - 50, (Random.value * 100) - 50), Quaternion.Euler(0, 0, 0));
+			Instantiate (ship_prefabs[(prefab_counter++ % 7) + 1], new Vector2 ((Random.value * 100) - 50, (Random.value * 100) - 50), Quaternion.Euler (0, 0, 0));
+		} else if (counter++ % 50 == 0) {
+			Instantiate (ship_prefabs[(prefab_counter++ % 7) + 1], new Vector2 ((Random.value * 100) - 50, (Random.value * 100) - 50), Quaternion.Euler (0, 0, 0));
 		}
 
 	}
 
-	public static ShipObject getSelectedShip() {
+	public static ShipObject isShipSelected () {
+		return selected_ship != null;
+	}
+	public static ShipObject getSelectedShip () {
 		return selected_ship;
+	}
+	public static Vector3 getSelectedShipPosition () {
+		return selected_ship.ship.transform.position;
 	}
 }
