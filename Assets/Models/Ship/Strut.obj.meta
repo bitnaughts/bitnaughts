@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: 01e77518617c4a64a8fc2f7cd78d2639
+guid: 31f81fa891c56c94c858ca1f1d9b2a6a
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: default
-    400000: //RootNode
-    400002: default
+    100000: default
+    100002: //RootNode
+    400000: default
+    400002: //RootNode
     2100000: defaultMat
     2300000: default
     3300000: default
@@ -67,7 +67,7 @@ ModelImporter:
     hasPreviousCalculatedGlobalScale: 0
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 1
+    normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
