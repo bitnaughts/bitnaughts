@@ -33,7 +33,7 @@ public class ShipManager : MonoBehaviour {
 
 	}
 
-	public static ShipObject isShipSelected () {
+	public static bool isShipSelected () {
 		return selected_ship != null;
 	}
 	public static ShipObject getSelectedShip () {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour {
 
 	Camera camera;
-	Vector2 movement;
+	Vector3 movement;
 
 	bool isPerspective = false;
 
@@ -18,31 +18,31 @@ public class CameraManager : MonoBehaviour {
 	}
 	void updateCamera () {
 		/* Get Movement Vector */
-		if (Referencer.shipManager.isShipSelected ()) movement = new Vector2 (-this.transform.position.x + Referencer.shipManager.getSelectedShipPosition ().x, -this.transform.position.y + Referencer.shipManager.getSelectedShipPosition ().y)
-		else movement = new Vector2 (Input.GetAxis ("Horizontal"), Input.GetAxis ("Vertical"));
+		if (ShipManager.isShipSelected ()) movement = new Vector3 (-this.transform.position.x + ShipManager.getSelectedShipPosition ().x, Input.GetAxis ("Mouse ScrollWheel"), -this.transform.position.z + ShipManager.getSelectedShipPosition ().z);
+		else movement = new Vector3 (Input.GetAxis ("Horizontal"), Input.GetAxis ("Mouse ScrollWheel"), Input.GetAxis ("Vertical"));
 
 		/* Move Camera via Input */
-		if (movement.x != 0 || movement.y != 0) {
+		if (movement.x != 0 || movement.z != 0) {
 			this.transform.Translate (new Vector3 (
 				movement.x * CameraProperties.SENSITIVITY * Time.deltaTime,
-				movement.y * CameraProperties.SENSITIVITY * Time.deltaTime,
-				0
+				0,
+				movement.z * CameraProperties.SENSITIVITY * Time.deltaTime
 			));
 		}
 		/* Handle Zooming based on Camera Mode */
-		if (isPerspective) ? updatePerspectiveCameraZoom () : updateOrthographicCameraZoom ();
-	}
-	void updatePerspectiveCameraZoom () {
-		/* Zooming Camera */
-		if (Input.GetAxis ("Mouse ScrollWheel") != 0) {
-			this.transform.Translate (new Vector3 (0, 0 Input.GetAxis ("Mouse ScrollWheel") * CameraProperties.SENSITIVITY * Time.deltaTime * this.transform.position.y));
-			if (this.transform.position.y < CameraProperties.MIN_Y || this.transform.position.y > CameraProperties.MAX_Y) {
-				this.transform.position = new Vector3 (this.transform.position.x, Mathf.Clamp (this.transform.position.y, CameraProperties.MIN_Y, CameraProperties.MAX_Y), this.transform.position.z);
+		if (movement.y != 0) {
+
+			if (isPerspective) {
+				this.transform.Translate (new Vector3 (0, movement.y * CameraProperties.SENSITIVITY * Time.deltaTime * this.transform.position.y, 0));
+				if (this.transform.position.y < CameraProperties.MIN_Y || this.transform.position.y > CameraProperties.MAX_Y) {
+					this.transform.position = new Vector3 (this.transform.position.x, Mathf.Clamp (this.transform.position.y, CameraProperties.MIN_Y, CameraProperties.MAX_Y), this.transform.position.z);
+				}
+			} else {
+				// camera.orthographicZoom += ...
+				// clamp ...
 			}
+
 		}
-	}
-	void updateOrthographicCameraZoom () {
-		// TODO: implement if desired
 	}
 	void switchCameraMode () {
 		isPerspective = !isPerspective;
