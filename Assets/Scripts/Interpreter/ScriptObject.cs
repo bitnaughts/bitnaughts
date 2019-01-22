@@ -16,14 +16,13 @@ public class ScriptObject {
 	bool new_line = true;
 
 	public ScriptObject (GameObject obj, string text) {
-		init (obj, text.Split ('\n'));
+		init (null, text.Split ('\n'));
 	}
 	public ScriptObject (GameObject obj, string[] script) {
-		init (obj, script);
+		init (null, script);
 	}
 	public void init (GameObject obj, string[] script) {
 		this.obj = obj;
-		this.script = script;
 		interpreter = new Interpreter (script, obj);
 		processor = new ProcessorObject ();
 	}
@@ -63,9 +62,7 @@ public class ScriptObject {
 			output += line + indents + ColorCoder.colorize(script[line]) + "\n";
 			if (script[line].Contains ("{")) indents += "\t";
 		}
-		return output;
 	}
-
 	public override string ToString () {
 		string output = "";
 		output += interpreter.ToString ();
