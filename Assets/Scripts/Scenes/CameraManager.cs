@@ -5,12 +5,14 @@ using UnityEngine;
 public class CameraManager : MonoBehaviour {
 
 	Camera camera;
+	Transform camera_transform;
 	Vector3 movement;
 
-	bool isPerspective = false;
+	bool isPerspective = true;
 
 	void Start () {
-		Camera camera = this.GetComponent<Camera> ();
+		camera_transform = this.transform.GetChild (0);
+		camera = camera_transform.GetComponent<Camera> ();
 		setCameraProperties ();
 	}
 	void Update () {
@@ -18,7 +20,7 @@ public class CameraManager : MonoBehaviour {
 	}
 	void updateCamera () {
 		/* Get Movement Vector */
-		if (ShipManager.isShipSelected ()) movement = new Vector3 (-this.transform.position.x + ShipManager.getSelectedShipPosition ().x, Input.GetAxis ("Mouse ScrollWheel"), -this.transform.position.z + ShipManager.getSelectedShipPosition ().z);
+		if (ShipManager.isShipSelected ()) movement = new Vector3 (-this.transform.position.x + (ShipManager.getSelectedShipPosition ().x - CameraProperties.OFFSET_X), Input.GetAxis ("Mouse ScrollWheel"), -this.transform.position.z + (ShipManager.getSelectedShipPosition ().z - CameraProperties.OFFSET_Z));
 		else movement = new Vector3 (Input.GetAxis ("Horizontal"), Input.GetAxis ("Mouse ScrollWheel"), Input.GetAxis ("Vertical"));
 
 		/* Move Camera via Input */
@@ -51,6 +53,8 @@ public class CameraManager : MonoBehaviour {
 	void setCameraProperties () {
 		if (isPerspective) {
 			// TODO: reset properties
+			camera_transform.rotation = Quaternion.Euler(new Vector3(90 - CameraProperties.ANGLE_X, CameraProperties.ANGLE_Y,0));
+
 		} else {
 			// TODO: reset properties
 		}
