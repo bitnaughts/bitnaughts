@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class SimpleFlier : MonoBehaviour {
 
+	ShipObject ship; // = this.GetComponent<ShipEditor>().ship;
+
 	// Use this for initialization
 	void Start () {
-
+		ship = this.GetComponent<ShipEditor> ().ship;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		ShipObject ship = this.GetComponent<ShipEditor>().ship;
-
-		this.transform.Translate (new Vector2 (0, Input.GetAxis ("Vertical") * .05f * ship.thrust / Mathf.Sqrt(ship.weight)));
-		this.transform.Rotate (new Vector3 (0, 0, -Input.GetAxis ("Horizontal")));
+		this.transform.Translate (new Vector3 (Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"))); //Input.GetAxis ("Vertical") * .05f * ship.thrust / Mathf.Sqrt (ship.weight)));
+		// this.transform.Rotate (new Vector3 (0, -Input.GetAxis ("Horizontal"), 0));
 	}
 }

@@ -76,8 +76,8 @@ public class FieldOfView : MonoBehaviour
         ViewCastInfo oldViewCast = new ViewCastInfo();
         for (int i = 0; i <= stepCount; i++)
         {
-                                            /////Z? used to be y
-            float angle = transform.eulerAngles.z - viewAngle / 2 + stepAngleSize * i;
+            /////Z? used to be y
+            float angle = transform.eulerAngles.y - viewAngle / 2 + stepAngleSize * i;
             ViewCastInfo newViewCast = ViewCast(angle);
 
             if (i > 0)
@@ -110,8 +110,8 @@ public class FieldOfView : MonoBehaviour
         vertices[0] = Vector3.zero;
         for (int i = 0; i < vertexCount - 1; i++)
         {
-            vertices[i + 1] = transform.InverseTransformPoint(viewPoints[i]) + Vector3.up * maskCutawayDst;
-
+            vertices[i + 1] = transform.InverseTransformPoint(viewPoints[i] * Mathf.Sin(i * Mathf.Deg2Rad) + Vector3.up * maskCutawayDst);
+            
             if (i < vertexCount - 2)
             {
                 triangles[i * 3] = 0;
@@ -146,7 +146,8 @@ public class FieldOfView : MonoBehaviour
                 minAngle = angle;
                 minPoint = newViewCast.point;
             }
-            else {
+            else
+            {
                 maxAngle = angle;
                 maxPoint = newViewCast.point;
             }
@@ -165,7 +166,8 @@ public class FieldOfView : MonoBehaviour
         {
             return new ViewCastInfo(true, hit.point, hit.distance, globalAngle);
         }
-        else {
+        else
+        {
             return new ViewCastInfo(false, transform.position + dir * viewRadius, viewRadius, globalAngle);
         }
     }
@@ -174,7 +176,7 @@ public class FieldOfView : MonoBehaviour
     {
         if (!angleIsGlobal)
         {
-                                                    //z? used to be y
+            //z? used to be y   
             angleInDegrees += transform.eulerAngles.y;
         }
         return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad), 0, Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
