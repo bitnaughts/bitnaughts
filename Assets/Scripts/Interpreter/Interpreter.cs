@@ -6,62 +6,20 @@ using UnityEngine;
 
 public class Interpreter {
 
-    string debugger = "";
-
     private GameObject obj;
     private string[] script;
 
-
-    //To be replaced by scope tree....
-    // private List<VariableObject> variables;
-    // private Stack<int> scope_tracker;
-    
-    
+    private ScopeHandler scope;
     private List<string> listeners;
-    // private Tree<ScopeNode> scope_tree;
 
-    
-    // variables list needs to be a tree of lists, each scope stepped into adds leaf, each scope popped out of removes leaf
-    // scope tracker should be derived from this tree?
-
-    // each variable may need an "id" plus a unique hash for what scope it is in?
-
-
-    //If step into a new scope, make a new leaf off of current leaf in scope_tree
-    //if declaring variable in scope, put it in scope_node's variable list
-    //if accessing a variable, check from current node up to see what the value is (preferring closer scope)
-    //this.variable_name == only check top of tree
-
-    // void example_function(int x) {
-    //
-    //}
-
-    // void example_function() {
-    //  int x = parameter_in[0];
-    //  
-    //  return null;
-    //}
-
-    //I lied, trees are unnecessary in their memory storage of scopes that will be ignored/deleted, use a stack...
-
-    private Stack<ScopeNode> scope;
-
-
-    private int pointer; //tracks what line is being processed
-
-    string variable_type, variable_name, variable_value, variable_modifier, variable_initialization;
-    string parameter, condition;
+    string variable_type, variable_name, variable_value, variable_modifier, variable_initialization, parameter, condition, debugger;
 
     public Interpreter (string[] script, GameObject obj) {
         if (script == null) script = new string[] { };
         this.script = script;
         this.obj = obj;
 
-        pointer = 0;
-
-        scope = new Stack<ScopeNode>();
-        // variables = new List<VariableObject> ();
-        // scope_tracker = new Stack<int> ();
+        scope = new ScopeHandler ();
         listeners = new List<string> ();
     }
 
@@ -176,7 +134,7 @@ public class Interpreter {
             return false;
         } else return true;
     }
-    
+
     private string parse (string input) {
         if (input != Operators.EMPTY) {
             List<string> parts = input.Split (' ').ToList<string> ();
@@ -232,20 +190,6 @@ public class Interpreter {
         return Operators.EMPTY;
     }
 
-    //... to be moved...
-    private void evaluateCondition (string input, string type) {
-        input = cast (parse (input), Variables.BOOLEAN);
-
-        if (bool.Parse (input) == true) {
-            /* e.g. "true", execute within brackets */
-            if (type == Keywords.WHILE || type == Keywords.FOR) {
-                scope_tracker.Push (pointer);
-            } else if (type == Keywords.IF) {
-                scope_tracker.Push (getPointerTo (pointer, Operators.CLOSING_BRACKET));
-            }
-        } else { skipScope (); }
-
-    }
     private string scrubSymbols (string input) {
         string output = input;
         if (input.Contains (Operators.END_LINE)) output = input.Remove (input.IndexOf (Operators.END_LINE), 1);

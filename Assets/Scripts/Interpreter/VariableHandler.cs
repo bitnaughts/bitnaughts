@@ -1,31 +1,41 @@
 using System.Collections.Generic;
 
-public class VariableHander {
+public class VariableHandler {
 
-    private List<VariableObject> variables;
+    public List<VariableObject> variables;
 
-    public bool isVariable (string name) {
+    public VariableHandler() {
+        variables = new List<VariableObject>();
+    }
+    public VariableHandler(List<VariableObject> variables) {
+        this.variables = variables;
+    }
+    public void add(VariableObject variable) {
+        variables.Add(variable);
+    }
+
+    public static bool isVariable (string name) {
         return getIndexOfVariable (name) != -1;
     }
-    public bool isVariable (string name, out int index) {
+    public static bool isVariable (string name, out int index) {
         index = getIndexOfVariable (name);
         return index != -1;
     }
-    private int getIndexOfVariable (string name) {
+    public static int getIndexOfVariable (string name) {
         for (int i = 0; i < variables.Count; i++)
             if (variables[i].name == name) return i;
         return -1;
     }
 
-    private string getValue (string input) {
+    public static string getValue (string input) {
         int index;
         if (isVariable (input, out index)) return variables[index].value;
         return input;
     }
-    private void declareVariable (string line) {
+    public static void declareVariable (string line) {
         declareVariable (line.Split (' '));
     }
-    private void declareVariable (string[] parts) {
+    public static void declareVariable (string[] parts) {
         /* e.g. ["int", "i", "=", "123;"] */
         variable_type = parts[0];
         variable_name = parts[1];
@@ -35,10 +45,10 @@ public class VariableHander {
         }
         setVariable (variable_type, variable_name, variable_value);
     }
-    private void setVariable (string line) {
+    public static void setVariable (string line) {
         setVariable (line.Split (' '));
     }
-    private void setVariable (string[] parts) {
+    public static void setVariable (string[] parts) {
         if (parts.Length == 1) {
             /* e.g. "i++;" */
             parts = splitIncrement (parts[0]);
@@ -56,17 +66,17 @@ public class VariableHander {
             setVariable (index, variable_value);
         }
     }
-    private void setVariable (int index, string value) {
+    public static void setVariable (int index, string value) {
         if (value != Operators.EMPTY) {
             variables[index].value = cast (parse (value), variables[index].type);
         }
     }
-    private void setVariable (string type, string name, string value) {
+    public static void setVariable (string type, string name, string value) {
         /* VARIABLE DOES NOT EXIST, INITIALIZE IT, e.g. "int i = 122;" */
         variables.Add (new VariableObject (type, name, cast (parse (value), type), pointer));
     }
 
-    private string cast (string input, string cast_type) {
+    public static string cast (string input, string cast_type) {
         if (input != Operators.EMPTY && Evaluator.getType (getValue (input)) == cast_type) {
             switch (cast_type) {
                 case Variables.BOOLEAN:

@@ -1,12 +1,12 @@
-
 using System.Collections.Generic;
 
-public class ScopeHander {
-    
-    
+public class ScopeHandler {
 
-    private int closeScope (bool isContinuing) {
-        if (scope_tracker.Count > 0) {
+    private int pointer;
+    private Stack<ScopeNode> scope;
+
+    public int closeScope (bool isContinuing) {
+        if (scope.Count > 0) {
             if (isContinuing) return scope_tracker.Peek ();
             else {
                 /* REMOVE VARIABLES DEFINED IN PREVIOUS SCOPE, e.g. "if (i < 10) { int j = 10; }" */
@@ -19,11 +19,26 @@ public class ScopeHander {
         }
         return -1;
     }
-    private void skipScope () {
+    public void skipScope () {
         pointer = getPointerTo (pointer, Operators.CLOSING_BRACKET);
         variables = GarbageCollector.removeBetween (getPointerTo (pointer, Operators.OPENING_BRACKET), pointer, variables);
     }
-        private int getPointerTo (int starting_pointer, string target) {
+
+    private void evaluateCondition (string input, string type) {
+        input = cast (parse (input), Variables.BOOLEAN);
+
+        if (bool.Parse (input) == true) {
+            /* e.g. "true", execute within brackets */
+            if (type == Keywords.WHILE || type == Keywords.FOR) {
+              //  scope_tracker.Push (pointer);
+            } else if (type == Keywords.IF) {
+               // scope_tracker.Push (getPointerTo (pointer, Operators.CLOSING_BRACKET));
+            }
+        } else { skipScope (); }
+
+    }
+
+    public int getPointerTo (int starting_pointer, string target) {
         int bracket_counter = 1;
         switch (target) {
             case Operators.CLOSING_BRACKET:
@@ -43,5 +58,5 @@ public class ScopeHander {
         }
         return starting_pointer;
     }
-    
+
 }

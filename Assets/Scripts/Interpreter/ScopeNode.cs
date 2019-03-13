@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class ScopeNode {
     private int start_line;
     private int end_line;
+
     private VariableHandler variables;
 
     /* 
@@ -28,15 +29,15 @@ public class ScopeNode {
     public ScopeNode(int start_line, int end_line) {
         this.start_line = start_line;
         this.end_line = end_line;
-        variables = new List<VariableObject>();
+        variables = new VariableHandler();
     }
     public ScopeNode(int start_line, int end_line, List<VariableObject> variables) {
         this.start_line = start_line;
         this.end_line = end_line;
-        this.variables = variables;
+        this.variables = new VariableHandler(variables);
     }
 
     public void addVariableToScope(VariableObject variable) {
-        variables.Add(variable);
+        variables.add(variable);
     }
 }
