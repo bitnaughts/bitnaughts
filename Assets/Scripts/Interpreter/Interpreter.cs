@@ -11,9 +11,41 @@ public class Interpreter {
     private GameObject obj;
     private string[] script;
 
+
+    //To be replaced by scope tree....
     private List<VariableObject> variables;
-    private List<string> listeners;
     private Stack<int> scope_tracker;
+    
+    
+    private List<string> listeners;
+    // private Tree<ScopeNode> scope_tree;
+
+    
+    // variables list needs to be a tree of lists, each scope stepped into adds leaf, each scope popped out of removes leaf
+    // scope tracker should be derived from this tree?
+
+    // each variable may need an "id" plus a unique hash for what scope it is in?
+
+
+    //If step into a new scope, make a new leaf off of current leaf in scope_tree
+    //if declaring variable in scope, put it in scope_node's variable list
+    //if accessing a variable, check from current node up to see what the value is (preferring closer scope)
+    //this.variable_name == only check top of tree
+
+    // void example_function(int x) {
+    //
+    //}
+
+    // void example_function() {
+    //  int x = parameter_in[0];
+    //  
+    //  return null;
+    //}
+
+    //I lied, trees are unnecessary in their memory storage of scopes that will be ignored/deleted, use a stack...
+
+    private Stack<ScopeNode> scope;
+
 
     private int pointer; //tracks what line is being processed
 
@@ -26,8 +58,10 @@ public class Interpreter {
         this.obj = obj;
 
         pointer = 0;
-        variables = new List<VariableObject> ();
-        scope_tracker = new Stack<int> ();
+
+        scope_tree = new Tree<ScopeNode>();
+        // variables = new List<VariableObject> ();
+        // scope_tracker = new Stack<int> ();
         listeners = new List<string> ();
     }
 
@@ -129,7 +163,7 @@ public class Interpreter {
                     break;
             }
             if (pointer == pointer_saved) pointer++; //step line
-            if (pointer >= script.Length) return true; //script done]
+            if (pointer >= script.Length) return true; //script done
 
             /* UPDATING LISTENERS */
             for (int listener = 0; listener < listeners.Count; listener++) {
@@ -240,7 +274,7 @@ public class Interpreter {
                 }
             }
 
-            /* PEMDAS REST OF OPERATIONS, e.g. ["12", "+", 4, "*", "4"] ==> ["12", "+", "16"] ==> ["28"]*/
+            /* PEMDAS REST OF OPERATIONS, e.g. ["12", "+", 4, "*", "4"] ==> ["12", "+", "16"] ==> ["28"] */
             if (parts.Count > 1) {
                 for (int operation_set = 0; operation_set < Operators.PEMDAS.Length; operation_set++) {
                     for (int part = 1; part < parts.Count - 1; part++) {
