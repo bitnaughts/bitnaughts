@@ -1,7 +1,10 @@
+
+using System.Collections.Generic;
+
 public class ScopeNode {
     private int start_line;
     private int end_line;
-    private List<VariableObject> variables;
+    private VariableHandler variables;
 
     /* 
     1   :   if (true) {
@@ -34,9 +37,6 @@ public class ScopeNode {
     }
 
     public void addVariableToScope(VariableObject variable) {
-        variables.Add
+        variables.Add(variable);
     }
-
-  //  public void init (int start_line, int end_line) {
-  //  }
 }
