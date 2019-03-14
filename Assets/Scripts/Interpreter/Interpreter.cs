@@ -47,20 +47,24 @@ public class Interpreter {
                     break;
                 case Keywords.BREAK:
                 case Operators.CLOSING_BRACKET:
+                    scope.pop ();
+                    break;
                 case Keywords.CONTINUE:
-                    /* Find new pointer location when hitting a "end of scope" operation */
-                    scope.pop (line_parts[0] == Keywords.CONTINUE);
-                    //scope.etPointer() = scope.closeScope (line_parts[0] == Keywords.CONTINUE);
+                    scope.back();
                     break;
                 case Keywords.IF:
                 case Keywords.WHILE:
+                    /* Add to scope */
+                    scope.push(getMatchingEndBracket(getPointer()));
                     /* e.g. "while (i < 10) {" */
                     condition = Operators.EMPTY;
                     for (int i = 1; i < line_parts.Length - 1; i++) condition += line_parts[i] + " ";
+                    
                     /* e.g. "(i < 10)" */
                     evaluateCondition (condition.Substring (1, condition.Length - 3), line_parts[0]);
                     break;
                 case Keywords.FOR:
+                    scope.push(getMatchingEndBracket(getPointer()));
                     /* e.g. "for (int i = 0; i < 10; i++) {" */
                     parameter = Operators.EMPTY;
                     for (int i = 1; i < line_parts.Length - 1; i++) parameter += line_parts[i] + " ";
@@ -117,6 +121,7 @@ public class Interpreter {
                     }
                     break;
             }
+            scope.step();
             // if (pointer == pointer_saved) pointer++; //step line
             //            if (pointer >= script.Length) return true; //script done/
 
@@ -148,6 +153,20 @@ public class Interpreter {
             }
         } else { scope.skipScope (); }
 
+    }
+
+    private int getMatchingEndBracket(int start_line) {
+        int bracket_count = 1;
+        while (bracket_count != 0) {
+            start_line++;
+            if (script[start_line].Contains(Operators.OPENING_PARENTHESIS)) {
+                bracket_count++;
+            } 
+            else if (script[start_line] == Operators.CLOSING_PARENTHESIS) {
+                bracket_count--;
+            }
+        }
+        return start_line;
     }
 
     public int getPointer () {
