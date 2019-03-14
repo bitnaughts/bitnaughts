@@ -159,8 +159,8 @@ public class Evaluator {
         }
         return new string[] { };
     }
-    public string cast (string input, string cast_type) {
-        if (input != Operators.EMPTY && Evaluator.getType (getValue (input)) == cast_type) {
+    public static string cast (string input, string cast_type) {
+        if (input != Operators.EMPTY) { //is this necessary? probably...&& Evaluator.getType (getValue (input)) == cast_type) {
             switch (cast_type) {
                 case Variables.BOOLEAN:
                     return bool.Parse (input).ToString ();

@@ -21,7 +21,6 @@ public class ScopeHandler {
         return scope.Peek ().variable_handler.variables;
     }
 
-
     public void step() {
         pointer++;
     }
@@ -40,7 +39,7 @@ public class ScopeHandler {
         scope.Pop ();
     }
     public void back () { //continue keyword
-        pointer = scope.Peek ().start_line;
+        pointer = scope.Peek ().getStartLine();
     }
     // public void skipScope () {
     //     pointer = scope.Peek ().getEndLine (); //getPointerTo (pointer, Operators.CLOSING_BRACKET); //will get "End line" value here

@@ -35,7 +35,9 @@ public class ScopeNode {
         this.end_line = end_line;
         this.variable_handler = new VariableHandler (variables);
     }
-
+    public int getStartLine () {
+        return start_line;
+    }
     public int getEndLine () {
         return end_line;
     }

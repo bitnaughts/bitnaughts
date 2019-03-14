@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class VariableHandler {
     string variable_type, variable_name, variable_value, variable_modifier, variable_initialization, parameter, condition, debugger;
@@ -53,7 +56,7 @@ public class VariableHandler {
     public void setVariable (string[] parts) {
         if (parts.Length == 1) {
             /* e.g. "i++;" */
-            parts = Parser.splitIncrement (parts[0]);
+            parts = Evaluator.splitIncrement (parts[0]);
         }
         string variable_name = parts[0];
         string variable_operator = parts[1];

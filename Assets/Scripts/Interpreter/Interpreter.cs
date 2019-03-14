@@ -35,7 +35,7 @@ public class Interpreter {
                 case Operators.EMPTY:
                     break;
                 case Keywords.LIBRARY_IMPORT:
-                    listener_handler.addListener (line_parts);
+                    listener_handler.addListener (line_parts, obj);
                     break;
                 case Keywords.BREAK:
                 case Operators.CLOSING_BRACKET:
@@ -51,7 +51,6 @@ public class Interpreter {
                     /* e.g. "while (i < 10) {" */
                     condition = Operators.EMPTY;
                     for (int i = 1; i < line_parts.Length - 1; i++) condition += line_parts[i] + " ";
-
                     /* e.g. "(i < 10)" */
                     evaluateCondition (condition.Substring (1, condition.Length - 3), line_parts[0]);
                     break;
@@ -82,9 +81,15 @@ public class Interpreter {
                     scope.declareVariableInScope (line);
                     break;
                 default:
+                    /*
+                        If not one of the above cases, is either a variable modification or function call
+                     */
                     if (scope.isVariableInScope (line_parts[0])) {
                         /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
                         scope.setVariableInScope (line);
+
+                        // } else if (isFunction(li) {
+
                     } else {
                         if (line_parts[0].Contains (".")) {
                             /* e.g. "Console.WriteLine("test")" */
@@ -116,7 +121,7 @@ public class Interpreter {
             scope.step ();
             // if (pointer == pointer_saved) pointer++; //step line
             // if (pointer >= script.Length) return true; //script done/
-            listener_handler.updateListeners(getPointer());
+            listener_handler.updateListeners (getPointer (), obj);
 
             return false;
         } else return true;
@@ -126,13 +131,8 @@ public class Interpreter {
         input = Evaluator.cast (scope.parseInScope (input), Variables.BOOLEAN);
 
         if (bool.Parse (input) == true) {
-            /* e.g. "true", execute within brackets */
-            if (type == Keywords.WHILE || type == Keywords.FOR) {
-                //  scope_tracker.Push (pointer);
-            } else if (type == Keywords.IF) {
-                // scope_tracker.Push (getPointerTo (pointer, Operators.CLOSING_BRACKET));
-            }
-        } else { scope.skipScope (); }
+            //...
+        } else { scope.pop (); }
 
     }
 
