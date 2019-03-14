@@ -5,7 +5,7 @@ public class ScopeNode {
     private int start_line;
     private int end_line;
 
-    private VariableHandler variables;
+    private VariableHandler variable_handler;
 
     /* 
     1   :   if (true) {
@@ -29,15 +29,19 @@ public class ScopeNode {
     public ScopeNode(int start_line, int end_line) {
         this.start_line = start_line;
         this.end_line = end_line;
-        variables = new VariableHandler();
+        this.variable_handler = new VariableHandler();
     }
     public ScopeNode(int start_line, int end_line, List<VariableObject> variables) {
         this.start_line = start_line;
         this.end_line = end_line;
-        this.variables = new VariableHandler(variables);
+        this.variable_handler = new VariableHandler(variables);
+    }
+
+    public int getEndLine() {
+        return end_line;
     }
 
     public void addVariableToScope(VariableObject variable) {
-        variables.add(variable);
+        variable_handler.add(variable);
     }
 }
