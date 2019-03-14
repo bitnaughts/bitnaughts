@@ -13,7 +13,7 @@ public class ColorCoder {
     public static Color Color_string = new Color (210 / 255f, 150 / 255f, 100 / 255f);
     public static Color Color_highlight = new Color (1, 0, 0);
 
-    public static string[] keyword_list = { "using", "boolean", "char", "class", "const", "double", "else", "final", "float", "for", "if", "int", "new", "private", "public", "return", "static", "this", "void", "while" };
+    public static string[] keyword_list = { "class", "using", "boolean", "char", "class", "const", "double", "else", "final", "float", "for", "if", "int", "new", "private", "public", "return", "static", "this", "void", "while" };
     public static string[] object_list = { "Console", "Plotter", "Grapher", "String", "System" };
     public static string[] function_list = { "WriteLine" };
         public static string[] variable_list = { "angle", "x", "y" };

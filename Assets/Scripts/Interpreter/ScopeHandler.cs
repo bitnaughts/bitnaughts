@@ -5,16 +5,24 @@ public class ScopeHandler {
     private int pointer;
     private Stack<ScopeNode> scope;
 
+    public ScopeHandler() {
+        scope = new Stack<ScopeNode>();
+    }
+
     public bool isVariableInScope (string name) {
+        if (scope.Count == 0) return false;
         return scope.Peek ().variable_handler.isVariable (name);
     }
     public void setVariableInScope (string line) {
+        if (scope.Count == 0) return;
         scope.Peek ().variable_handler.setVariable (line);
     }
     public void declareVariableInScope (string line) {
+        if (scope.Count == 0) return;
         scope.Peek ().variable_handler.declareVariable (line);
     }
     public string parseInScope (string line) {
+        if (scope.Count == 0) return null;
         return scope.Peek ().variable_handler.parse (line);
     }
     public List<VariableObject> getVariablesInScope () {
