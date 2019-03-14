@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 
 public class VariableHandler {
-string variable_type, variable_name, variable_value, variable_modifier, variable_initialization, parameter, condition, debugger;
+    string variable_type, variable_name, variable_value, variable_modifier, variable_initialization, parameter, condition, debugger;
 
+    //this should probably become a dictionary...
     public List<VariableObject> variables;
 
-    public VariableHandler() {
-        variables = new List<VariableObject>();
+    public VariableHandler () {
+        variables = new List<VariableObject> ();
     }
-    public VariableHandler(List<VariableObject> variables) {
+    public VariableHandler (List<VariableObject> variables) {
         this.variables = variables;
     }
-    public void add(VariableObject variable) {
-        variables.Add(variable);
+    public void add (VariableObject variable) {
+        variables.Add (variable);
     }
 
     public bool isVariable (string name) {
@@ -74,7 +75,7 @@ string variable_type, variable_name, variable_value, variable_modifier, variable
     }
     public void setVariable (string type, string name, string value) {
         /* VARIABLE DOES NOT EXIST, INITIALIZE IT, e.g. "int i = 122;" */
-        variables.add (new VariableObject (type, name, cast (Parser.parse (value), type), pointer));
+        variables.Add (new VariableObject (type, name, cast (Parser.parse (value), type), 1 /* pointer */ ));
     }
 
     public string cast (string input, string cast_type) {

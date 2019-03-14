@@ -15,7 +15,7 @@ public class VariableObject {
     public string value;
     public int line_defined;
     VariableObject[] fields;
-     public VariableObject (string type, string name, string value, int line_defined) {
+    public VariableObject (string type, string name, string value, int line_defined) {
         init (type, name, value, line_defined);
     }
     public void init (string type, string name, string value, int line_defined) {

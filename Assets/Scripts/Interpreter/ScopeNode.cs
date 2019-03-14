@@ -1,11 +1,10 @@
-
 using System.Collections.Generic;
 
 public class ScopeNode {
     private int start_line;
     private int end_line;
 
-    private VariableHandler variable_handler;
+    public VariableHandler variable_handler;
 
     /* 
     1   :   if (true) {
@@ -26,22 +25,22 @@ public class ScopeNode {
     when closing node, if condition if false, go to end_line + 1; if condition is true, go to start_line + 1
     */
 
-    public ScopeNode(int start_line, int end_line) {
+    public ScopeNode (int start_line, int end_line) {
         this.start_line = start_line;
         this.end_line = end_line;
-        this.variable_handler = new VariableHandler();
+        this.variable_handler = new VariableHandler ();
     }
-    public ScopeNode(int start_line, int end_line, List<VariableObject> variables) {
+    public ScopeNode (int start_line, int end_line, List<VariableObject> variables) {
         this.start_line = start_line;
         this.end_line = end_line;
-        this.variable_handler = new VariableHandler(variables);
+        this.variable_handler = new VariableHandler (variables);
     }
 
-    public int getEndLine() {
+    public int getEndLine () {
         return end_line;
     }
 
-    public void addVariableToScope(VariableObject variable) {
-        variable_handler.add(variable);
+    public void addVariableToScope (VariableObject variable) {
+        variable_handler.add (variable);
     }
 }

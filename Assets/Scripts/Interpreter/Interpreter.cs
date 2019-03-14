@@ -25,11 +25,11 @@ public class Interpreter {
 
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
     public bool interpretLine () {
-        if (script.Length > 0 && scope.getPointer() >= 0 && scope.getPointer() < script.Length) {
-            debugger += "LINE: " + script[scope.getPointer()] + "\n";
-            string line = script[scope.getPointer()];
+        if (script.Length > 0 && scope.getPointer () >= 0 && scope.getPointer () < script.Length) {
+            debugger += "LINE: " + script[scope.getPointer ()] + "\n";
+            string line = script[scope.getPointer ()];
             string[] line_parts = line.Split (' ');
-            int pointer_saved = scope.getPointer();
+            int pointer_saved = scope.getPointer ();
 
             switch (line_parts[0]) {
                 case Operators.EMPTY:
@@ -49,7 +49,7 @@ public class Interpreter {
                 case Operators.CLOSING_BRACKET:
                 case Keywords.CONTINUE:
                     /* Find new pointer location when hitting a "end of scope" operation */
-                    scope.pop(line_parts[0] == Keywords.CONTINUE);
+                    scope.pop (line_parts[0] == Keywords.CONTINUE);
                     //scope.getPointer() = scope.closeScope (line_parts[0] == Keywords.CONTINUE);
                     break;
                 case Keywords.IF:
@@ -72,10 +72,10 @@ public class Interpreter {
                     condition = parameters[1].Substring (1);
                     variable_modifier = parameters[2].Substring (1);
                     /* e.g. ["int i = 0", "i < 10", "i++"] */
-                    if (scope.variables.isVariable (variable_initialization.Split (' ') [1])) {
-                        scope.variables.setVariable (variable_modifier); /* Is not the first time for loop has run, e.g. "i" exists*/
+                    if (scope.isVariableInScope (variable_initialization.Split (' ') [1])) {
+                        scope.setVariableInScope (variable_modifier); /* Is not the first time for loop has run, e.g. "i" exists*/
                     } else {
-                        scope.variables.declareVariable (variable_initialization); /* Run first part of for loop for first iteration, e.g. "i" needs to be initialized*/
+                        scope.declareVariableInScope (variable_initialization); /* Run first part of for loop for first iteration, e.g. "i" needs to be initialized*/
                     }
                     evaluateCondition (condition, line_parts[0]);
                     break;
@@ -83,12 +83,12 @@ public class Interpreter {
                 case Variables.INTEGER:
                 case Variables.FLOAT:
                 case Variables.STRING:
-                    scope.variables.declareVariable (line_parts);
+                    scope.declareVariableInScope (line);
                     break;
                 default:
-                    if (scope.variables.isVariable (line_parts[0])) {
+                    if (scope.isVariableInScope (line_parts[0])) {
                         /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
-                        setVariable (line_parts);
+                        scope.setVariableInScope (line);
                     } else {
                         if (line_parts[0].Contains (".")) {
                             /* e.g. "Console.WriteLine("test")" */
@@ -96,7 +96,7 @@ public class Interpreter {
                             string function_name = line_parts[0].Split ('.') [1].Split ('(') [0];
                             string function_parameters = line.Substring (line.IndexOf ("(") + 1);
                             function_parameters = function_parameters.Substring (0, function_parameters.Length - 2);
-                            function_parameters = parse (function_parameters);
+                            function_parameters = Parser.parse (function_parameters);
 
                             /* e.g. "Console", "WriteLine" */
                             switch (class_name) {
@@ -117,14 +117,14 @@ public class Interpreter {
                     }
                     break;
             }
-           // if (pointer == pointer_saved) pointer++; //step line
-//            if (pointer >= script.Length) return true; //script done/
+            // if (pointer == pointer_saved) pointer++; //step line
+            //            if (pointer >= script.Length) return true; //script done/
 
             /* UPDATING LISTENERS */
             for (int listener = 0; listener < listeners.Count; listener++) {
                 switch (listeners[listener]) {
                     case Classes.CONSOLE:
-                        Referencer.consoleManager.execute (Console.UPDATE, pointer + "", obj);
+                        Referencer.consoleManager.execute (Console.UPDATE, getPointer () + "", obj);
                         break;
                     case Classes.PLOTTER:
 
@@ -136,12 +136,8 @@ public class Interpreter {
         } else return true;
     }
 
-   
-
-    
-
     private void evaluateCondition (string input, string type) {
-        input = cast (parse (input), Variables.BOOLEAN);
+        input = cast (Parser.parse (input), Variables.BOOLEAN);
 
         if (bool.Parse (input) == true) {
             /* e.g. "true", execute within brackets */
@@ -155,7 +151,7 @@ public class Interpreter {
     }
 
     public int getPointer () {
-        return scope.getPointer();
+        return scope.getPointer ();
     }
     public override string ToString () {
         string output = debugger + "\n\n";

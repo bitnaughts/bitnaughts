@@ -8,7 +8,7 @@ using System.Reflection;
 
 public class Parser {
 
-     public static string parse (string input) {
+    public static string parse (string input) {
         if (input != Operators.EMPTY) {
             List<string> parts = input.Split (' ').ToList<string> ();
             /* EVALUATE PARENTHESIS AND FUNCTIONS RECURSIVELY, e.g. "12 + function(2) * 4" ==> "12 + 4 * 4" */
@@ -62,13 +62,13 @@ public class Parser {
         }
         return Operators.EMPTY;
     }
-      public static string scrubSymbols (string input) {
+    public static string scrubSymbols (string input) {
         string output = input;
         if (input.Contains (Operators.END_LINE)) output = input.Remove (input.IndexOf (Operators.END_LINE), 1);
         return output;
     }
 
-      public static string[] splitIncrement (string input) {
+    public static string[] splitIncrement (string input) {
         string variable_name, variable_operation;
         input = input.Split (Operators.END_LINE_CHAR) [0]; //remove ; if there
 
