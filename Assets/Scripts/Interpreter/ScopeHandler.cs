@@ -14,9 +14,17 @@ public class ScopeHandler {
     public void declareVariableInScope (string line) {
         scope.Peek ().variable_handler.declareVariable (line);
     }
+    public string parseInScope (string line) {
+        return scope.Peek ().variable_handler.parse(line);
+    }
+    public string evalu (string line) {
+        return scope.Peek ().variable_handler.parse(line);
+    }
 
     public List<VariableObject> getVariablesInScope () {
         return scope.Peek ().variable_handler.variables;
+    }
+
         // List <VariableObject> collection = new List<VariableObject>();
 
         // ScopeNode[] full_scope = scope.ToArray(); 

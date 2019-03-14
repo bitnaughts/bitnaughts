@@ -137,4 +137,26 @@ public class Evaluator {
         }
 
     }
+    public static string scrubSymbols (string input) {
+        string output = input;
+        if (input.Contains (Operators.END_LINE)) output = input.Remove (input.IndexOf (Operators.END_LINE), 1);
+        return output;
+    }
+
+    public static string[] splitIncrement (string input) {
+        string variable_name, variable_operation;
+        input = input.Split (Operators.END_LINE_CHAR) [0]; //remove ; if there
+
+        variable_name = input.Substring (0, input.Length - 2);
+        variable_operation = input.Substring (input.Length - 2);
+
+        switch (variable_operation) {
+            case Operators.INCREMENT:
+                return new string[] { variable_name, Operators.EQUALS, variable_name, Operators.ADD, "1" };
+            case Operators.DECREMENT:
+                return new string[] { variable_name, Operators.EQUALS, variable_name, Operators.SUBTRACT, "1" };
+
+        }
+        return new string[] { };
+    }
 }

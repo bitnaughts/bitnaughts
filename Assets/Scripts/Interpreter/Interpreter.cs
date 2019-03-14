@@ -35,8 +35,8 @@ public class Interpreter {
                 case Operators.EMPTY:
                     break;
                 case Keywords.LIBRARY_IMPORT:
-                    listeners.Add (Parser.scrubSymbols (line_parts[1]));
-                    switch (Parser.scrubSymbols (line_parts[1])) {
+                    listeners.Add (Evaluator.scrubSymbols (line_parts[1]));
+                    switch (Evaluator.scrubSymbols (line_parts[1])) {
                         case Classes.CONSOLE:
                             Referencer.consoleManager.execute (Console.OPEN, "", obj);
                             break;
@@ -96,7 +96,9 @@ public class Interpreter {
                             string function_name = line_parts[0].Split ('.') [1].Split ('(') [0];
                             string function_parameters = line.Substring (line.IndexOf ("(") + 1);
                             function_parameters = function_parameters.Substring (0, function_parameters.Length - 2);
-                            function_parameters = Parser.parse (function_parameters);
+
+                            //would prefer avoiding the parse call...
+                            function_parameters = scope.parseInScope (function_parameters);
 
                             /* e.g. "Console", "WriteLine" */
                             switch (class_name) {
@@ -137,7 +139,7 @@ public class Interpreter {
     }
 
     private void evaluateCondition (string input, string type) {
-        input = cast (Parser.parse (input), Variables.BOOLEAN);
+        input = cast (scope.parseInScope (input), Variables.BOOLEAN);
 
         if (bool.Parse (input) == true) {
             /* e.g. "true", execute within brackets */
