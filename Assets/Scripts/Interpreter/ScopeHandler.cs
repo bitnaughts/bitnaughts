@@ -17,9 +17,6 @@ public class ScopeHandler {
     public string parseInScope (string line) {
         return scope.Peek ().variable_handler.parse(line);
     }
-    public string evalu (string line) {
-        return scope.Peek ().variable_handler.parse(line);
-    }
 
     public List<VariableObject> getVariablesInScope () {
         return scope.Peek ().variable_handler.variables;
@@ -46,8 +43,7 @@ public class ScopeHandler {
         //         }
         //     }
         // }
-        // return collection;        
-    }
+        // return collection;       
 
     public void pop (bool isContinuing) {
         if (scope.Count > 0) {
@@ -91,5 +87,4 @@ public class ScopeHandler {
     //     }
     //     return starting_pointer;
     // }
-
 }

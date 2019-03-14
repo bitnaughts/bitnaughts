@@ -70,12 +70,12 @@ public class VariableHandler {
     }
     public void setVariable (int index, string value) {
         if (value != Operators.EMPTY) {
-            variables[index].value = cast (parse (value), variables[index].type);
+            variables[index].value = Evaluator.cast (parse (value), variables[index].type);
         }
     }
     public void setVariable (string type, string name, string value) {
         /* VARIABLE DOES NOT EXIST, INITIALIZE IT, e.g. "int i = 122;" */
-        variables.Add (new VariableObject (type, name, cast (parse (value), type), 1 /* pointer */ ));
+        variables.Add (new VariableObject (type, name, Evaluator.cast (parse (value), type), 1 /* pointer */ ));
     }
     public string parse (string input) {
         if (input != Operators.EMPTY) {
@@ -131,21 +131,5 @@ public class VariableHandler {
         }
         return Operators.EMPTY;
     }
-    public string cast (string input, string cast_type) {
-        if (input != Operators.EMPTY && Evaluator.getType (getValue (input)) == cast_type) {
-            switch (cast_type) {
-                case Variables.BOOLEAN:
-                    return bool.Parse (input).ToString ();
-                case Variables.INTEGER:
-                    return int.Parse (input).ToString ();
-                case Variables.FLOAT:
-                    return float.Parse (input).ToString ();
-                case Variables.STRING:
-                    return input;
-            }
-        }
-        //add cases to convert floats to ints, etc? 
-        //but, preferrably implement casting (int.Parse...)
-        return Operators.EMPTY;
-    }
+
 }

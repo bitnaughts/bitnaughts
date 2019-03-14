@@ -50,7 +50,7 @@ public class Interpreter {
                 case Keywords.CONTINUE:
                     /* Find new pointer location when hitting a "end of scope" operation */
                     scope.pop (line_parts[0] == Keywords.CONTINUE);
-                    //scope.getPointer() = scope.closeScope (line_parts[0] == Keywords.CONTINUE);
+                    //scope.etPointer() = scope.closeScope (line_parts[0] == Keywords.CONTINUE);
                     break;
                 case Keywords.IF:
                 case Keywords.WHILE:
@@ -96,8 +96,6 @@ public class Interpreter {
                             string function_name = line_parts[0].Split ('.') [1].Split ('(') [0];
                             string function_parameters = line.Substring (line.IndexOf ("(") + 1);
                             function_parameters = function_parameters.Substring (0, function_parameters.Length - 2);
-
-                            //would prefer avoiding the parse call...
                             function_parameters = scope.parseInScope (function_parameters);
 
                             /* e.g. "Console", "WriteLine" */
@@ -139,7 +137,7 @@ public class Interpreter {
     }
 
     private void evaluateCondition (string input, string type) {
-        input = cast (scope.parseInScope (input), Variables.BOOLEAN);
+        input = Evaluator.cast (scope.parseInScope (input), Variables.BOOLEAN);
 
         if (bool.Parse (input) == true) {
             /* e.g. "true", execute within brackets */
