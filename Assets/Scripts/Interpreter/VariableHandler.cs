@@ -13,7 +13,8 @@ public class VariableHandler {
         variables = new List<VariableObject> ();
     }
     public VariableHandler (List<VariableObject> variables) {
-        this.variables = variables;
+        if (variables == null) this.variables = new List<VariableObject> ();
+        else this.variables = variables;
     }
     public void add (VariableObject variable) {
         variables.Add (variable);
@@ -134,5 +135,11 @@ public class VariableHandler {
         }
         return Operators.EMPTY;
     }
-
+    public override string ToString () {
+        string output = "";
+         for (int i = 0; i < variables.Count; i++) {
+            output += variables[i].ToString() + ", ";
+        }
+        return output;
+    }
 }

@@ -4,6 +4,8 @@ public class ScopeNode {
     private int start_line;
     private int end_line;
 
+    private bool looping;
+
     public VariableHandler variable_handler;
 
     /* 
@@ -25,15 +27,17 @@ public class ScopeNode {
     when closing node, if condition if false, go to end_line + 1; if condition is true, go to start_line + 1
     */
 
-    public ScopeNode (int start_line, int end_line) {
+    public ScopeNode (int start_line, int end_line, bool looping) {
         this.start_line = start_line;
         this.end_line = end_line;
         this.variable_handler = new VariableHandler ();
+        this.looping = looping;
     }
-    public ScopeNode (int start_line, int end_line, List<VariableObject> variables) {
+    public ScopeNode (int start_line, int end_line, List<VariableObject> variables, bool looping) {
         this.start_line = start_line;
         this.end_line = end_line;
         this.variable_handler = new VariableHandler (variables);
+        this.looping = looping;
     }
     public int getStartLine () {
         return start_line;
@@ -41,8 +45,15 @@ public class ScopeNode {
     public int getEndLine () {
         return end_line;
     }
+    public bool isLooping () {
+        return looping;
+    }
 
     public void addVariableToScope (VariableObject variable) {
         variable_handler.add (variable);
+    }
+    public override string ToString () {
+        string output = "Range(" + start_line + "->" + end_line + ")\t" + variable_handler.ToString ();
+        return output;
     }
 }

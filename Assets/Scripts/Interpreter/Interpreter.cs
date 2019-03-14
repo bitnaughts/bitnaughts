@@ -38,8 +38,15 @@ public class Interpreter {
                     listener_handler.addListener (line_parts, obj);
                     break;
                 case Keywords.BREAK:
-                case Operators.CLOSING_BRACKET:
                     scope.pop ();
+                    break;
+                case Operators.CLOSING_BRACKET:
+                    if (scope.isLooping()) {
+                        scope.back();
+                    }
+                    else { 
+                        scope.pop ();
+                    }
                     break;
                 case Keywords.CONTINUE:
                     scope.back ();
@@ -48,14 +55,16 @@ public class Interpreter {
                 case Keywords.WHILE:
                 case Keywords.FOR:
                     /* Add to scope */
-                    scope.push (getMatchingEndBracket (getPointer ()));
+                    
+                    //Add "if scope hasn't been pushed for this yet..."
+                    scope.push (getMatchingEndBracket (getPointer ()), line_parts[0] != Keywords.IF);
                     /* e.g. "while (i < 10) {" */
                     parameter = Operators.EMPTY;
                     for (int i = 1; i < line_parts.Length - 1; i++) parameter += line_parts[i] + " ";
                     parameter = parameter.Substring (1, parameter.Length - 3);
-                   
+
                     if (line_parts[0] == Keywords.FOR) {
-                         /* e.g. "int i = 0; i < 10; i++" */
+                        /* e.g. "int i = 0; i < 10; i++" */
                         string[] parameters = parameter.Split (Operators.END_LINE_CHAR);
                         variable_initialization = parameters[0];
                         variable_modifier = parameters[2].Substring (1);
@@ -79,7 +88,7 @@ public class Interpreter {
                     if (scope.isVariableInScope (line_parts[0])) {
                         /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
                         scope.setVariableInScope (line);
-                    //} else if (isFunction(li) {
+                        //} else if (isFunction(li) {
                     } else {
                         if (line_parts[0].Contains (".")) {
                             /* e.g. "Console.WriteLine("test")" */
@@ -127,15 +136,15 @@ public class Interpreter {
 
     private int getMatchingEndBracket (int start_line) {
         int bracket_count = 1;
-        while (bracket_count != 0) {
+        while (bracket_count > 0) {
             start_line++;
-            if (script[start_line].Contains (Operators.OPENING_PARENTHESIS)) {
+            if (script[start_line].Contains (Operators.OPENING_BRACKET)) {
                 bracket_count++;
-            } else if (script[start_line] == Operators.CLOSING_PARENTHESIS) {
+            } else if (script[start_line] == Operators.CLOSING_BRACKET) {
                 bracket_count--;
             }
         }
-        return start_line;
+        return start_line + 1;
     }
 
     public int getPointer () {
@@ -144,6 +153,7 @@ public class Interpreter {
     public override string ToString () {
         string output = debugger + "\n\n";
         debugger = Operators.EMPTY;
+        output += scope.ToString ();
         // for (int i = 0; i < variables.Count; i++) {
         //     output += "-> Variable(" + variables[i].ToString () + ")\n";
         // }
