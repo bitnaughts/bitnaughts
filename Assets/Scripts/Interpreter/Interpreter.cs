@@ -10,7 +10,7 @@ public class Interpreter {
     private string[] script;
 
     private ScopeHandler scope;
-    private List<string> listeners;
+    private ListenerHandler listener_handler;
 
     string variable_type, variable_name, variable_value, variable_modifier, variable_initialization, parameter, condition, debugger;
 
@@ -20,7 +20,7 @@ public class Interpreter {
         this.obj = obj;
 
         scope = new ScopeHandler ();
-        listeners = new List<string> ();
+        listener_handler = new ListenerHandler ();
     }
 
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
@@ -35,36 +35,28 @@ public class Interpreter {
                 case Operators.EMPTY:
                     break;
                 case Keywords.LIBRARY_IMPORT:
-                    listeners.Add (Evaluator.scrubSymbols (line_parts[1]));
-                    switch (Evaluator.scrubSymbols (line_parts[1])) {
-                        case Classes.CONSOLE:
-                            Referencer.consoleManager.execute (Console.OPEN, "", obj);
-                            break;
-                        case Classes.PLOTTER:
-
-                            break;
-                    }
+                    listener_handler.addListener (line_parts);
                     break;
                 case Keywords.BREAK:
                 case Operators.CLOSING_BRACKET:
                     scope.pop ();
                     break;
                 case Keywords.CONTINUE:
-                    scope.back();
+                    scope.back ();
                     break;
                 case Keywords.IF:
                 case Keywords.WHILE:
                     /* Add to scope */
-                    scope.push(getMatchingEndBracket(getPointer()));
+                    scope.push (getMatchingEndBracket (getPointer ()));
                     /* e.g. "while (i < 10) {" */
                     condition = Operators.EMPTY;
                     for (int i = 1; i < line_parts.Length - 1; i++) condition += line_parts[i] + " ";
-                    
+
                     /* e.g. "(i < 10)" */
                     evaluateCondition (condition.Substring (1, condition.Length - 3), line_parts[0]);
                     break;
                 case Keywords.FOR:
-                    scope.push(getMatchingEndBracket(getPointer()));
+                    scope.push (getMatchingEndBracket (getPointer ()));
                     /* e.g. "for (int i = 0; i < 10; i++) {" */
                     parameter = Operators.EMPTY;
                     for (int i = 1; i < line_parts.Length - 1; i++) parameter += line_parts[i] + " ";
@@ -121,21 +113,10 @@ public class Interpreter {
                     }
                     break;
             }
-            scope.step();
+            scope.step ();
             // if (pointer == pointer_saved) pointer++; //step line
-            //            if (pointer >= script.Length) return true; //script done/
-
-            /* UPDATING LISTENERS */
-            for (int listener = 0; listener < listeners.Count; listener++) {
-                switch (listeners[listener]) {
-                    case Classes.CONSOLE:
-                        Referencer.consoleManager.execute (Console.UPDATE, getPointer () + "", obj);
-                        break;
-                    case Classes.PLOTTER:
-
-                        break;
-                }
-            }
+            // if (pointer >= script.Length) return true; //script done/
+            listener_handler.updateListeners(getPointer());
 
             return false;
         } else return true;
@@ -155,14 +136,13 @@ public class Interpreter {
 
     }
 
-    private int getMatchingEndBracket(int start_line) {
+    private int getMatchingEndBracket (int start_line) {
         int bracket_count = 1;
         while (bracket_count != 0) {
             start_line++;
-            if (script[start_line].Contains(Operators.OPENING_PARENTHESIS)) {
+            if (script[start_line].Contains (Operators.OPENING_PARENTHESIS)) {
                 bracket_count++;
-            } 
-            else if (script[start_line] == Operators.CLOSING_PARENTHESIS) {
+            } else if (script[start_line] == Operators.CLOSING_PARENTHESIS) {
                 bracket_count--;
             }
         }
