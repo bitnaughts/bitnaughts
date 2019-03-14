@@ -46,33 +46,28 @@ public class Interpreter {
                     break;
                 case Keywords.IF:
                 case Keywords.WHILE:
+                case Keywords.FOR:
                     /* Add to scope */
                     scope.push (getMatchingEndBracket (getPointer ()));
                     /* e.g. "while (i < 10) {" */
-                    condition = Operators.EMPTY;
-                    for (int i = 1; i < line_parts.Length - 1; i++) condition += line_parts[i] + " ";
-                    /* e.g. "(i < 10)" */
-                    evaluateCondition (condition.Substring (1, condition.Length - 3), line_parts[0]);
-                    break;
-                case Keywords.FOR:
-                    scope.push (getMatchingEndBracket (getPointer ()));
-                    /* e.g. "for (int i = 0; i < 10; i++) {" */
                     parameter = Operators.EMPTY;
                     for (int i = 1; i < line_parts.Length - 1; i++) parameter += line_parts[i] + " ";
-                    /* e.g. "(int i = 0; i < 10; i++)" */
                     parameter = parameter.Substring (1, parameter.Length - 3);
-                    /* e.g. "int i = 0; i < 10; i++" */
-                    string[] parameters = parameter.Split (Operators.END_LINE_CHAR);
-                    variable_initialization = parameters[0];
-                    condition = parameters[1].Substring (1);
-                    variable_modifier = parameters[2].Substring (1);
-                    /* e.g. ["int i = 0", "i < 10", "i++"] */
-                    if (scope.isVariableInScope (variable_initialization.Split (' ') [1])) {
-                        scope.setVariableInScope (variable_modifier); /* Is not the first time for loop has run, e.g. "i" exists*/
-                    } else {
-                        scope.declareVariableInScope (variable_initialization); /* Run first part of for loop for first iteration, e.g. "i" needs to be initialized*/
+                   
+                    if (line_parts[0] == Keywords.FOR) {
+                         /* e.g. "int i = 0; i < 10; i++" */
+                        string[] parameters = parameter.Split (Operators.END_LINE_CHAR);
+                        variable_initialization = parameters[0];
+                        variable_modifier = parameters[2].Substring (1);
+                        parameter = parameters[1].Substring (1);
+                        /* e.g. ["int i = 0", "i < 10", "i++"] */
+                        if (scope.isVariableInScope (variable_initialization.Split (' ') [1])) {
+                            scope.setVariableInScope (variable_modifier); /* Is not the first time for loop has run, e.g. "i" exists*/
+                        } else {
+                            scope.declareVariableInScope (variable_initialization); /* Run first part of for loop for first iteration, e.g. "i" needs to be initialized*/
+                        }
                     }
-                    evaluateCondition (condition, line_parts[0]);
+                    evaluateCondition (parameter, line_parts[0]);
                     break;
                 case Variables.BOOLEAN:
                 case Variables.INTEGER:
@@ -81,15 +76,10 @@ public class Interpreter {
                     scope.declareVariableInScope (line);
                     break;
                 default:
-                    /*
-                        If not one of the above cases, is either a variable modification or function call
-                     */
                     if (scope.isVariableInScope (line_parts[0])) {
                         /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
                         scope.setVariableInScope (line);
-
-                        // } else if (isFunction(li) {
-
+                    //} else if (isFunction(li) {
                     } else {
                         if (line_parts[0].Contains (".")) {
                             /* e.g. "Console.WriteLine("test")" */
@@ -98,7 +88,6 @@ public class Interpreter {
                             string function_parameters = line.Substring (line.IndexOf ("(") + 1);
                             function_parameters = function_parameters.Substring (0, function_parameters.Length - 2);
                             function_parameters = scope.parseInScope (function_parameters);
-
                             /* e.g. "Console", "WriteLine" */
                             switch (class_name) {
                                 case Classes.CONSOLE:
