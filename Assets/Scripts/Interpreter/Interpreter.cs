@@ -25,104 +25,103 @@ public class Interpreter {
 
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
     public bool interpretLine () {
-        if (script.Length > 0 && scope.getPointer () >= 0 && scope.getPointer () < script.Length) {
-            debugger += "LINE: " + script[scope.getPointer ()] + "\n";
-            string line = script[scope.getPointer ()];
-            string[] line_parts = line.Split (' ');
-            int pointer_saved = scope.getPointer ();
+        // debugger += "LINE: " + script[scope.getPointer ()] + "\n";
 
-            switch (line_parts[0]) {
-                case Operators.EMPTY:
-                    break;
-                case Keywords.LIBRARY_IMPORT:
-                    listener_handler.addListener (line_parts, obj);
-                    break;
-                case Keywords.BREAK:
-                    scope.pop ();
-                    break;
-                case Operators.CLOSING_BRACKET:
-                    if (scope.isLooping()) {
-                        scope.back();
-                    }
-                    else { 
-                        scope.pop ();
-                    }
-                    break;
-                case Keywords.CONTINUE:
+        string line = script[scope.getPointer ()];
+        string[] line_parts = line.Split (' ');
+
+        switch (line_parts[0]) {
+            case Operators.EMPTY:
+                break;
+            case Keywords.LIBRARY_IMPORT:
+                listener_handler.addListener (line_parts, obj);
+                break;
+            case Keywords.BREAK:
+                scope.pop ();
+                break;
+            case Operators.CLOSING_BRACKET:
+                if (scope.isLooping ()) {
                     scope.back ();
-                    break;
-                case Keywords.IF:
-                case Keywords.WHILE:
-                case Keywords.FOR:
-                    /* Add to scope */
-                    
-                    //Add "if scope hasn't been pushed for this yet..."
-                    scope.push (getMatchingEndBracket (getPointer ()), line_parts[0] != Keywords.IF);
-                    /* e.g. "while (i < 10) {" */
-                    parameter = Operators.EMPTY;
-                    for (int i = 1; i < line_parts.Length - 1; i++) parameter += line_parts[i] + " ";
-                    parameter = parameter.Substring (1, parameter.Length - 3);
+                } else {
+                    scope.pop ();
+                }
+                break;
+            case Keywords.CONTINUE:
+                scope.back ();
+                break;
+            case Keywords.IF:
+            case Keywords.WHILE:
+            case Keywords.FOR:
+                /* Add to scope "if scope hasn't been pushed for this yet..." */
+                scope.push (getMatchingEndBracket (getPointer ()), line_parts[0] != Keywords.IF);
+                /* e.g. "while (i < 10) {" */
+                parameter = Operators.EMPTY;
+                for (int i = 1; i < line_parts.Length - 1; i++) parameter += line_parts[i] + " ";
+                parameter = parameter.Substring (1, parameter.Length - 3);
 
-                    if (line_parts[0] == Keywords.FOR) {
-                        /* e.g. "int i = 0; i < 10; i++" */
-                        string[] parameters = parameter.Split (Operators.END_LINE_CHAR);
-                        variable_initialization = parameters[0];
-                        variable_modifier = parameters[2].Substring (1);
-                        parameter = parameters[1].Substring (1);
-                        /* e.g. ["int i = 0", "i < 10", "i++"] */
-                        if (scope.isVariableInScope (variable_initialization.Split (' ') [1])) {
-                            scope.setVariableInScope (variable_modifier); /* Is not the first time for loop has run, e.g. "i" exists*/
-                        } else {
-                            scope.declareVariableInScope (variable_initialization); /* Run first part of for loop for first iteration, e.g. "i" needs to be initialized*/
-                        }
-                    }
-                    evaluateCondition (parameter, line_parts[0]);
-                    break;
-                case Variables.BOOLEAN:
-                case Variables.INTEGER:
-                case Variables.FLOAT:
-                case Variables.STRING:
-                    scope.declareVariableInScope (line);
-                    break;
-                default:
-                    if (scope.isVariableInScope (line_parts[0])) {
-                        /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
-                        scope.setVariableInScope (line);
-                        //} else if (isFunction(li) {
+                if (line_parts[0] == Keywords.FOR) {
+                    /* e.g. "int i = 0; i < 10; i++" */
+                    string[] parameters = parameter.Split (Operators.END_LINE_CHAR);
+                    variable_initialization = parameters[0];
+                    variable_modifier = parameters[2].Substring (1);
+                    parameter = parameters[1].Substring (1);
+                    /* e.g. ["int i = 0", "i < 10", "i++"] */
+                    if (scope.isVariableInScope (variable_initialization.Split (' ') [1])) {
+                        scope.setVariableInScope (variable_modifier); /* Is not the first time for loop has run, e.g. "i" exists*/
                     } else {
-                        if (line_parts[0].Contains (".")) {
-                            /* e.g. "Console.WriteLine("test")" */
-                            string class_name = line_parts[0].Split ('.') [0];
-                            string function_name = line_parts[0].Split ('.') [1].Split ('(') [0];
-                            string function_parameters = line.Substring (line.IndexOf ("(") + 1);
-                            function_parameters = function_parameters.Substring (0, function_parameters.Length - 2);
-                            function_parameters = scope.parseInScope (function_parameters);
-                            /* e.g. "Console", "WriteLine" */
-                            switch (class_name) {
-                                case Classes.CONSOLE:
-                                    Referencer.consoleManager.execute (function_name, function_parameters, obj);
-                                    break;
-                                case "Application":
-                                    break;
-                                case "Mathf":
-                                    break;
-                            }
-                        }
-                        /* CHECK IF LINE REFERS TO A FUNCTION, e.g. "Console.WriteLine("Test");" */
-                        /*
-                            switch className
-                         */
-                        //how to handle the many various "action" functions people could call, e.g. Console.log, this.rotate(), etc.
+                        scope.declareVariableInScope (variable_initialization); /* Run first part of for loop for first iteration, e.g. "i" needs to be initialized*/
                     }
-                    break;
-            }
-            scope.step ();
-            // if (pointer == pointer_saved) pointer++; //step line
-            // if (pointer >= script.Length) return true; //script done/
-            listener_handler.updateListeners (getPointer (), obj);
+                }
 
+                evaluateCondition (parameter, line_parts[0]);
+                break;
+            case Variables.BOOLEAN:
+            case Variables.INTEGER:
+            case Variables.FLOAT:
+            case Variables.STRING:
+                scope.declareVariableInScope (line);
+                break;
+            case "static":
+                scope.push (getMatchingEndBracket (getPointer ()));
+                break;
+            default:
+                if (scope.isVariableInScope (line_parts[0])) {
+                    /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
+                    scope.setVariableInScope (line);
+                    //} else if (isFunction(li) {
+                } else {
+                    if (line_parts[0].Contains (".")) {
+                        /* e.g. "Console.WriteLine("test")" */
+                        string class_name = line_parts[0].Split ('.') [0];
+                        string function_name = line_parts[0].Split ('.') [1].Split ('(') [0];
+                        string function_parameters = line.Substring (line.IndexOf ("(") + 1);
+                        function_parameters = function_parameters.Substring (0, function_parameters.Length - 2);
+                        function_parameters = scope.parseInScope (function_parameters);
+                        /* e.g. "Console", "WriteLine" */
+                        switch (class_name) {
+                            case Classes.CONSOLE:
+                                Referencer.consoleManager.execute (function_name, function_parameters, obj);
+                                break;
+                            case "Application":
+                                break;
+                            case "Mathf":
+                                break;
+                        }
+                    }
+                    /* CHECK IF LINE REFERS TO A FUNCTION, e.g. "Console.WriteLine("Test");" */
+                    /*
+                        switch className
+                     */
+                    //how to handle the many various "action" functions people could call, e.g. Console.log, this.rotate(), etc.
+                }
+                break;
+        }
+        if (scope.isFinished ()) return true;
+        else {
+            scope.step ();
+            listener_handler.updateListeners (getPointer (), obj);
             return false;
-        } else return true;
+        }
     }
 
     private void evaluateCondition (string input, string type) {
@@ -154,9 +153,6 @@ public class Interpreter {
         string output = debugger + "\n\n";
         debugger = Operators.EMPTY;
         output += scope.ToString ();
-        // for (int i = 0; i < variables.Count; i++) {
-        //     output += "-> Variable(" + variables[i].ToString () + ")\n";
-        // }
         return output;
     }
 }

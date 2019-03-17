@@ -6,9 +6,12 @@ public class ScopeHandler {
     private Stack<ScopeNode> scope;
 
     private bool hasAlreadyStepped;
+    private bool hasFinished;
 
     public ScopeHandler () {
         scope = new Stack<ScopeNode> ();
+        hasAlreadyStepped = false;
+        hasFinished = false;
     }
 
     public bool isVariableInScope (string name) {
@@ -29,7 +32,11 @@ public class ScopeHandler {
     }
     public List<VariableObject> getVariablesInScope () {
         if (scope.Count == 0) return null;
-        return scope.Peek ().variable_handler.variables;
+        List<VariableObject> variables_copy = new List<VariableObject>();
+        foreach (VariableObject var in scope.Peek ().variable_handler.variables) {
+            variables_copy.Add(var);
+        }
+        return variables_copy;
     }
 
     public void step () {
@@ -39,22 +46,26 @@ public class ScopeHandler {
             pointer++;
         }
     }
-
+    public void push (int end_line) {
+        push (pointer, end_line, false);
+    }
     public void push (int end_line, bool isLooping) {
         push (pointer, end_line, isLooping);
     }
     public void push (int start_line, int end_line, bool isLooping) {
-
         //Add all existing variables to new scope
-        ScopeNode node = new ScopeNode (start_line, end_line, getVariablesInScope (), isLooping);
-        scope.Push (node);
+        if (scope.Count == 0 || scope.Peek ().getStartLine () != start_line) {
+            ScopeNode node = new ScopeNode (start_line, end_line, getVariablesInScope (), isLooping);
+            scope.Push (node);
+        }
+
     }
     public void pop () {
         pointer = scope.Peek ().getEndLine ();
         hasAlreadyStepped = true;
 
         scope.Pop ();
-
+        if (scope.Count == 0) hasFinished = true;
     }
     public void back () { //continue keyword
         pointer = scope.Peek ().getStartLine ();
@@ -64,6 +75,9 @@ public class ScopeHandler {
     public bool isLooping () {
         if (scope.Count == 0) return false;
         return scope.Peek ().isLooping ();
+    }
+    public bool isFinished() {
+        return hasFinished;
     }
     // public void skipScope () {
     //     pointer = scope.Peek ().getEndLine (); //getPointerTo (pointer, Operators.CLOSING_BRACKET); //will get "End line" value here
