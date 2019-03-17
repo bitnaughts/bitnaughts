@@ -3,6 +3,7 @@ using System.Collections.Generic;
 public class ScopeNode {
     private int start_line;
     private int end_line;
+    private int return_to_line;
 
     private bool looping;
 
@@ -30,12 +31,15 @@ public class ScopeNode {
     public ScopeNode (int start_line, int end_line, bool looping) {
         this.start_line = start_line;
         this.end_line = end_line;
+        this.return_to_line = end_line;
         this.variable_handler = new VariableHandler ();
         this.looping = looping;
+
     }
     public ScopeNode (int start_line, int end_line, List<VariableObject> variables, bool looping) {
         this.start_line = start_line;
         this.end_line = end_line;
+        this.return_to_line = end_line;
         this.variable_handler = new VariableHandler (variables);
         this.looping = looping;
     }
@@ -44,6 +48,9 @@ public class ScopeNode {
     }
     public int getEndLine () {
         return end_line;
+    }
+    public int getReturnToLine() {
+        return return_to_line;
     }
     public bool isLooping () {
         return looping;
