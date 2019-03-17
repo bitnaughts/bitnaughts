@@ -9,6 +9,8 @@ public class Interpreter {
     private GameObject obj;
     private string[] script;
 
+    private CompilerHandler compiler;
+
     private ScopeHandler scope;
     private ListenerHandler listener_handler;
 
@@ -19,8 +21,13 @@ public class Interpreter {
         this.script = script;
         this.obj = obj;
 
-        scope = new ScopeHandler ();
-        listener_handler = new ListenerHandler ();
+        //Might need a "compiler" object to compile all public functions, variables to pass to the first layer of scope of the ScopeHandler
+        compiler = new CompilerHandler(script);
+        
+                    //listener_handler.addListener (line_parts, obj);
+        
+        scope = new ScopeHandler (compiler);
+        listener_handler = new ListenerHandler (compiler);
     }
 
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
@@ -32,9 +39,6 @@ public class Interpreter {
 
         switch (line_parts[0]) {
             case Operators.EMPTY:
-                break;
-            case Keywords.LIBRARY_IMPORT:
-                listener_handler.addListener (line_parts, obj);
                 break;
             case Keywords.BREAK:
                 scope.pop ();
@@ -79,11 +83,13 @@ public class Interpreter {
             case Variables.INTEGER:
             case Variables.FLOAT:
             case Variables.STRING:
+                //Was going to say "if you read a function header, set new scope... but you never read a function header without a call first"
+                // if (line_parts[1].Contains(OPENING_PARENTHESIS) {
+
+                // }
                 scope.declareVariableInScope (line);
                 break;
-            case "static":
-                scope.push (getMatchingEndBracket (getPointer ()));
-                break;
+        
             default:
                 if (scope.isVariableInScope (line_parts[0])) {
                     /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
