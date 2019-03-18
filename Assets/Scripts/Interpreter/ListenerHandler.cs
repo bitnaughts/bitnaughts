@@ -2,11 +2,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ListenerHandler {
-    public List<string> listeners = new List<string> ();
 
-    public void addListener (string[] line_parts, GameObject obj) {
-        listeners.Add (Evaluator.scrubSymbols (line_parts[1]));
-        switch (Evaluator.scrubSymbols (line_parts[1])) {
+    private List<string> listeners;
+    private GameObject obj; 
+
+    public ListenerHandler (List<string> listeners, GameObject obj) {
+        this.listeners = listeners;
+        this.obj = obj;
+        for (int listener = 0; listener < listeners.Count; listener++) {
+            addListener (listeners[listener]);
+        }
+    }
+
+    public void addListener (string class_name) {
+        switch (class_name) {
             case Classes.CONSOLE:
                 Referencer.consoleManager.execute (Console.OPEN, "", obj);
                 break;
@@ -15,7 +24,8 @@ public class ListenerHandler {
                 break;
         }
     }
-    public void updateListeners (int line,  GameObject obj) {
+
+    public void updateListeners (int line) {
         for (int listener = 0; listener < listeners.Count; listener++) {
             switch (listeners[listener]) {
                 case Classes.CONSOLE:
@@ -23,7 +33,7 @@ public class ListenerHandler {
                     break;
                 case Classes.PLOTTER:
                     break;
-                //...
+                    //...
             }
         }
     }

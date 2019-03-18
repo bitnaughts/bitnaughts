@@ -26,8 +26,8 @@ public class Interpreter {
         
                     //listener_handler.addListener (line_parts, obj);
         
-        scope = new ScopeHandler (compiler);
-        listener_handler = new ListenerHandler (compiler);
+        scope = new ScopeHandler (compiler.base_scope);
+        listener_handler = new ListenerHandler (compiler.handlers, obj);
     }
 
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
@@ -125,7 +125,7 @@ public class Interpreter {
         if (scope.isFinished ()) return true;
         else {
             scope.step ();
-            listener_handler.updateListeners (getPointer (), obj);
+            listener_handler.updateListeners (getPointer ());
             return false;
         }
     }
