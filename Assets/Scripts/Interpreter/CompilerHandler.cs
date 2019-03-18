@@ -18,9 +18,9 @@ public class CompilerHandler {
     // public List<VariableObject> variables;
 
     public CompilerHandler (string[] lines) {
-        handlers = new List<string>();
-        functions = new List<FunctionObject>();
-        base_scope = new ScopeNode(-1,1000, false);
+        handlers = new List<string> ();
+        functions = new List<FunctionObject> ();
+        base_scope = new ScopeNode (-1, 1000, false);
 
         compile (lines);
     }
@@ -42,7 +42,7 @@ public class CompilerHandler {
                     line_parts = line.Split (' ');
                     switch (line_parts[0]) {
                         case Keywords.LIBRARY_IMPORT:
-                            handlers.Add (line_parts[1]);
+                            handlers.Add (line_parts[1].Substring(0, line_parts[1].Length-1 ) );
                             break;
                     }
                     break;
@@ -57,9 +57,9 @@ public class CompilerHandler {
                         case Variables.STRING:
                             if (line_parts[1].Contains (Operators.OPENING_PARENTHESIS)) {
                                 /* Function declaration, e.g. "void sum (int x, int y) {" */
-                                functions.Add(new FunctionObject(line_parts, i));
+                             //   functions.Add (new FunctionObject (line_parts, i));
                             } else {
-                                 /* Variable declaration, e.g. "int y;" */
+                                /* Variable declaration, e.g. "int y;" */
                                 base_scope.variable_handler.declareVariable (line);
                             }
                             break;
@@ -72,5 +72,10 @@ public class CompilerHandler {
             }
 
         }
+    }
+    public override string ToString () {
+        string output = base_scope.ToString();
+        output += "\n" + handlers.Count + "\n";
+        return output;
     }
 }

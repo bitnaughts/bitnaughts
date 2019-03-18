@@ -26,14 +26,13 @@ public class Interpreter {
         
                     //listener_handler.addListener (line_parts, obj);
         
-        scope = new ScopeHandler (compiler.base_scope);
-        listener_handler = new ListenerHandler (compiler.handlers, obj);
+        scope = new ScopeHandler (compiler);
+        listener_handler = new ListenerHandler (compiler.handlers);
     }
 
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
     public bool interpretLine () {
         // debugger += "LINE: " + script[scope.getPointer ()] + "\n";
-
         string line = script[scope.getPointer ()];
         string[] line_parts = line.Split (' ');
 
@@ -125,7 +124,7 @@ public class Interpreter {
         if (scope.isFinished ()) return true;
         else {
             scope.step ();
-            listener_handler.updateListeners (getPointer ());
+            listener_handler.updateListeners (getPointer (), obj);
             return false;
         }
     }
@@ -157,6 +156,7 @@ public class Interpreter {
     }
     public override string ToString () {
         string output = debugger + "\n\n";
+        output += compiler.ToString();
         debugger = Operators.EMPTY;
         output += scope.ToString ();
         return output;
