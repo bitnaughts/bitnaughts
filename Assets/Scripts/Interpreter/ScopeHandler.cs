@@ -3,16 +3,25 @@ using System.Collections.Generic;
 public class ScopeHandler {
 
     private int pointer;
+
     private Stack<ScopeNode> scope;
+
+    //Available Functions to Call
+    //might need to make a "FunctionObject" for this to keep track of potential parameters/return types....
+    private List<string> functions;
 
     private bool hasAlreadyStepped;
     private bool hasFinished;
 
-    public ScopeHandler () {
+    public ScopeHandler (CompilerHandler compiled_script) {
         scope = new Stack<ScopeNode> ();
+        scope.Push(compiled_script.base_scope);
+        pointer = compiled_script.main_function_line;
+
         hasAlreadyStepped = false;
         hasFinished = false;
     }
+    
 
     public bool isVariableInScope (string name) {
         if (scope.Count == 0) return false;
@@ -32,9 +41,9 @@ public class ScopeHandler {
     }
     public List<VariableObject> getVariablesInScope () {
         if (scope.Count == 0) return null;
-        List<VariableObject> variables_copy = new List<VariableObject>();
-        foreach (VariableObject var in scope.Peek ().variable_handler.variables) {
-            variables_copy.Add(var);
+        List<VariableObject> variables_copy = new List<VariableObject> ();
+        foreach (VariableObject variable in scope.Peek ().variable_handler.variables) {
+            variables_copy.Add (variable);
         }
         return variables_copy;
     }
@@ -76,7 +85,7 @@ public class ScopeHandler {
         if (scope.Count == 0) return false;
         return scope.Peek ().isLooping ();
     }
-    public bool isFinished() {
+    public bool isFinished () {
         return hasFinished;
     }
     // public void skipScope () {

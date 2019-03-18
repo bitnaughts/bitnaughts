@@ -11,10 +11,10 @@ public class ProjectileEditor : MonoBehaviour {
 
     void Start () {
         testScript =
-            "class ExampleClass {\n" +
             "using Console;\n" +
             "using Plotter;\n" +
             "using Grapher;\n" +
+            "class ExampleClass {\n" +
             "static void Main() {\n" +
             "int angle = 1;\n" +
             "for (int x = 0; x < 10; x++) {\n" +
