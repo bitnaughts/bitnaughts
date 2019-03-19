@@ -52,6 +52,14 @@ public class FunctionHandler {
         }
         return false;
     }
+    public FunctionObject getFunction(string function_name) {
+         for (int i = 0; i < functions.Count; i++) {
+            if (function_name == functions[i].name) {
+                return functions[i];
+            }
+        }
+        return null;
+    }
 
     public override string ToString () {
         string output = "";

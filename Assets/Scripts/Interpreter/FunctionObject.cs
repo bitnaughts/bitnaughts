@@ -2,13 +2,13 @@ public class FunctionObject {
 
     public string return_type;
     public string name;
-    public Range scope_bounds;
+    public Range range;
     VariableObject[] parameters;
 
-    public FunctionObject (string return_type, string name, Range scope_bounds, VariableObject[] parameters) {
+    public FunctionObject (string return_type, string name, Range range, VariableObject[] parameters) {
         this.return_type = return_type;
         this.name = name;
-        this.scope_bounds = scope_bounds;
+        this.range = range;
         this.parameters = parameters;
     }
 

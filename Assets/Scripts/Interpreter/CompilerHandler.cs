@@ -17,14 +17,14 @@ public class CompilerHandler {
     public ScopeNode base_scope;
     // public List<VariableObject> variables;
 
-    public CompilerHandler (string[] lines) {
+    public CompilerHandler (string[] script) {
         handlers = new List<string> ();
-        base_scope = new ScopeNode (-1, 1000, false);
+        base_scope = new ScopeNode (new Range(-1, 1000), false);
         function_handler = new FunctionHandler ();
 
-        compile (lines);
+        compile (script);
 
-        base_scope.setRange (main_function_line, 100);
+        base_scope.setRange (Range.getScopeRange (script, main_function_line));
     }
 
     public void compile (string[] script) {

@@ -59,7 +59,7 @@ public class Interpreter {
             case Keywords.WHILE:
             case Keywords.FOR:
                 /* Add to scope "if scope hasn't been pushed for this yet..." */
-                scope.push (getMatchingEndBracket (getPointer ()), line_parts[0] != Keywords.IF);
+                scope.push (Range.getScopeRange (script, getPointer ()), line_parts[0] != Keywords.IF);
                 /* e.g. "while (i < 10) {" */
                 parameter = Operators.EMPTY;
                 for (int i = 1; i < line_parts.Length - 1; i++) parameter += line_parts[i] + " ";
@@ -98,9 +98,11 @@ public class Interpreter {
                     scope.setVariableInScope (line);
                     //} else if (isFunction(li) {
                 } else if (function_handler.isFunction (line_parts[0].Split ('(') [0])) {
-
-                    scope.push (Range.getScopeRange(script,getPointer()), false);
                     
+                    FunctionObject function = function_handler.getFunction(line_parts[0].Split ('(') [0]);
+
+                    scope.push (Range.returnTo(function.range, getPointer()), false);
+
                 } else {
                     if (line_parts[0].Contains (".")) {
                         /* e.g. "Console.WriteLine("test")" */

@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 
 public class ScopeNode {
-    private int start_line;
-    private int end_line;
-    private int return_to_line;
+    private Range range;
 
     private bool looping;
 
@@ -28,35 +26,30 @@ public class ScopeNode {
     when closing node, if condition if false, go to end_line + 1; if condition is true, go to start_line + 1
     */
 
-    public ScopeNode (int start_line, int end_line, bool looping) {
-        this.start_line = start_line;
-        this.end_line = end_line;
-        this.return_to_line = end_line;
+    public ScopeNode (Range range, bool looping) {
+        this.range = range;
         this.variable_handler = new VariableHandler ();
         this.looping = looping;
 
     }
-    public ScopeNode (int start_line, int end_line, List<VariableObject> variables, bool looping) {
-        this.start_line = start_line;
-        this.end_line = end_line;
-        this.return_to_line = end_line;
+    public ScopeNode (Range range, List<VariableObject> variables, bool looping) {
+        this.range = range;
         this.variable_handler = new VariableHandler (variables);
         this.looping = looping;
     }
 
-    public void setRange(int start_line, int end_line) {
-        this.start_line = start_line;
-        this.end_line = end_line;
+    public void setRange(Range range) {
+        this.range = range;
     }
 
     public int getStartLine () {
-        return start_line;
+        return this.range.start;
     }
     public int getEndLine () {
-        return end_line;
+        return this.range.end;
     }
-    public int getReturnToLine() {
-        return return_to_line;
+    public int getReturnToLine () {
+        return this.range.return_to;
     }
     public bool isLooping () {
         return looping;
@@ -66,7 +59,7 @@ public class ScopeNode {
         variable_handler.add (variable);
     }
     public override string ToString () {
-        string output = "Range(" + start_line + "->" + end_line + ")\t" + variable_handler.ToString ();
+        string output = range.ToString() + "\t" + variable_handler.ToString ();
         return output;
     }
 }
