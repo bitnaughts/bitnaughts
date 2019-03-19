@@ -79,7 +79,7 @@ public class VariableHandler {
     }
     public void setVariable (string type, string name, string value) {
         /* VARIABLE DOES NOT EXIST, INITIALIZE IT, e.g. "int i = 122;" */
-        variables.Add (new VariableObject (type, name, Evaluator.cast (parse (value), type), 1 /* pointer */ ));
+        variables.Add (new VariableObject (type, name, Evaluator.cast (parse (value), type)));
     }
     public string parse (string input) {
         if (input != Operators.EMPTY) {
