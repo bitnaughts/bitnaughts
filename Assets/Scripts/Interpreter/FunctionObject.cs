@@ -5,15 +5,21 @@ public class FunctionObject {
     public int line_defined;
     VariableObject[] parameters;
 
-    public FunctionObject (string[] line_parts, int line) {
-        this.return_type = line_parts[0];
-        this.name = line_parts[1].Split ('(') [0];
-        this.line_defined = line;
-        string parameter =  line_parts[1].Split ('(') [1];
-        for (int i = 2; i < line_parts.Length - 1; i++) parameter += line_parts[i] + " ";
-        parameter = parameter.Substring (1, parameter.Length - 2);
+    public FunctionObject (string return_type, string name, int line_defined, VariableObject[] parameters) {
+        this.return_type = return_type;
+        this.name = name;
+        this.line_defined = line_defined;
+        this.parameters = parameters;
+    }
 
-        //parse into variables   
+    public override string ToString () {
+        string output = return_type + " " + name + " " + line_defined;
+        if (parameters != null) {
+            for (int i = 0; i < parameters.Length; i++) {
+                output += "-> -> Parameter(" + parameters[i].ToString () + ")\n";
+            }
+        }
+        return output;
     }
 
 }

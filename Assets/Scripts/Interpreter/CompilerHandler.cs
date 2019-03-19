@@ -13,16 +13,18 @@ public class CompilerHandler {
     public int main_function_line;
 
     public List<string> handlers;
-    public List<FunctionObject> functions;
+    public FunctionHandler function_handler;
     public ScopeNode base_scope;
     // public List<VariableObject> variables;
 
     public CompilerHandler (string[] lines) {
         handlers = new List<string> ();
-        functions = new List<FunctionObject> ();
         base_scope = new ScopeNode (-1, 1000, false);
+        function_handler = new FunctionHandler();
 
         compile (lines);
+
+        base_scope.setRange (main_function_line, 100);
     }
 
     public void compile (string[] lines) {
@@ -33,8 +35,6 @@ public class CompilerHandler {
             string[] line_parts;
 
             /* Manage current depth of scope (relevant for public variables, function declarations) */
-            if (line.Contains (Operators.OPENING_BRACKET)) scope_depth++;
-            if (line.Contains (Operators.CLOSING_BRACKET)) scope_depth--;
 
             switch (scope_depth) {
                 case 0:
@@ -42,7 +42,7 @@ public class CompilerHandler {
                     line_parts = line.Split (' ');
                     switch (line_parts[0]) {
                         case Keywords.LIBRARY_IMPORT:
-                            handlers.Add (line_parts[1].Substring(0, line_parts[1].Length-1 ) );
+                            handlers.Add (line_parts[1].Substring (0, line_parts[1].Length - 1));
                             break;
                     }
                     break;
@@ -57,7 +57,7 @@ public class CompilerHandler {
                         case Variables.STRING:
                             if (line_parts[1].Contains (Operators.OPENING_PARENTHESIS)) {
                                 /* Function declaration, e.g. "void sum (int x, int y) {" */
-                             //   functions.Add (new FunctionObject (line_parts, i));
+                                function_handler.declareFunction(line, i);
                             } else {
                                 /* Variable declaration, e.g. "int y;" */
                                 base_scope.variable_handler.declareVariable (line);
@@ -70,12 +70,13 @@ public class CompilerHandler {
                     }
                     break;
             }
-
+            if (line.Contains (Operators.OPENING_BRACKET)) scope_depth++;
+            if (line.Contains (Operators.CLOSING_BRACKET)) scope_depth--;
         }
     }
     public override string ToString () {
-        string output = base_scope.ToString();
-        output += "\n" + handlers.Count + "\n";
+        string output = function_handler.ToString ();
+        output += "\n" + main_function_line + "\n";
         return output;
     }
 }

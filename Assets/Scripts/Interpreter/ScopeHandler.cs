@@ -8,7 +8,7 @@ public class ScopeHandler {
 
     //Available Functions to Call
     //might need to make a "FunctionObject" for this to keep track of potential parameters/return types....
-    private List<string> functions;
+    public FunctionHandler function_handler;
 
     private bool hasAlreadyStepped;
     private bool hasFinished;
@@ -16,6 +16,9 @@ public class ScopeHandler {
     public ScopeHandler (CompilerHandler compiled_script) {
         scope = new Stack<ScopeNode> ();
         scope.Push(compiled_script.base_scope);
+
+        this.function_handler = compiled_script.function_handler;
+
         pointer = compiled_script.main_function_line;
 
         hasAlreadyStepped = false;
@@ -117,7 +120,7 @@ public class ScopeHandler {
     //     return starting_pointer;
     // }
     public override string ToString () {
-        string output = "";
+        string output = "\n" + pointer + "\n";
         ScopeNode[] scope_array = scope.ToArray ();
         for (int i = 0; i < scope_array.Length; i++) {
             output += i + ":\t" + scope_array[i].ToString () + "\n";
