@@ -14,13 +14,15 @@ public class ProjectileEditor : MonoBehaviour {
             "using Console;\n" +
             "using Plotter;\n" +
             "using Grapher;\n" +
-            "class ExampleClass {\n" + 
+            "class ExampleClass {\n" +
             "int tester = 10;\n" +
             "static void Main() {\n" +
+            "Plotter.Open(\"left\", .3, 1);\n" +
             "int angle = 1;\n" +
             "for (int x = 0; x < 10; x++) {\n" +
             "for (int y = 0; y < 10; y++) {\n" +
             "for (int z = 0; z < 10; z++) {\n" +
+            "Print2();\n" +
             "angle = angle + 1;\n" +
             "Print();\n" +
             "}\n" +

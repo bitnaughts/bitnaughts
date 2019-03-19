@@ -96,11 +96,9 @@ public class Interpreter {
                 if (scope.isVariableInScope (line_parts[0])) {
                     /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
                     scope.setVariableInScope (line);
-                    //} else if (isFunction(li) {
                 } else if (function_handler.isFunction (line_parts[0].Split ('(') [0])) {
-                    
+                    /* CHECK IF LINE REFERS TO A FUNCTION, e.g. "print(x);" */
                     FunctionObject function = function_handler.getFunction(line_parts[0].Split ('(') [0]);
-
                     scope.push (Range.returnTo(function.range, getPointer()), false);
 
                 } else {
