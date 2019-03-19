@@ -13,11 +13,14 @@ public class ColorCoder {
     public static Color Color_string = new Color (210 / 255f, 150 / 255f, 100 / 255f);
     public static Color Color_highlight = new Color (1, 0, 0);
 
+    public static Color Color_shadedScreen = new Color (16 / 255f, 46 / 255f, 51 / 255f);
+    public static Color Color_screen = new Color (25 / 255f, 61 / 255f, 65 / 255f);
+    public static Color Color_litScreen = new Color (34 / 255f, 76 / 255f, 79 / 255f);
+
     public static string[] keyword_list = { "class", "using", "boolean", "char", "class", "const", "double", "else", "final", "float", "for", "if", "int", "new", "private", "public", "return", "static", "this", "void", "while" };
     public static string[] object_list = { "Console", "Plotter", "Grapher", "String", "System" };
     public static string[] function_list = { "WriteLine" };
-        public static string[] variable_list = { "angle", "x", "y" };
-
+    public static string[] variable_list = { "angle", "x", "y" };
 
     public static string colorize (string line) {
         List<int> indexes;
@@ -90,12 +93,20 @@ public class ColorCoder {
     }
 
     public static string highlight (string line) {
-        return "<mark=#" + ColorCoder.getHighlightColor () + "55>" + line + "</mark>";
+        return "<color=#" + ColorCoder.getHighlightColor () + "55>" + line + "</mark>";
     }
     public static string comment (string line) {
         return line.Substring (0, line.IndexOf ("//")) + "<color=#" + ColorCoder.getCommentColor () + ">" + line.Substring (line.IndexOf ("//")) + "</color>";
     }
-
+    public static string getShadedScreenColor () {
+        return RGBToHex (Color_shadedScreen);
+    }
+    public static string getScreenColor () {
+        return RGBToHex (Color_screen);
+    }
+    public static string getLitScreenColor () {
+        return RGBToHex (Color_litScreen);
+    }
     public static string getKeywordColor () {
         return RGBToHex (Color_keyword);
     }
