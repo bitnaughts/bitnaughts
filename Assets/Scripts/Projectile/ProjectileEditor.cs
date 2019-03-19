@@ -14,7 +14,8 @@ public class ProjectileEditor : MonoBehaviour {
             "using Console;\n" +
             "using Plotter;\n" +
             "using Grapher;\n" +
-            "class ExampleClass {\n" +
+            "class ExampleClass {\n" + 
+            "int tester = 10;\n" +
             "static void Main() {\n" +
             "int angle = 1;\n" +
             "for (int x = 0; x < 10; x++) {\n" +
@@ -27,6 +28,9 @@ public class ProjectileEditor : MonoBehaviour {
             "}\n" +
             "}\n" +
             "void Print() {\n" +
+            "Print2();\n" +
+            "}\n" +
+            "void Print2() {\n" +
             "Console.WriteLine(\"hello\");\n" +
             "}\n" +
             "}";

@@ -8,7 +8,6 @@ public class ScopeHandler {
 
     //Available Functions to Call
     //might need to make a "FunctionObject" for this to keep track of potential parameters/return types....
-    public FunctionHandler function_handler;
 
     private bool hasAlreadyStepped;
     private bool hasFinished;
@@ -16,8 +15,6 @@ public class ScopeHandler {
     public ScopeHandler (CompilerHandler compiled_script) {
         scope = new Stack<ScopeNode> ();
         scope.Push(compiled_script.base_scope);
-
-        this.function_handler = compiled_script.function_handler;
 
         pointer = compiled_script.main_function_line;
 
@@ -58,22 +55,22 @@ public class ScopeHandler {
             pointer++;
         }
     }
-    public void push (int end_line) {
-        push (pointer, end_line, false);
+    public void push (Range range) {
+        push (range, false);
     }
-    public void push (int end_line, bool isLooping) {
-        push (pointer, end_line, isLooping);
-    }
-    public void push (int start_line, int end_line, bool isLooping) {
+    public void push (Range range, bool isLooping) {
         //Add all existing variables to new scope
-        if (scope.Count == 0 || scope.Peek ().getStartLine () != start_line) {
-            ScopeNode node = new ScopeNode (start_line, end_line, getVariablesInScope (), isLooping);
+        if (scope.Count == 0 || scope.Peek ().getStartLine () != range.start) {
+            ScopeNode node = new ScopeNode (range, getVariablesInScope (), isLooping);
             scope.Push (node);
+
+            pointer = range.start;
+            hasAlreadyStepped = true;
         }
 
     }
     public void pop () {
-        pointer = scope.Peek ().getEndLine ();
+        pointer = scope.Peek ().getReturnToLine ();
         hasAlreadyStepped = true;
 
         scope.Pop ();
