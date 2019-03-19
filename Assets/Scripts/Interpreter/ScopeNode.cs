@@ -43,6 +43,12 @@ public class ScopeNode {
         this.variable_handler = new VariableHandler (variables);
         this.looping = looping;
     }
+
+    public void setRange(int start_line, int end_line) {
+        this.start_line = start_line;
+        this.end_line = end_line;
+    }
+
     public int getStartLine () {
         return start_line;
     }
