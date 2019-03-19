@@ -11,10 +11,10 @@ public class FunctionHandler {
         this.functions = functions;
     }
 
-    public void declareFunction (string line, int line_defined) {
-        declareFunction (line.Split (' '), line_defined);
+    public void declareFunction (string line, Range scope_bounds) {
+        declareFunction (line.Split (' '), scope_bounds);
     }
-    public void declareFunction (string[] line_parts, int line_defined) {
+    public void declareFunction (string[] line_parts, Range scope_bounds) {
         /* e.g. { "void", "funct(int", "i)", "{" }  */
         string return_type = line_parts[0];
         string name = line_parts[1].Split ('(') [0];
@@ -39,9 +39,18 @@ public class FunctionHandler {
             }
         }
 
-        FunctionObject function = new FunctionObject (return_type, name, line_defined, parameters);
+        FunctionObject function = new FunctionObject (return_type, name, scope_bounds, parameters);
 
         functions.Add (function);
+    }
+
+    public bool isFunction(string function_name) {
+        for (int i = 0; i < functions.Count; i++) {
+            if (function_name == functions[i].name) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public override string ToString () {

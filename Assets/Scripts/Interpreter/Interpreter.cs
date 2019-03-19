@@ -9,10 +9,12 @@ public class Interpreter {
     private GameObject obj;
     private string[] script;
 
+    //Eventually move to be a local variable to save memory space...
     private CompilerHandler compiler;
 
     private ScopeHandler scope;
     private ListenerHandler listener_handler;
+    public FunctionHandler function_handler;
 
     string variable_type, variable_name, variable_value, variable_modifier, variable_initialization, parameter, condition, debugger;
 
@@ -22,12 +24,13 @@ public class Interpreter {
         this.obj = obj;
 
         //Might need a "compiler" object to compile all public functions, variables to pass to the first layer of scope of the ScopeHandler
-        compiler = new CompilerHandler(script);
-        
-                    //listener_handler.addListener (line_parts, obj);
-        
+        compiler = new CompilerHandler (script);
+
+        //listener_handler.addListener (line_parts, obj);
+
         scope = new ScopeHandler (compiler);
         listener_handler = new ListenerHandler (compiler.handlers);
+        function_handler = compiler.function_handler;
     }
 
     /* Parsing each line of text into code (a.k.a. where the magic happens) */
@@ -88,12 +91,16 @@ public class Interpreter {
                 // }
                 scope.declareVariableInScope (line);
                 break;
-        
+
             default:
                 if (scope.isVariableInScope (line_parts[0])) {
                     /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
                     scope.setVariableInScope (line);
                     //} else if (isFunction(li) {
+                } else if (function_handler.isFunction (line_parts[0].Split ('(') [0])) {
+
+                    scope.push (Range.getScopeRange(script,getPointer()), false);
+                    
                 } else {
                     if (line_parts[0].Contains (".")) {
                         /* e.g. "Console.WriteLine("test")" */
@@ -156,7 +163,7 @@ public class Interpreter {
     }
     public override string ToString () {
         string output = debugger + "\n\n";
-        output += compiler.ToString();
+        output += compiler.ToString ();
         debugger = Operators.EMPTY;
         output += scope.ToString ();
         return output;

@@ -20,18 +20,18 @@ public class CompilerHandler {
     public CompilerHandler (string[] lines) {
         handlers = new List<string> ();
         base_scope = new ScopeNode (-1, 1000, false);
-        function_handler = new FunctionHandler();
+        function_handler = new FunctionHandler ();
 
         compile (lines);
 
         base_scope.setRange (main_function_line, 100);
     }
 
-    public void compile (string[] lines) {
+    public void compile (string[] script) {
         int scope_depth = 0;
 
-        for (int i = 0; i < lines.Length; i++) {
-            string line = lines[i];
+        for (int i = 0; i < script.Length; i++) {
+            string line = script[i];
             string[] line_parts;
 
             /* Manage current depth of scope (relevant for public variables, function declarations) */
@@ -57,7 +57,7 @@ public class CompilerHandler {
                         case Variables.STRING:
                             if (line_parts[1].Contains (Operators.OPENING_PARENTHESIS)) {
                                 /* Function declaration, e.g. "void sum (int x, int y) {" */
-                                function_handler.declareFunction(line, i);
+                                function_handler.declareFunction (line, Range.getScopeRange (script, i));
                             } else {
                                 /* Variable declaration, e.g. "int y;" */
                                 base_scope.variable_handler.declareVariable (line);
