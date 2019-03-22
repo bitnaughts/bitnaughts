@@ -85,41 +85,43 @@ public class Interpreter {
             case Variables.INTEGER:
             case Variables.FLOAT:
             case Variables.STRING:
-                //Was going to say "if you read a function header, set new scope... but you never read a function header without a call first"
-                // if (line_parts[1].Contains(OPENING_PARENTHESIS) {
-
-                // }
+                //Not possible (as far as I know) to hit a function header, so assume it is just a variable declaration
                 scope.declareVariableInScope (line);
                 break;
-
             default:
                 if (scope.isVariableInScope (line_parts[0])) {
                     /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
                     scope.setVariableInScope (line);
                 } else if (function_handler.isFunction (line_parts[0].Split ('(') [0])) {
                     /* CHECK IF LINE REFERS TO A FUNCTION, e.g. "print(x);" */
-                    FunctionObject function = function_handler.getFunction(line_parts[0].Split ('(') [0]);
-                    scope.push (Range.returnTo(function.range, getPointer()), false);
+                    FunctionObject function = function_handler.getFunction (line_parts[0].Split ('(') [0]);
+                    scope.push (Range.returnTo (function.range, getPointer ()), false);
+
+                } else if (listener_handler.isFunction (line_parts[0].Split ('.') [0])) {
+                    /* CHECK IF LINE REFERS TO A FUNCTION, e.g. "print(x);" */
+                    FunctionObject function = function_handler.getFunction (line_parts[0].Split ('(') [0]);
+                    scope.push (Range.returnTo (function.range, getPointer ()), false);
 
                 } else {
-                    if (line_parts[0].Contains (".")) {
-                        /* e.g. "Console.WriteLine("test")" */
-                        string class_name = line_parts[0].Split ('.') [0];
-                        string function_name = line_parts[0].Split ('.') [1].Split ('(') [0];
-                        string function_parameters = line.Substring (line.IndexOf ("(") + 1);
-                        function_parameters = function_parameters.Substring (0, function_parameters.Length - 2);
-                        function_parameters = scope.parseInScope (function_parameters);
-                        /* e.g. "Console", "WriteLine" */
-                        switch (class_name) {
-                            case Classes.CONSOLE:
-                                Referencer.consoleManager.execute (function_name, function_parameters, obj);
-                                break;
-                            case "Application":
-                                break;
-                            case "Mathf":
-                                break;
-                        }
-                    }
+                    debugger += "Not able to process line" + line;
+                    // if (line_parts[0].Contains (".")) {
+                    //     /* e.g. "Console.WriteLine("test")" */
+                    //     string class_name = line_parts[0].Split ('.') [0];
+                    //     string function_name = line_parts[0].Split ('.') [1].Split ('(') [0];
+                    //     string function_parameters = line.Substring (line.IndexOf ("(") + 1);
+                    //     function_parameters = function_parameters.Substring (0, function_parameters.Length - 2);
+                    //     function_parameters = scope.parseInScope (function_parameters);
+                    //     /* e.g. "Console", "WriteLine" */
+                    //     switch (class_name) {
+                    //         case Classes.CONSOLE:
+                    //             Referencer.consoleManager.execute (function_name, function_parameters, obj);
+                    //             break;
+                    //         case "Application":
+                    //             break;
+                    //         case "Mathf":
+                    //             break;
+                    //     }
+                    // }
                     /* CHECK IF LINE REFERS TO A FUNCTION, e.g. "Console.WriteLine("Test");" */
                     /*
                         switch className

@@ -14,10 +14,11 @@ public class ProjectileEditor : MonoBehaviour {
             "using Console;\n" +
             "using Plotter;\n" +
             "using Grapher;\n" +
+            "using IO;\n" +
             "class ExampleClass {\n" +
             "int tester = 10;\n" +
             "static void Main() {\n" +
-            "Plotter.Open(\"left\", .3, 1);\n" +
+            "Plotter.Open(\"left\", .3);\n" +       //Snap to the left 30% width. If "top", would be 30% height.
             "int angle = 1;\n" +
             "for (int x = 0; x < 10; x++) {\n" +
             "for (int y = 0; y < 10; y++) {\n" +

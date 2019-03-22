@@ -29,7 +29,19 @@ public class ListenerHandler {
                 break;
         }
     }
-
+    public void callListener (string command, GameObject obj) {
+        for (int listener = 0; listener < listeners.Count; listener++) {
+            switch (listeners[listener]) {
+                case Classes.CONSOLE:
+                    Referencer.consoleManager.execute (command, "", obj);
+                    break;
+                case Classes.PLOTTER:
+                    // Referencer.plotterManager.execute (command, "", obj);
+                    break;
+                    //...
+            }
+        }
+    }
     public void updateListeners (int line, GameObject obj) {
         if (has_been_added) {
             for (int listener = 0; listener < listeners.Count; listener++) {
@@ -42,9 +54,8 @@ public class ListenerHandler {
                         //...
                 }
             }
-        }
-        else {
-            addListeners(obj);
+        } else {
+            addListeners (obj);
             has_been_added = true;
         }
     }

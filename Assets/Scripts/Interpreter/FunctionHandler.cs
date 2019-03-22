@@ -45,11 +45,13 @@ public class FunctionHandler {
     }
 
     public bool isFunction(string function_name) {
+        /* Isn't a function in scope */
         for (int i = 0; i < functions.Count; i++) {
             if (function_name == functions[i].name) {
                 return true;
             }
         }
+        /* Is it a static function? */
         return false;
     }
     public FunctionObject getFunction(string function_name) {
