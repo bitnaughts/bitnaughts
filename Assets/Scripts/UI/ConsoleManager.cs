@@ -23,7 +23,7 @@ public class ConsoleManager : MonoBehaviour {
         // console.SetActive (false);  
     }
 
-    public void execute (string function_name, string function_parameters, GameObject obj) {
+    public void execute (string function_name, string[] function_parameters, GameObject obj) {
         switch (function_name) {
             case Console.OPEN:
                 console.SetActive (true);
@@ -51,7 +51,7 @@ public class ConsoleManager : MonoBehaviour {
         }
     }
     public void execute (string function_name) {
-        execute (function_name, "", null);
+        execute (function_name, new string[] { "" }, null);
     }
 
     //Generalize to support multiple consoles live... parameter of which script it is
