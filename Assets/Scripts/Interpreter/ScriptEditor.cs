@@ -11,6 +11,7 @@ public class ScriptEditor : MonoBehaviour {
 	// }
 	void Update() {
 		if (script != null && script.tick (Time.deltaTime, Referencer.codeSpeedTester.value)) {
+			GameObject.Find("Text 1").GetComponent<Text>().text = script.ToString();
 			//Any visualization/updating while script executes
 		}
 	}
