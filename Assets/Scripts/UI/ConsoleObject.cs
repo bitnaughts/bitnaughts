@@ -34,18 +34,17 @@ public class ConsoleObject : MonoBehaviour {
         // panels.Add (new UIPanel (UIStyle.SNAP_BOTTOM, .25f));
 
         // panels.Add (new UIPanel (UIStyle.SNAP_BOTTOM, .1f));
-        panels.Add (new UIPanel (UIStyle.SNAP_LEFT, .5f));
-        
-        panels.Add (new UIPanel (UIStyle.SNAP_LEFT, .5f));
+        // panels.Add (new UIPanel (UIStyle.SNAP_LEFT, .5f));
+
+        // panels.Add (new UIPanel (UIStyle.SNAP_LEFT, .5f));
         // panels.Add (new UIPanel (UIStyle.SNAP_RIGHT, .5f));
 
-        for (int i = 0; i < panels.Count; i++) {
-            panels[i].setObj (Instantiate (prefab_panel, this.transform));
+        // for (int i = 0; i < panels.Count; i++) {
+        //     panels[i].setObj (Instantiate (prefab_panel, this.transform));
 
-        }
+        // }
     }
     void Update () {
-
 
         //when needing to update...
         float total_width = 1f, total_height = 1f;
@@ -63,42 +62,65 @@ public class ConsoleObject : MonoBehaviour {
         // }
 
         // ... or ...
-        UIRectangle moving_window_points = new UIRectangle (-this.GetComponent<RectTransform> ().rect.width / 2, this.GetComponent<RectTransform> ().rect.width / 2, -this.GetComponent<RectTransform> ().rect.height / 2, this.GetComponent<RectTransform> ().rect.height / 2);
-        for (int i = 0; i < panels.Count - 1; i++) {
-            panels[i].setRect (UIRectangle.partition (ref moving_window_points, panels[i].snap_direction, panels[i].size, total_width, total_height));
+        if (panels.Count > 0) {
+            UIRectangle moving_window_points = new UIRectangle (-this.GetComponent<RectTransform> ().rect.width / 2, this.GetComponent<RectTransform> ().rect.width / 2, -this.GetComponent<RectTransform> ().rect.height / 2, this.GetComponent<RectTransform> ().rect.height / 2);
+            for (int i = 0; i < panels.Count - 1; i++) {
+                panels[i].setRect (UIRectangle.partition (ref moving_window_points, panels[i].snap_direction, panels[i].size, total_width, total_height));
+            }
+            panels[panels.Count - 1].setRect (moving_window_points);
         }
-        panels[panels.Count - 1].setRect (moving_window_points);
     }
 
-    // public void execute (string function_name, string function_parameters, GameObject obj) {
-    //     switch (function_name) {
-    //         case Console.OPEN:
-    //             console.SetActive (true);
-    //             script_to_view = obj.GetComponent<ScriptEditor> ().script;
-    //             console_input.text = script_to_view.getFormattedScript ();
-    //             break;
-    //         case Console.WRITE_LINE:
-    //             if (console_output.text.Split ('\n').Length > 2) {
-    //                 console_output.text = console_output.text.Substring (console_output.text.IndexOf ("\n") + 1);
-    //             }
-    //             console_output.text += DateTime.Now.ToString ("HH:mm:ss:  ");
-    //             console_output.text += function_parameters + "\n";
+    public void execute (string class_name, string function_name, string[] function_parameters, GameObject obj) {
+        switch (class_name) {
+            case Plotter.NAME:
+                // switch (function_name) {
+                //     case Console.ADD:
+                //         string value_of_interest = function_parameters[0];
+                //         panels.Add (new UIPanel (function_parameters[1], function_parameters[2]));
+                //         break;
+                // }
+                break;
+            case Console.NAME:
+                switch (function_name) {
+                    //     case Console.OPEN:
+                    //         console.SetActive (true);
+                    //         script_to_view = obj.GetComponent<ScriptEditor> ().script;
+                    //         console_input.text = script_to_view.getFormattedScript ();
+                    //         break;
+                    case Console.ADD:
+                        // string value_of_interest = function_parameters[0];
+                        panels.Add (new UIPanel (function_parameters[1], float.Parse (function_parameters[2]), class_name, Instantiate (prefab_panel, this.transform)));
+                        break;
+                        // case Console.WRITE_LINE:
+                        //     if (console_output.text.Split ('\n').Length > 2) {
+                        //         console_output.text = console_output.text.Substring (console_output.text.IndexOf ("\n") + 1);
+                        //     }
+                        //     console_output.text += DateTime.Now.ToString ("HH:mm:ss:  ");
+                        //     console_output.text += function_parameters + "\n";
 
-    //             break;
-    //         case Console.WRITE:
-    //             console_output.text += DateTime.Now + ":\t";
-    //             console_output.text += function_parameters;
-    //             break;
-    //         case Console.UPDATE:
-    //             updateListener (int.Parse (function_parameters));
-    //             break;
-    //         case Console.CLOSE:
-    //             console.SetActive (false);
-    //             break;
-    //     }
-    // }
+                        //     break;
+                        // case Console.WRITE:
+                        //     console_output.text += DateTime.Now + ":\t";
+                        //     console_output.text += function_parameters;
+                        //     break;
+                    case Console.UPDATE:
+                        for (int i = 0; i < panels.Count; i++) {
+
+                            panels[i].updateListener (int.Parse (function_parameters[0]));
+
+                        }
+                        // updateListener (int.Parse (function_parameters));
+                        break;
+                        // case Console.CLOSE:
+                        //     console.SetActive (false);
+                        //     break;
+                }
+                break;
+        }
+    }
     // public void execute (string function_name) {
-    //     execute (function_name, "", null);
+    //     execute (function_name, new string[] { "" }, null);
     // }
 
     // //Generalize to support multiple consoles live... parameter of which script it is

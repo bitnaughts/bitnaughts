@@ -12,7 +12,7 @@ public class ConsoleManager : MonoBehaviour {
     public GameObject console_highlighter;
 
     ScriptObject script_to_view;
-    Vector2 minimum_window_size = new Vector2 (330, 220);
+    // Vector2 minimum_window_size = new Vector2 (330, 220);
 
     int line;
     void Start () {
