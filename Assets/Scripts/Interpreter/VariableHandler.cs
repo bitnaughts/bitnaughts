@@ -39,17 +39,39 @@ public class VariableHandler {
         return input;
     }
     public void declareVariable (string line) {
+
+        /* e.g. "Vector2 vect = new Vector2(20, 10);" */
         declareVariable (line.Split (' '));
     }
     public void declareVariable (string[] parts) {
         /* e.g. ["int", "i", "=", "123;"] */
+
+        /* e.g. ["Vector2", "vect", "=", "new", "Vector2(20,", "10);"] */
         variable_type = parts[0];
         variable_name = parts[1];
         variable_value = Operators.EMPTY;
-        for (int i = 3; i < parts.Length; i++) {
-            variable_value += Evaluator.scrubSymbols (parts[i]) + " ";
+
+        if (parts[3] == Keywords.NEW) {
+            for (int i = 4; i < parts.Length; i++) {
+                variable_value += parts[i] + " ";
+            }
+
+            string[] variable_values = variable_value.Split(',');
+            variable_values[0].Substring(1);
+            variable_values[variable_values.Length - 1].Substring(0, variable_values[variable_values.Length - 1].Length - 2);
+
+            
+            //might want a "splitAtLevel" to delimiter "," but ignoring them if in functions, e.g.::
+            // new Vector2 (getValue(10, 20), 20);
+            // should have 2 fields, not 3.
+
+            setVariable (variable_type, variable_name, variable_values);
+        } else {
+            for (int i = 3; i < parts.Length; i++) {
+                variable_value += Evaluator.scrubSymbols (parts[i]) + " ";
+            }
+            setVariable (variable_type, variable_name, variable_value);
         }
-        setVariable (variable_type, variable_name, variable_value);
     }
     public void setVariable (string line) {
         setVariable (line.Split (' '));
@@ -80,6 +102,14 @@ public class VariableHandler {
     public void setVariable (string type, string name, string value) {
         /* VARIABLE DOES NOT EXIST, INITIALIZE IT, e.g. "int i = 122;" */
         variables.Add (new VariableObject (type, name, Evaluator.cast (parse (value), type)));
+    }
+    public void setVariable (string type, string name, string[] values) {
+        /* OBJECT DOES NOT EXIST, INITIALIZE IT */
+        variables.Add (new VariableObject (type, name, Keywords.NULL));
+        VariableObject template = VariableObject.getTemplate (type);
+        for (int i = 0; i < template.fields.Length; i++) {
+            variables.Add (new VariableObject (template.fields[i].type, name + Operators.DOT + template.fields[i].name, Evaluator.cast (parse (values[i]), template.fields[i].type)));
+        }
     }
     public string parse (string input) {
         if (input != Operators.EMPTY) {
@@ -137,8 +167,8 @@ public class VariableHandler {
     }
     public override string ToString () {
         string output = "";
-         for (int i = 0; i < variables.Count; i++) {
-            output += variables[i].ToString() + ", ";
+        for (int i = 0; i < variables.Count; i++) {
+            output += variables[i].ToString () + ", ";
         }
         return output;
     }

@@ -13,8 +13,11 @@ public class VariableObject {
     public string name;
     /* For Primitive Data Types, value == value, otherwise value holds ToString() */
     public string value;
-    VariableObject[] fields;
+    public VariableObject[] fields;
 
+    public VariableObject (string type) {
+        init (type, "", "");
+    }
     public VariableObject (string type, string name, string value) {
         init (type, name, value);
     }
@@ -27,14 +30,30 @@ public class VariableObject {
         switch (type) {
             case "Vector2":
                 fields = new VariableObject[] {
-                    new VariableObject ("float", "x", value.Split (',') [0]),
-                    new VariableObject ("float", "y", value.Split (',') [1])
+                    new VariableObject (Variables.FLOAT, "x", value.Split (',') [0]),
+                    new VariableObject (Variables.FLOAT, "y", value.Split (',') [1])
                 };
+                break;
+            case Console.NAME:
+                fields = new VariableObject[] {
+                    new VariableObject (Variables.FLOAT, "x", value.Split (',') [0]),
+                    new VariableObject (Variables.FLOAT, "y", value.Split (',') [1])
+                };
+                break;
+            case Plotter.NAME:
+                // fields = new VariableObject[] {
+                //     new VariableObject (Variables.STRING, "snap_direction", value.Split (',') [0]),
+                //     new VariableObject (Variables.FLOAT, "size", value.Split (',') [1])
+                // };
                 break;
             default:
                 fields = null;
                 break;
         }
+    }
+
+    public static VariableObject getTemplate(string type) {
+        return new VariableObject(type);
     }
 
     public override string ToString () {
@@ -48,3 +67,9 @@ public class VariableObject {
         return output;
     }
 }
+
+// public class VariableTemplates {
+//     public static VariableObject VECTOR2;
+
+
+// }

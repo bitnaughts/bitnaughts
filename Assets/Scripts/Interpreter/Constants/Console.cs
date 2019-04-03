@@ -3,6 +3,7 @@
     WRITE = "Write",
     WRITE_LINE = "WriteLine",
     OPEN = "Open",
+    ADD = "Add",
     CLOSE = "Close",
     UPDATE = "Update";
 

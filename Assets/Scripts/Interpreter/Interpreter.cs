@@ -85,10 +85,14 @@ public class Interpreter {
             case Variables.INTEGER:
             case Variables.FLOAT:
             case Variables.STRING:
+                //Primitive Data Types
+            case Console.NAME:
+            case Plotter.NAME:    
                 //Not possible (as far as I know) to hit a function header, so assume it is just a variable declaration
                 scope.declareVariableInScope (line);
                 break;
             default:
+                
                 if (scope.isVariableInScope (line_parts[0])) {
                     /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
                     scope.setVariableInScope (line);
@@ -106,17 +110,6 @@ public class Interpreter {
 
                 } else {
                     debugger += "Not able to process line" + line;
-                    //     switch (class_name) {
-                    //         case Classes.CONSOLE:
-                    //             Referencer.consoleManager.execute (function_name, function_parameters, obj);
-                    //             break;
-                    //         case "Application":
-                    //             break;
-                    //         case "Mathf":
-                    //             break;
-                    //     }
-                    // }
-                    /* CHECK IF LINE REFERS TO A FUNCTION, e.g. "Console.WriteLine("Test");" */
                 }
                 break;
         }

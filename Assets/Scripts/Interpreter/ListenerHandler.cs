@@ -22,7 +22,7 @@ public class ListenerHandler {
     public void addListener (string class_name, GameObject obj) {
         switch (class_name) {
             case Classes.CONSOLE:
-                Referencer.consoleManager.execute (Console.OPEN, new string[] { "" }, obj);
+                Referencer.consoleManager.execute (Console.NAME, Console.OPEN, new string[] { "" }, obj);
                 break;
             case Classes.PLOTTER:
 
@@ -51,7 +51,7 @@ public class ListenerHandler {
 
         switch (class_name) {
             case Classes.CONSOLE:
-                Referencer.consoleManager.execute (function_name, function_parameters_arr, obj);
+                Referencer.consoleManager.execute (class_name, function_name, function_parameters_arr, obj);
                 break;
             case Classes.PLOTTER:
                 // Referencer.plotterManager.execute (command, "", obj);
@@ -63,7 +63,7 @@ public class ListenerHandler {
             for (int listener = 0; listener < listeners.Count; listener++) {
                 switch (listeners[listener]) {
                     case Classes.CONSOLE:
-                        Referencer.consoleManager.execute (Console.UPDATE, new string[] { line + "" }, obj);
+                        Referencer.consoleManager.execute (Console.NAME, Console.UPDATE, new string[] { line + "" }, obj);
                         break;
                     case Classes.PLOTTER:
                         break;
