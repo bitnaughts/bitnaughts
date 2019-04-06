@@ -56,11 +56,13 @@ public class VariableHandler {
                 variable_value += parts[i] + " ";
             }
 
-            string[] variable_values = variable_value.Split(',');
-            variable_values[0].Substring(1);
-            variable_values[variable_values.Length - 1].Substring(0, variable_values[variable_values.Length - 1].Length - 2);
+            string[] variable_values = variable_value.Split (',');
+            for (int i = 0; i < variable_values.Length; i++) {
+                variable_values[i] = variable_values[i].Substring (1);
+            }
+            variable_values[0] = variable_values[0].Split ('(') [1];
+            variable_values[variable_values.Length - 1].Substring (0, variable_values[variable_values.Length - 1].Length - 2);
 
-            
             //might want a "splitAtLevel" to delimiter "," but ignoring them if in functions, e.g.::
             // new Vector2 (getValue(10, 20), 20);
             // should have 2 fields, not 3.
@@ -105,9 +107,10 @@ public class VariableHandler {
     }
     public void setVariable (string type, string name, string[] values) {
         /* OBJECT DOES NOT EXIST, INITIALIZE IT */
-        variables.Add (new VariableObject (type, name, Keywords.NULL));
+        variables.Add (new VariableObject (type, name, HashManager.getNewHash ().ToString())); //Hash used to connect it to its UI counterpart
         VariableObject template = VariableObject.getTemplate (type);
         for (int i = 0; i < template.fields.Length; i++) {
+            Logger.Log (values[i]);
             variables.Add (new VariableObject (template.fields[i].type, name + Operators.DOT + template.fields[i].name, Evaluator.cast (parse (values[i]), template.fields[i].type)));
         }
     }

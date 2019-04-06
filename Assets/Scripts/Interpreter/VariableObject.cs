@@ -26,34 +26,36 @@ public class VariableObject {
         this.type = type;
         this.name = name;
         this.value = value;
+        if (name == "") {
 
-        switch (type) {
+            switch (type) {
+
             case "Vector2":
-                fields = new VariableObject[] {
-                    new VariableObject (Variables.FLOAT, "x", value.Split (',') [0]),
-                    new VariableObject (Variables.FLOAT, "y", value.Split (',') [1])
-                };
-                break;
-            case Console.NAME:
-                fields = new VariableObject[] {
-                    new VariableObject (Variables.FLOAT, "x", value.Split (',') [0]),
-                    new VariableObject (Variables.FLOAT, "y", value.Split (',') [1])
-                };
-                break;
-            case Plotter.NAME:
-                // fields = new VariableObject[] {
-                //     new VariableObject (Variables.STRING, "snap_direction", value.Split (',') [0]),
-                //     new VariableObject (Variables.FLOAT, "size", value.Split (',') [1])
-                // };
-                break;
-            default:
-                fields = null;
-                break;
+            fields = new VariableObject[] {
+            new VariableObject (Variables.FLOAT, "x", value.Split (',') [0]),
+            new VariableObject (Variables.FLOAT, "y", value.Split (',') [1])
+                    };
+                    break;
+                case Console.NAME:
+                    fields = new VariableObject[] {
+                        new VariableObject (Variables.FLOAT, "x", ""),
+                        new VariableObject (Variables.FLOAT, "y", "")
+                    };
+                    break;
+                case Plotter.NAME:
+                    fields = new VariableObject[] {
+                        new VariableObject (Variables.STRING, "value", "")
+                    };
+                    break;
+                default:
+                    fields = null;
+                    break;
+            }
         }
     }
 
-    public static VariableObject getTemplate(string type) {
-        return new VariableObject(type);
+    public static VariableObject getTemplate (string type) {
+        return new VariableObject (type);
     }
 
     public override string ToString () {
@@ -70,6 +72,5 @@ public class VariableObject {
 
 // public class VariableTemplates {
 //     public static VariableObject VECTOR2;
-
 
 // }
