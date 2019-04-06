@@ -22,7 +22,7 @@ public class ListenerHandler {
     public void addListener (string class_name, GameObject obj) {
         switch (class_name) {
             case Classes.CONSOLE:
-                Referencer.consoleManager.execute (Console.NAME, Console.OPEN, new string[] { "" }, obj);
+                // Referencer.consoleManager.execute (Console.NAME, Console.OPEN, obj);
                 break;
             case Classes.PLOTTER:
 
@@ -51,24 +51,28 @@ public class ListenerHandler {
 
         switch (class_name) {
             case Classes.CONSOLE:
-                Referencer.consoleManager.execute (class_name, function_name, function_parameters_arr, obj);
+                // Referencer.consoleManager.execute (class_name, function_name, function_parameters_arr, obj);
                 break;
             case Classes.PLOTTER:
                 // Referencer.plotterManager.execute (command, "", obj);
                 break;
         }
     }
-    public void updateListeners (int line, GameObject obj) {
+    public void updateListeners (ScopeHandler scope, GameObject obj) {
         if (has_been_added) {
-            for (int listener = 0; listener < listeners.Count; listener++) {
-                switch (listeners[listener]) {
-                    case Classes.CONSOLE:
-                        Referencer.consoleManager.execute (Console.NAME, Console.UPDATE, new string[] { line + "" }, obj);
-                        break;
-                    case Classes.PLOTTER:
-                        break;
-                }
+
+            foreach (VariableObject console in scope.getVariablesInScope (Console.NAME).ToArray()) {
+                Referencer.consoleManager.execute (Console.NAME, Console.UPDATE, console, obj);
             }
+            // for (int listener = 0; listener < listeners.Count; listener++) {
+            //     switch (listeners[listener]) {
+            //         case Classes.CONSOLE:
+            //             Referencer.consoleManager.execute (Console.NAME, Console.UPDATE, scope, obj);
+            //             break;
+            //         case Classes.PLOTTER:
+            //             break;
+            //     }
+            // }
         } else {
             addListeners (obj);
             has_been_added = true;

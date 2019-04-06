@@ -9,9 +9,6 @@ public class Interpreter {
     private GameObject obj;
     private string[] script;
 
-    //Eventually move to be a local variable to save memory space...
-    private CompilerHandler compiler;
-
     private ScopeHandler scope;
     private ListenerHandler listener_handler;
     public FunctionHandler function_handler;
@@ -23,10 +20,7 @@ public class Interpreter {
         this.script = script;
         this.obj = obj;
 
-        //Might need a "compiler" object to compile all public functions, variables to pass to the first layer of scope of the ScopeHandler
-        compiler = new CompilerHandler (script);
-
-        //listener_handler.addListener (line_parts, obj);
+        CompilerHandler compiler = new CompilerHandler (script);
 
         scope = new ScopeHandler (compiler);
         listener_handler = new ListenerHandler (compiler.handlers);
@@ -46,11 +40,8 @@ public class Interpreter {
                 scope.pop ();
                 break;
             case Operators.CLOSING_BRACKET:
-                if (scope.isLooping ()) {
-                    scope.back ();
-                } else {
-                    scope.pop ();
-                }
+                if (scope.isLooping ()) scope.back ();
+                else scope.pop ();
                 break;
             case Keywords.CONTINUE:
                 scope.back ();
@@ -86,17 +77,22 @@ public class Interpreter {
             case Variables.FLOAT:
             case Variables.STRING:
                 //Primitive Data Types
-            case Console.NAME:
-            case Plotter.NAME:    
-                //Not possible (as far as I know) to hit a function header, so assume it is just a variable declaration
                 scope.declareVariableInScope (line);
                 break;
+            case Console.NAME:
+            case Plotter.NAME:
+                //Not possible (as far as I know) to hit a function header, so assume it is just a variable declaration
+                scope.declareVariableInScope (line);
+                if (line_parts[0] == Console.NAME) {
+                    //issue with doing this here is that you still ned separate logic when garbage collecting to destroy window...
+                }
+                break;
             default:
-                
+
                 if (scope.isVariableInScope (line_parts[0])) {
                     /* CHECK IF LINE REFERS TO A VARIABLE, e.g. "i = 10;" */
                     scope.setVariableInScope (line);
-                    
+
                 } else if (function_handler.isFunction (line_parts[0].Split ('(') [0])) {
                     /* CHECK IF LINE REFERS TO A FUNCTION, e.g. "print(x);" */
                     FunctionObject function = function_handler.getFunction (line_parts[0].Split ('(') [0]);
@@ -104,7 +100,7 @@ public class Interpreter {
 
                 } else if (listener_handler.isFunction (line_parts[0].Split ('(') [0])) {
                     /* CHECK IF LINE REFERS TO A LISTENER, e.g. "Console.PrintLine("test");" */
-                    listener_handler.callListener(line, obj);
+                    listener_handler.callListener (line, obj);
                     // FunctionObject function = function_handler.getFunction (line_parts[0].Split ('(') [0]);
                     // scope.push (Range.returnTo (function.range, getPointer ()), false);
 
@@ -116,7 +112,7 @@ public class Interpreter {
         if (scope.isFinished ()) return true;
         else {
             scope.step ();
-            listener_handler.updateListeners (getPointer (), obj);
+            listener_handler.updateListeners (scope, obj);
             return false;
         }
     }
@@ -148,7 +144,7 @@ public class Interpreter {
     }
     public override string ToString () {
         string output = debugger + "\n\n";
-        output += compiler.ToString ();
+        // output += compiler.ToString ();
         debugger = Operators.EMPTY;
         output += scope.ToString ();
         return output;
