@@ -5,35 +5,28 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ConsoleManager : MonoBehaviour {
+
     public Dictionary<string, ConsoleObject> consoles = new Dictionary<string, ConsoleObject> ();
     private ConsoleObject console_reference;
-    // public Text console_input;
-    // public Text console_output;
-
-    // public GameObject console_highlighter;
-
-    // ScriptObject script_to_view;
+    
+    public GameObject prefab_console;
+    
     // Vector2 minimum_window_size = new Vector2 (330, 220);
-
-    // int line;
-    void Start () {
-        // console = GameObject.Find ("Console");
-        // console_input = console.transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetComponent<Text> ();
-        // console_output = console.transform.GetChild (2).GetChild (0).GetChild (0).GetChild (0).GetComponent<Text> ();
-        // console_highlighter = console_input.transform.GetChild (0).gameObject;
-        // console.SetActive (false);  
-    }
+    
     public void execute (string class_name, string function_name, VariableObject[] console_variables, GameObject obj) {
 
         foreach (VariableObject console_variable in console_variables) {
+
+            //TODO
             // foreach (ConsoleObject console in consoles) {
                 //there is an unresolved issue with:
                 //if console_variable is deleted, console does not get deleted
             // }
+            
             if (consoles.TryGetValue (console_variable.value, out console_reference)) {
-                console_reference.execute ();
+                // console_reference.execute ();
             } else {
-                consoles.Add (console_variable.value, Instantiate (prefab_console, GameObject.Find ("GUI")));
+               // consoles.Add (console_variable.value, (Instantiate (prefab_console, GameObject.Find ("GUI").transform) as GameObject).GetComponent<ConsoleObject>());
             }
         }
     }
