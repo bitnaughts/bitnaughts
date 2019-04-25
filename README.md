@@ -1,15 +1,14 @@
 # BitNaughts
-Asset Folder for BitNaughts
 
 [Website](http://bitnaughts.github.io)
 
-## Initiatilization:
-In Unity 2018.3, clone this repository into a new project's asset folder.
+To run the latest development build, make a blank 2D game in Unity 2018.3 and navigate to the /Assets folder
 
-## Background:
-Combining the science fiction of galaxy exploration with the maximum possible level of customization:
-being able to code every aspect of your own space ship to optimize it against your foes.
+```
+git clone https://github.com/bitnaughts/bitnaughts.git
+git clone https://github.com/bitnaughts/csharp.interpreter.git
+```
 
-## Technically Speaking:
-We aim to create a C# interpreter to parse user-generated code in real time to control systems on their space ship(s) exactly how they want. 
+BitNaughts is an MMORPG like no other. Instead of grinding levels to beat your opponents, the champion of the galaxy is who ever can write the most optimized, most effective, and most deadly code.
 
+~ more information coming soon ~

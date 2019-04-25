@@ -1,5 +1,6 @@
 ﻿public static class Operators {
     public const string EMPTY = "",
+        DOT = ".",
         EQUALS = "=",
         INCREMENT = "++",
         DECREMENT = "--",
