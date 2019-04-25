@@ -15,6 +15,23 @@ if (i < 100) {
 
 
 
+Console.Open(this.script);
+int i = 0;
+if (i < 100) {
+while (i < 200) {
+i++;
+this.rotation = i;
+}
+}
+
+//self
+this.script
+//position
+this.position
+this.rotation
+//this.MissileObject
+
+
 1 class MissileObject {
 2   int angle = 0;
 3   Vector2 positon = this.position;
