@@ -23,12 +23,18 @@ public class ConsoleManager : MonoBehaviour {
         // console_highlighter = console_input.transform.GetChild (0).gameObject;
         // console.SetActive (false);  
     }
-    public void execute (string class_name, string function_name, VariableObject console_variable, GameObject obj) {
+    public void execute (string class_name, string function_name, VariableObject[] console_variables, GameObject obj) {
 
-        if (consoles.TryGetValue (console_variable.value, out console_reference)) {
-            console_reference.execute ();
-        } else {
-            consoles.Add (console_variable.value, Instantiate (prefab_console, GameObject.Find ("GUI")));
+        foreach (VariableObject console_variable in console_variables) {
+            // foreach (ConsoleObject console in consoles) {
+                //there is an unresolved issue with:
+                //if console_variable is deleted, console does not get deleted
+            // }
+            if (consoles.TryGetValue (console_variable.value, out console_reference)) {
+                console_reference.execute ();
+            } else {
+                consoles.Add (console_variable.value, Instantiate (prefab_console, GameObject.Find ("GUI")));
+            }
         }
     }
 
