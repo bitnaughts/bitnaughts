@@ -7,6 +7,7 @@ public class ReferencerManager : MonoBehaviour {
 	void Start () {
 		/* CodeManager-derived scripts */
 		GameObject codeManager = GameObject.Find("CodeManager");
+		// Referencer.consoleManager = GameObject.Find("InnerWindow").GetComponent<ConsoleObject>();//codeManager.GetComponent<ConsoleManager>();
 		Referencer.consoleManager = codeManager.GetComponent<ConsoleManager>();
 		Referencer.shipManager = codeManager.GetComponent<ShipManager>();
 

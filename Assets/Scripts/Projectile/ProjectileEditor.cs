@@ -15,10 +15,16 @@ public class ProjectileEditor : MonoBehaviour {
             "using Plotter;\n" +
             "using Grapher;\n" +
             "using IO;\n" +
+            "using Scanner;\n" +    //Scanner.GetClosestShip();
             "class ExampleClass {\n" +
             "int tester = 10;\n" +
             "static void Main() {\n" +
-            "Plotter.Open(\"left\", .3);\n" +       //Snap to the left 30% width. If "top", would be 30% height.
+            //
+            "Console console1 = new Console(500, 500, this.script);\n" + 
+            //
+            "Plotter plot1 = new Plotter(ref x);\n" + //Construct with a ref == Watch variable
+            "console1.Add(plot1, \"left\", .3f);\n" + //Snap to the left 30% width. If "top", would be 30% height.
+            //
             "int angle = 1;\n" +
             "for (int x = 0; x < 10; x++) {\n" +
             "for (int y = 0; y < 10; y++) {\n" +

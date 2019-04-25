@@ -5,28 +5,37 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ConsoleManager : MonoBehaviour {
-    public GameObject console;
-    public Text console_input;
-    public Text console_output;
+    public Dictionary<string, ConsoleObject> consoles = new Dictionary<string, ConsoleObject> ();
+    private ConsoleObject console_reference;
+    // public Text console_input;
+    // public Text console_output;
 
-    public GameObject console_highlighter;
+    // public GameObject console_highlighter;
 
-    ScriptObject script_to_view;
-    Vector2 minimum_window_size = new Vector2 (330, 220);
+    // ScriptObject script_to_view;
+    // Vector2 minimum_window_size = new Vector2 (330, 220);
 
-    int line;
+    // int line;
     void Start () {
-        console = GameObject.Find ("Console");
+        // console = GameObject.Find ("Console");
         // console_input = console.transform.GetChild (0).GetChild (0).GetChild (0).GetChild (0).GetComponent<Text> ();
         // console_output = console.transform.GetChild (2).GetChild (0).GetChild (0).GetChild (0).GetComponent<Text> ();
         // console_highlighter = console_input.transform.GetChild (0).gameObject;
         // console.SetActive (false);  
     }
+    public void execute (string class_name, string function_name, VariableObject console_variable, GameObject obj) {
+
+        if (consoles.TryGetValue (console_variable.value, out console_reference)) {
+            console_reference.execute ();
+        } else {
+            consoles.Add (console_variable.value, Instantiate (prefab_console, GameObject.Find ("GUI")));
+        }
+    }
 
     public void execute (string function_name, string[] function_parameters, GameObject obj) {
         switch (function_name) {
             case Console.OPEN:
-                console.SetActive (true);
+                // console.SetActive (true);
                 // script_to_view = obj.GetComponent<ScriptEditor> ().script;
                 // console_input.text = script_to_view.getFormattedScript ();
                 break;
@@ -46,7 +55,7 @@ public class ConsoleManager : MonoBehaviour {
                 // updateListener (int.Parse (function_parameters));
                 break;
             case Console.CLOSE:
-                console.SetActive (false);
+                // console.SetActive (false);
                 break;
         }
     }

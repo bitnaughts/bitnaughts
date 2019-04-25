@@ -9,14 +9,19 @@ public class UIPanel : MonoBehaviour {
     public float size;
     public string snap_direction;
 
+    public string type; //Console.NAME, Plotter.NAME, etc
+
     public UIRectangle rect;
     public GameObject obj;
 
     //UIStyle style;
 
-    public UIPanel (string snap_direction, float size) {
+    public UIPanel (string snap_direction, float size, string type, GameObject obj) {
         this.snap_direction = snap_direction;
         this.size = size;
+        this.type = type;
+        this.obj = obj;
+
         // switch (snap_direction) {
         //     case UIStyle.SNAP_TOP:
         //     case UIStyle.SNAP_BOTTOM:
@@ -25,7 +30,6 @@ public class UIPanel : MonoBehaviour {
         //         break;
         //     case UIStyle.SNAP_LEFT:
         //     case UIStyle.SNAP_RIGHT:
-
         //         break;
         // }
     }
@@ -34,10 +38,22 @@ public class UIPanel : MonoBehaviour {
     }
     public void setRect(UIRectangle rect) {
         this.rect = rect;
-        this.obj.GetComponent<RectTransform>().localPosition = rect.getMidpoint();
-        this.obj.GetComponent<RectTransform>().sizeDelta = rect.getSize();
-
+        obj.GetComponent<RectTransform>().localPosition = rect.getMidpoint();
+        obj.GetComponent<RectTransform>().sizeDelta = rect.getSize();
     }
+
+    public void updateListener(int line) {
+        switch (type) {
+            case Plotter.NAME: 
+                obj.GetComponent<PlotterHandler>().updateListener(line);
+                break;
+            case Console.NAME: 
+                obj.GetComponent<ConsoleHandler>().updateListener(line);
+                break;    
+        }
+    }
+
+
 
     // public float getWidth() {
     //     return width;

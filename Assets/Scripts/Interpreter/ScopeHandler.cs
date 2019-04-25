@@ -14,14 +14,13 @@ public class ScopeHandler {
 
     public ScopeHandler (CompilerHandler compiled_script) {
         scope = new Stack<ScopeNode> ();
-        scope.Push(compiled_script.base_scope);
+        scope.Push (compiled_script.base_scope);
 
         pointer = compiled_script.main_function_line;
 
         hasAlreadyStepped = false;
         hasFinished = false;
     }
-    
 
     public bool isVariableInScope (string name) {
         if (scope.Count == 0) return false;
@@ -44,6 +43,14 @@ public class ScopeHandler {
         List<VariableObject> variables_copy = new List<VariableObject> ();
         foreach (VariableObject variable in scope.Peek ().variable_handler.variables) {
             variables_copy.Add (variable);
+        }
+        return variables_copy;
+    }
+    public List<VariableObject> getVariablesInScope (string type) {
+        if (scope.Count == 0) return null;
+        List<VariableObject> variables_copy = new List<VariableObject> ();
+        foreach (VariableObject variable in scope.Peek ().variable_handler.variables) {
+            if (type == variable.type) variables_copy.Add (variable);
         }
         return variables_copy;
     }
