@@ -33,27 +33,30 @@ public class UIPanel : MonoBehaviour {
         //         break;
         // }
     }
-    public void setObj(GameObject obj) {
+    public void setObj (GameObject obj) {
         this.obj = obj;
     }
-    public void setRect(UIRectangle rect) {
-        this.rect = rect;
-        obj.GetComponent<RectTransform>().localPosition = rect.getMidpoint();
-        obj.GetComponent<RectTransform>().sizeDelta = rect.getSize();
-    }
+    public void setRect (UIRectangle rect) {
+        print (this.rect);
+        if (rect == null) {
 
-    public void updateListener(int line) {
-        switch (type) {
-            case Plotter.NAME: 
-                obj.GetComponent<PlotterHandler>().updateListener(line);
-                break;
-            case Console.NAME: 
-                obj.GetComponent<ConsoleHandler>().updateListener(line);
-                break;    
+        } else {
+            this.rect = rect;
+            obj.GetComponent<RectTransform> ().localPosition = rect.getMidpoint ();
+            obj.GetComponent<RectTransform> ().sizeDelta = rect.getSize ();
         }
     }
 
-
+    public void updateListener (int line) {
+        switch (type) {
+            case Plotter.NAME:
+                obj.GetComponent<PlotterHandler> ().updateListener (line);
+                break;
+            case Console.NAME:
+                obj.GetComponent<ConsoleHandler> ().updateListener (line);
+                break;
+        }
+    }
 
     // public float getWidth() {
     //     return width;

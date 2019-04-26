@@ -111,7 +111,7 @@ public class ConsoleObject : MonoBehaviour {
                     case Console.UPDATE:
                         for (int i = 0; i < panels.Count; i++) {
 
-                            panels[i].updateListener (int.Parse (function_parameters[0]));
+                            // panels[i].updateListener (int.Parse (function_parameters[0]));
 
                         }
                         // updateListener (int.Parse (function_parameters));

@@ -23,7 +23,11 @@ public class ProjectileEditor : MonoBehaviour {
             "Console console1 = new Console(500, 500, this.script);\n" + 
             //
             "Plotter plot1 = new Plotter(ref x);\n" + //Construct with a ref == Watch variable
-            "console1.Add(plot1, \"left\", .3f);\n" + //Snap to the left 30% width. If "top", would be 30% height.
+            "Plotter plot2 = new Plotter(ref x);\n" + //Construct with a ref == Watch variable
+            "Plotter plot3 = new Plotter(ref x);\n" + //Construct with a ref == Watch variable
+            "console1.Add(plot1, \"left\", .3);\n" + //Snap to the left 30% width. If "top", would be 30% height.
+            "console1.Add(plot2, \"left\", .3);\n" + //Snap to the left 30% width. If "top", would be 30% height.
+            "console1.Add(plot3, \"left\", .3);\n" + //Snap to the left 30% width. If "top", would be 30% height.
             //
             "int angle = 1;\n" +
             "for (int x = 0; x < 10; x++) {\n" +
