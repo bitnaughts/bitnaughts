@@ -9,6 +9,8 @@ public class ConsoleObject : MonoBehaviour {
     List<UIPanel> panels = new List<UIPanel> ();
     GameObject inner_window;
 
+    
+
     Vector2 window_size;
 
     public GameObject prefab_panel;
@@ -30,6 +32,7 @@ public class ConsoleObject : MonoBehaviour {
     int line;
 
     void Start () {
+        inner_window = this.gameObject;
         //inner_window = ...
         // panels.Add (new UIPanel (UIStyle.SNAP_BOTTOM, .25f));
 
@@ -89,6 +92,7 @@ public class ConsoleObject : MonoBehaviour {
                     //         console_input.text = script_to_view.getFormattedScript ();
                     //         break;
                     case Console.ADD:
+                        print ("yes");
                         // string value_of_interest = function_parameters[0];
                         panels.Add (new UIPanel (function_parameters[1], float.Parse (function_parameters[2]), class_name, Instantiate (prefab_panel, this.transform)));
                         break;

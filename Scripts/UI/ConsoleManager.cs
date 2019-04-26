@@ -24,9 +24,12 @@ public class ConsoleManager : MonoBehaviour {
             // }
             
             if (consoles.TryGetValue (console_variable.value, out console_reference)) {
-                // console_reference.execute ();
+                //If console exists, execute the desired command
+                print (class_name + function_name);
+                console_reference.execute (class_name, function_name, new string[] { "", "left", ".5"}, null);
             } else {
-               // consoles.Add (console_variable.value, (Instantiate (prefab_console, GameObject.Find ("GUI").transform) as GameObject).GetComponent<ConsoleObject>());
+                //Make desired console
+               consoles.Add (console_variable.value, (Instantiate (prefab_console, GameObject.Find ("GUI").transform) as GameObject).transform.GetChild(0).GetComponent<ConsoleObject>());
             }
         }
     }
