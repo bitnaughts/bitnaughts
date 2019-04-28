@@ -27,12 +27,13 @@ public class ConsoleManager : MonoBehaviour {
             } else {
                 //Make desired console
                 consoles.Add (console_variable.value, (Instantiate (prefab_console, GameObject.Find ("GUI").transform) as GameObject).transform.GetChild (0).GetComponent<ConsoleObject>());
+                execute(console_variable, "Add", new String[] {"ScriptViewer", "bottom", ".7"}, null);
             }
         }
     }
 
     public void execute (VariableObject variable, string function_name, string[] function_parameters, GameObject obj) {
-
+        print (variable + function_name + function_parameters[0] + function_parameters[1] + function_parameters[2] + obj);
         if (consoles.TryGetValue (variable.value, out console_reference)) {
             console_reference.execute (variable.type, function_name, function_parameters, obj);
         } else {

@@ -14,6 +14,7 @@ public class ConsoleObject : MonoBehaviour {
     Vector2 window_size;
 
     public GameObject prefab_panel;
+    public GameObject prefab_script_viewer;
 
     //UIPanel
     //ScriptPanel
@@ -71,6 +72,10 @@ public class ConsoleObject : MonoBehaviour {
                         print ("yes");
                         // string value_of_interest = function_parameters[0];
                         panels.Add (new UIPanel (function_parameters[1], float.Parse (function_parameters[2]), class_name, Instantiate (prefab_panel, this.transform)));
+                        if (function_parameters[0] == "ScriptViewer") {
+                            print ("add script viewer");
+                            Instantiate(prefab_script_viewer, panels[panels.Count - 1].obj.transform);
+                        } 
                         break;
                         // case Console.WRITE_LINE:
                         //     if (console_output.text.Split ('\n').Length > 2) {
@@ -87,7 +92,7 @@ public class ConsoleObject : MonoBehaviour {
                     case Console.UPDATE:
                         for (int i = 0; i < panels.Count; i++) {
 
-                            // panels[i].updateListener (int.Parse (function_parameters[0]));
+                            panels[i].updateListener (int.Parse (function_parameters[0]));
 
                         }
                         // updateListener (int.Parse (function_parameters));
