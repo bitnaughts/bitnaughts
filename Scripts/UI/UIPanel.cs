@@ -21,45 +21,29 @@ public class UIPanel : MonoBehaviour {
         this.size = size;
         this.type = type;
         this.obj = obj;
-
-        // switch (snap_direction) {
-        //     case UIStyle.SNAP_TOP:
-        //     case UIStyle.SNAP_BOTTOM:
-        //         width = -1;
-        //         height = size;
-        //         break;
-        //     case UIStyle.SNAP_LEFT:
-        //     case UIStyle.SNAP_RIGHT:
-        //         break;
-        // }
     }
-    public void setObj(GameObject obj) {
+    public void setObj (GameObject obj) {
         this.obj = obj;
     }
-    public void setRect(UIRectangle rect) {
-        this.rect = rect;
-        obj.GetComponent<RectTransform>().localPosition = rect.getMidpoint();
-        obj.GetComponent<RectTransform>().sizeDelta = rect.getSize();
-    }
-
-    public void updateListener(int line) {
-        switch (type) {
-            case Plotter.NAME: 
-                obj.GetComponent<PlotterHandler>().updateListener(line);
-                break;
-            case Console.NAME: 
-                obj.GetComponent<ConsoleHandler>().updateListener(line);
-                break;    
+    public void setRect (UIRectangle rect) {
+        if (rect != null) {
+            this.rect = rect;
+            obj.GetComponent<RectTransform> ().localPosition = rect.getMidpoint ();
+            obj.GetComponent<RectTransform> ().sizeDelta = rect.getSize ();
         }
     }
 
+    public void updateListener (int line) {
 
+        /* The question is what data do panels need to update with...? */
 
-    // public float getWidth() {
-    //     return width;
-    // }
-    // public float getHeight() {
-    //     return height;
-    // }
-
+        switch (type) {
+            case Plotter.NAME:
+                obj.GetComponent<PlotterHandler> ().updateListener (line);
+                break;
+            case Console.NAME:
+                obj.GetComponent<ConsoleHandler> ().updateListener (line);
+                break;
+        }
+    }
 }
