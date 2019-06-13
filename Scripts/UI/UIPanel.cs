@@ -34,6 +34,9 @@ public class UIPanel : MonoBehaviour {
     }
 
     public void updateListener (int line) {
+
+        /* The question is what data do panels need to update with...? */
+
         switch (type) {
             case Plotter.NAME:
                 obj.GetComponent<PlotterHandler> ().updateListener (line);
