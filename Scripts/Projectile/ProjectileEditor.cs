@@ -51,7 +51,7 @@ public class ProjectileEditor : MonoBehaviour {
             // "Console.WriteLine(\"hello\");\n" +
             // "}\n" +
             "}";
-        GetComponent<ScriptEditor> ().script = new ScriptObject (this.gameObject, testScript);
+        GetComponent<ScriptEditor> ().script = new ScriptObject (testScript);
     }
 
     void Update () {
