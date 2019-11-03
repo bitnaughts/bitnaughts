@@ -3,13 +3,18 @@ using System.Collections;
 using System.Drawing;
 using UnityEngine;
 
+public static class ConversionHandler {
 
-public static class ConversionHandler 
-{
-    
-    public static Vector2 ToVector2(PointF point)
-    {
-        return new Vector2(point.X, point.Y);
+    public static Vector2 ToVector2 (PointF point) {
+        return new Vector2 (point.x, point.y);
     }
-
+    public static Quaternion ToQuaternion (float z_angle) {
+        return  Quaternion.Euler (
+            new Vector3 (
+                0,
+                0,
+                z_angle
+            )
+        );
+    }
 }
