@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GalaxyManager : MonoBehaviour {
 
@@ -13,13 +14,15 @@ public class GalaxyManager : MonoBehaviour {
     public GameObject[] star_prefabs;
     public GameObject line_prefab;
 
-    void Start () {
+    async void Start () {
         // print (.ToString());
 
         if (DatabaseHandler.LOAD_FROM_DATABASE) {
 
             /* Loads galaxy object from database, only including necessary objects for visualization in galaxy view */
             Task<string> task = Task.Run<string> (async () => await DatabaseHandler.Get<GalaxyObject> (666)); // 666 == current galaxy_id
+
+            /* Loads results from database into Galaxy object */
             galaxy = new GalaxyObject (task.Result);
             print (task.Result + "\n" + galaxy.ToString ());
 
@@ -28,17 +31,23 @@ public class GalaxyManager : MonoBehaviour {
             /* Procedurally generates galaxy, including all systems, their planets, stars, asteroids, etc. */
             galaxy = new GalaxyObject (4);
 
+            // debugger.GetComponent<Text>().text += await DatabaseHandler.Set<GalaxyObject> (galaxy);
+
             /* Saves Galaxy objects to DB, destructively overriding old data */
-            Task<string> task = Task.Run<string> (async () => await DatabaseHandler.Set<GalaxyObject> (galaxy));
-            print ("Save result:" + task.Result);
+            // Task<string> task = Task.Run<string> (async () => await DatabaseHandler.Set<GalaxyObject> (galaxy));
+            // print ("Save result:" + task.Result);
         }
         Visualize ();
+        // string output = await DatabaseHandler.Reset();
+        // debugger.GetComponent<Text>().text += output;
+        // print (output);
     }
 
     int system_id = 0;
     void Update () {
         // if (system_id < galaxy.systems.Count) {
         if (system_id++ == 400) {
+
             // print();
             // System.IO.File.WriteAllText (@"C:\test.txt", galaxy.ToString ());
             // 
@@ -62,26 +71,17 @@ public class GalaxyManager : MonoBehaviour {
                 /* Creates a new line between two systems, pointed between the two systems */
                 GameObject line = Instantiate (
                     line_prefab,
-                    new Vector2 (
-                        (connected_system.position.X + system.position.X) / 2,
-                        (connected_system.position.Y + system.position.Y) / 2
+                    ConversionHandler.ToVector2 (
+                        PointHandler.GetMidpoint (connected_system.position, system.position)
                     ),
-                    Quaternion.Euler (
-                        new Vector3 (
-                            0,
-                            0,
-                            Mathf.Rad2Deg * Mathf.Atan (
-                                (connected_system.position.Y - system.position.Y) / (connected_system.position.X - system.position.X)
-                            )
-                        )
+                    ConversionHandler.ToQuaternion (
+                        PointHandler.GetAngle (connected_system.position, system.position)
                     )
                 ) as GameObject;
 
                 /* Sets line's length equal to distance between systems */
                 line.transform.localScale = new Vector3 (
-                    Mathf.Sqrt (
-                        Mathf.Pow (connected_system.position.X - system.position.X, 2) + Mathf.Pow (connected_system.position.Y - system.position.Y, 2)
-                    ),
+                    PointHandler.GetDistance(connected_system.position, system.position),
                     .05f,
                     .05f
                 );

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 public static class DatabaseHandler {
 
-    public const bool LOAD_FROM_DATABASE = true;
+    public const bool LOAD_FROM_DATABASE = false;
 
     public const string URL = "https://bitnaughts.azurewebsites.net/api/";
 
@@ -26,6 +26,12 @@ public static class DatabaseHandler {
         ID = "id";
 
     public static HttpClient client = new HttpClient ();
+
+    public static async Task<string> Reset () {
+        return await Get (
+            HTTP.Endpoints.RESET
+        );
+    }
 
     public static async Task<string> Get<T> (int id) {
         return await Get (
