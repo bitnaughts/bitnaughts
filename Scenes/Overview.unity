@@ -760,9 +760,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 153241716}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ccb4cd29d180cc438532844c08eed11, type: 3}
+  m_Script: {fileID: 11500000, guid: bed510f239b90fc48a2f6746f4c06be7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugger: {fileID: 1271708504}
 --- !u!4 &153241718
 Transform:
   m_ObjectHideFlags: 0
@@ -6559,17 +6560,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1912851571}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1d9f0ddc69292f4a8cb7f94738b1569, type: 3}
+  m_Script: {fileID: 11500000, guid: 259f6e2a010970f4da9c9a589e4da1ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  star_prefabs:
-  - {fileID: 1683677613930704632, guid: 2d70178d51a6ff14cba97233d061b354, type: 3}
-  - {fileID: 6053117032425377983, guid: 1dd4adeefb8d56d4cafa5eaecec00ca3, type: 3}
-  - {fileID: 8675855472467751072, guid: 530f51b0d6802974a87bf88885cd7c1f, type: 3}
-  - {fileID: 6781714235328248455, guid: da020e2a4b585d841b320a79edaf7862, type: 3}
-  line_prefab: {fileID: 7714474634701114001, guid: 318f0c96da40bdd4285c09b55b01e205,
-    type: 3}
-  database: {fileID: 0}
 --- !u!1 &1917987945
 GameObject:
   m_ObjectHideFlags: 0
