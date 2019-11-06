@@ -190,7 +190,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 153241720}
+      - m_Target: {fileID: 0}
         m_MethodName: execute
         m_Mode: 5
         m_Arguments:
@@ -742,9 +742,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 153241718}
-  - component: {fileID: 153241717}
   - component: {fileID: 153241719}
-  - component: {fileID: 153241720}
+  - component: {fileID: 153241717}
   m_Layer: 0
   m_Name: CodeManager
   m_TagString: Untagged
@@ -761,7 +760,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 153241716}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78ab5690879b69a408f6f9e4f0f1c134, type: 3}
+  m_Script: {fileID: 11500000, guid: 0ccb4cd29d180cc438532844c08eed11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &153241718
@@ -790,18 +789,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47028d29ae65721438a63093b216b180, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &153241720
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153241716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e218f843bf1223849a603be3966324a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &175030244
@@ -882,7 +869,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 153241720}
+      - m_Target: {fileID: 0}
         m_MethodName: execute
         m_Mode: 5
         m_Arguments:
@@ -1513,7 +1500,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 153241720}
+      - m_Target: {fileID: 0}
         m_MethodName: execute
         m_Mode: 5
         m_Arguments:
@@ -1715,7 +1702,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 153241720}
+      - m_Target: {fileID: 0}
         m_MethodName: execute
         m_Mode: 5
         m_Arguments:
@@ -3371,7 +3358,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 153241720}
+      - m_Target: {fileID: 0}
         m_MethodName: execute
         m_Mode: 5
         m_Arguments:
@@ -3551,9 +3538,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111e967dfddcaed46a90f88e1fac2a83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Name: 
-  m_Name: 
-  m_Name: 
 --- !u!114 &976678598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3566,9 +3550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abd6c032933be4f4e92e555f9d3bf10b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Name: 
-  m_Name: 
-  m_Name: 
 --- !u!114 &976678599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4034,7 +4015,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 153241720}
+      - m_Target: {fileID: 0}
         m_MethodName: execute
         m_Mode: 5
         m_Arguments:
@@ -4951,7 +4932,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 153241720}
+      - m_Target: {fileID: 0}
         m_MethodName: execute
         m_Mode: 5
         m_Arguments:
@@ -5625,7 +5606,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 153241720}
+      - m_Target: {fileID: 0}
         m_MethodName: execute
         m_Mode: 5
         m_Arguments:
@@ -6016,7 +5997,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 153241720}
+      - m_Target: {fileID: 0}
         m_MethodName: execute
         m_Mode: 5
         m_Arguments:
@@ -6265,7 +6246,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 153241720}
+      - m_Target: {fileID: 0}
         m_MethodName: execute
         m_Mode: 5
         m_Arguments:
@@ -6588,7 +6569,7 @@ MonoBehaviour:
   - {fileID: 6781714235328248455, guid: da020e2a4b585d841b320a79edaf7862, type: 3}
   line_prefab: {fileID: 7714474634701114001, guid: 318f0c96da40bdd4285c09b55b01e205,
     type: 3}
-  debugger: {fileID: 1271708502}
+  database: {fileID: 0}
 --- !u!1 &1917987945
 GameObject:
   m_ObjectHideFlags: 0
