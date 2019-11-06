@@ -1,65 +1,71 @@
+/* C# Dependencies */
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+/* Unity, Async Dependencies */
+using UnityAsync;
+using UnityEngine;
+using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
+using WaitForSeconds = UnityAsync.WaitForSeconds;
+using WaitForSecondsRealtime = UnityAsync.WaitForSecondsRealtime;
+using WaitUntil = UnityAsync.WaitUntil;
+using WaitWhile = UnityAsync.WaitWhile;
 
-public static class DatabaseHandler {
+public class DatabaseController : MonoBehaviour {
 
-    public const bool LOAD_FROM_DATABASE = false;
+    public const bool LOAD_FROM_SERVER = true;
 
-    public const string URL = "https://bitnaughts.azurewebsites.net/api/";
+    HttpClient client;
+    Text debugger;
+    
+    void Start () {
+        debugger = GameObject.Find ("DEBUGGER").GetComponent<Text> ();
+        client = new HttpClient ();
+    }
 
-    /* Endpoints */
-    public const string GET = "get",
-        SET = "set";
-
-    /* Parameter Flags */
-    public const string FLAG = "flag",
-        RESET = "reset",
-        TYPE = "type",
-        ID = "id";
-
-    public static HttpClient client = new HttpClient ();
-
-    public static async Task<string> Reset () {
+    public async Task<string> Reset () {
         return await Get (
             HTTP.Endpoints.RESET
         );
     }
 
-    public static async Task<string> Get<T> (int id) {
+    public async Task<string> Get<T> (int id) {
         return await Get (
-            GET,
-            new Dictionary<string, string> { { TYPE, typeof (T).ToString () },
-                { ID, id.ToString () }
+            HTTP.Endpoints.GET,
+            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.TYPE, typeof (T).ToString () },
+                { HTTP.Endpoints.Parameters.ID, id.ToString () }
             }
         );
     }
-    public static async Task<string> Set<T> (T obj) {
-        return await Post (
-            SET,
-            new Dictionary<string, string> { { TYPE, typeof (T).ToString () } },
+    public async void Set<T> (T obj) {
+        debugger.text += await Post (
+            HTTP.Endpoints.SET,
+            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.TYPE, typeof (T).ToString () } },
             obj.ToString ()
         );
     }
 
     /* HTTP Post Logic with System.Net.Http */
-    public static async Task<string> Post (string endpoint, Dictionary<string, string> parameters_dict, string json) {
+    private async Task<string> Post (string endpoint, Dictionary<string, string> parameters_dict, string json) {
         return await Post (
             endpoint + JSONHandler.ToParameters (parameters_dict),
             json
         );
     }
-    public static async Task<string> Post (string endpoint, string json) {
+    private async Task<string> Post (string endpoint, string json) {
         try {
             HttpResponseMessage response = await client.PostAsync (
-                URL + endpoint,
+                HTTP.API_ENDPOINT + endpoint,
                 new StringContent (json)
             );
             response.EnsureSuccessStatusCode ();
@@ -70,15 +76,15 @@ public static class DatabaseHandler {
     }
 
     /* HTTP Get Logic with System.Net.Http */
-    public static async Task<string> Get (string endpoint, Dictionary<string, string> parameters_dict) {
+    private async Task<string> Get (string endpoint, Dictionary<string, string> parameters_dict) {
         return await Get (
             endpoint + JSONHandler.ToParameters (parameters_dict)
         );
     }
-    public static async Task<string> Get (string endpoint) {
+    private async Task<string> Get (string endpoint) {
         try {
             HttpResponseMessage response = await client.GetAsync (
-                URL + endpoint
+                HTTP.API_ENDPOINT + endpoint
             );
             response.EnsureSuccessStatusCode ();
             return await response.Content.ReadAsStringAsync ();
@@ -86,5 +92,4 @@ public static class DatabaseHandler {
             return ex.ToString ();
         }
     }
-
 }

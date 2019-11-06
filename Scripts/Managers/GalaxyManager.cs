@@ -14,25 +14,27 @@ public class GalaxyManager : MonoBehaviour {
     public GameObject[] star_prefabs;
     public GameObject line_prefab;
 
-    async void Start () {
+    public DatabaseController database;
+
+    void Start () {
+
+        database = GameObject.Find("CodeManager").GetComponent<DatabaseController>();
         // print (.ToString());
 
-        if (DatabaseHandler.LOAD_FROM_DATABASE) {
+        if (DatabaseController.LOAD_FROM_SERVER) {
 
             /* Loads galaxy object from database, only including necessary objects for visualization in galaxy view */
-            Task<string> task = Task.Run<string> (async () => await DatabaseHandler.Get<GalaxyObject> (666)); // 666 == current galaxy_id
+            // Task<string> task = Task.Run<string> (async () => await DatabaseHandler.Get<GalaxyObject> (666)); // 666 == current galaxy_id
 
             /* Loads results from database into Galaxy object */
-            galaxy = new GalaxyObject (task.Result);
-            print (task.Result + "\n" + galaxy.ToString ());
+            // galaxy = new GalaxyObject (task.Result);
+            // print (task.Result + "\n" + galaxy.ToString ());
 
         } else {
 
             /* Procedurally generates galaxy, including all systems, their planets, stars, asteroids, etc. */
             galaxy = new GalaxyObject (4);
-
             // debugger.GetComponent<Text>().text += await DatabaseHandler.Set<GalaxyObject> (galaxy);
-
             /* Saves Galaxy objects to DB, destructively overriding old data */
             // Task<string> task = Task.Run<string> (async () => await DatabaseHandler.Set<GalaxyObject> (galaxy));
             // print ("Save result:" + task.Result);
@@ -45,16 +47,16 @@ public class GalaxyManager : MonoBehaviour {
 
     int system_id = 0;
     void Update () {
-        // if (system_id < galaxy.systems.Count) {
         if (system_id++ == 400) {
-
-            // print();
+            database.Set<GalaxyObject>(galaxy);
+            // print (line);
+            // string list = AsyncHelpers.RunSync<string>(() => DatabaseHandler.Set<GalaxyObject>(galaxy));
+            // print (list);
+            // database.Set<GalaxyObject> (galaxy);
             // System.IO.File.WriteAllText (@"C:\test.txt", galaxy.ToString ());
-            // 
         }
-        //     system_id++;
-        // }
     }
+
 
     public void Visualize () {
         /* Generates systems, represented by sprites */
