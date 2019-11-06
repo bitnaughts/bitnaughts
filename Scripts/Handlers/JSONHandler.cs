@@ -23,6 +23,6 @@ public static class JSONHandler {
         );
     }
     public static string ToJSONArray<T> (List<T> list) {
-        return "[" + String.Join (",", list.Select (x => x.ToString ()).ToArray ()) + "]";
+        return "[" + String.Join (",", list.Select (x => x.ToString ())) + "]";
     }
 }
