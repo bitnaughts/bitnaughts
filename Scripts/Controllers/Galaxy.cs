@@ -24,7 +24,7 @@ public class Galaxy : MonoBehaviour {
         database = GameObject.Find ("CodeManager").GetComponent<Database> ();
 
         line_prefab = Resources.Load<GameObject> ("Prefabs/GalaxyElements/Lines/line");
-        star_prefabs.Each ((star, index) => { Debug.Log(index); star = Resources.Load<GameObject> ("Prefabs/GalaxyElements/Stars/star" + (index + 1)); });
+        star_prefabs.Each ((star, index) => { Debug.Log (index); star = Resources.Load<GameObject> ("Prefabs/GalaxyElements/Stars/star" + (index + 1)); });
 
         for (int i = 0; i < 4; i++) {
             star_prefabs[i] = Resources.Load<GameObject> ("Prefabs/GalaxyElements/Stars/star" + (i + 1));
@@ -43,22 +43,24 @@ public class Galaxy : MonoBehaviour {
 
         // } else {
 
-            /* Procedurally generates galaxy, including all systems, their planets, stars, asteroids, etc. */
+        /* Procedurally generates galaxy, including all systems, their planets, stars, asteroids, etc. */
         galaxy = new GalaxyObject (10);
-        Debug.Log(galaxy.ToString());
 
+        Debug.Log (galaxy.ToString ());
+        // System.IO.File.WriteAllText (@"C:\test.txt", galaxy.ToString ());
 
-        save_result = database.Set<GalaxyObject> (galaxy);
+        // save_result = database.Set<GalaxyObject> (galaxy);
+        save_result = database.Add<ShipObject> (new ShipObject(5));
         // save_result;
 
         // save_result;
 
         // Debug.Log(save_result);
 
-            // debugger.GetComponent<Text>().text += await DatabaseHandler.Set<GalaxyObject> (galaxy);
-            /* Saves Galaxy objects to DB, destructively overriding old data */
-            // Task<string> task = Task.Run<string> (async () => await DatabaseHandler.Set<GalaxyObject> (galaxy));
-            // print ("Save result:" + task.Result);
+        // debugger.GetComponent<Text>().text += await DatabaseHandler.Set<GalaxyObject> (galaxy);
+        /* Saves Galaxy objects to DB, destructively overriding old data */
+        // Task<string> task = Task.Run<string> (async () => await DatabaseHandler.Set<GalaxyObject> (galaxy));
+        // print ("Save result:" + task.Result);
         // }
         Visualize ();
         // string output = await DatabaseHandler.Reset();
@@ -68,9 +70,9 @@ public class Galaxy : MonoBehaviour {
 
     int system_id = 0;
     void Update () {
-        // Debug.Log(save_result.Status);
+        Debug.Log (save_result.Status);
         if (save_result.IsCompleted) {
-            Debug.Log(save_result.Result);
+            Debug.Log (save_result.Result);
         }
         if (system_id++ == 400) {
 
@@ -78,7 +80,7 @@ public class Galaxy : MonoBehaviour {
             // string list = AsyncHelpers.RunSync<string>(() => DatabaseHandler.Set<GalaxyObject>(galaxy));
             // print (list);
             // database.Set<GalaxyObject> (galaxy);
-            // System.IO.File.WriteAllText (@"C:\test.txt", galaxy.ToString ());
+            System.IO.File.WriteAllText (@"C:\test.txt", galaxy.ToString ());
         }
     }
 
@@ -114,6 +116,5 @@ public class Galaxy : MonoBehaviour {
             }
         }
     }
-
 
 }

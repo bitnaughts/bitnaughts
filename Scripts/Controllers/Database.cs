@@ -31,13 +31,23 @@ public class Database : MonoBehaviour {
     void Update () {
 
         debugger.text = (debug_text.Length > 5000) ? debug_text.Substring (0, 5000) : debug_text;
-        int deletion_speed = new System.Random ().Next (-50, 5);
-        while (deletion_speed > 0) {
-            if (debug_text.IndexOf ('\n') != -1) {
-                debug_text = debug_text.Substring (debug_text.IndexOf ('\n') + 1);
-            }
-            deletion_speed--;
+        // int deletion_speed = new System.Random ().Next (-50, 5);
+        // while (deletion_speed > 0) {
+        if (debug_text.IndexOf ('\n') != -1) {
+            debug_text = debug_text.Substring (debug_text.IndexOf ('\n') + 1);
         }
+        // deletion_speed--;
+        // }
+    }
+
+    public async Task<string> Mine (CelestialObject asteroid, ShipObject ship, double amount) {
+        return await Post (
+            HTTP.Endpoints.MINE,
+            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.ASTEROID, asteroid.id.ToString() },
+                { HTTP.Endpoints.Parameters.SHIP, ship.id.ToString() },
+                { HTTP.Endpoints.Parameters.AMOUNT, amount.ToString("F") }
+            }
+        );
     }
 
     public async Task<string> Reset () {
@@ -60,11 +70,37 @@ public class Database : MonoBehaviour {
             new Dictionary<string, string> { { HTTP.Endpoints.Parameters.FLAG, HTTP.Endpoints.Parameters.Values.RESET } },
             obj.ToString ()
         );
-        debug_text += result;
+        debug_text += result.Replace (",", ", ");
+        System.IO.File.WriteAllText (@"C:\test.txt", debug_text);
         return result;
     }
+    public async Task<string> Add<T> (T obj) {
+        string result = await Post (
+            HTTP.Endpoints.SET,
+            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.FLAG, HTTP.Endpoints.Parameters.Values.ADD },
+                { HTTP.Endpoints.Parameters.TABLE, GetTableForType(typeof(T).ToString()) }
+            },
+            obj.ToString ()
+        );
+        debug_text += result.Replace (",", ", ");
+        System.IO.File.WriteAllText (@"C:\test.txt", debug_text);
+        return result + GetTableForType(typeof(T).ToString()) + typeof(T).ToString();
+    }
+    public string GetTableForType (string type) {
+        switch (type) {
+            case "ShipObject":
+                return "dbo.Ships";
+        }
+        return "null";
+    } 
 
     /* HTTP Post Logic with System.Net.Http */
+    private async Task<string> Post (string endpoint, Dictionary<string, string> parameters_dict) {
+        return await Post (
+            endpoint + JSONHandler.ToParameters (parameters_dict),
+            ""
+        );
+    }
     private async Task<string> Post (string endpoint, Dictionary<string, string> parameters_dict, string json) {
         return await Post (
             endpoint + JSONHandler.ToParameters (parameters_dict),
