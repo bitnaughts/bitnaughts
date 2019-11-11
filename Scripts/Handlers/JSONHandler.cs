@@ -12,6 +12,7 @@ public static class JSONHandler {
         ) + "}";
     }
     public static string ToJSONPair (KeyValuePair<string, string> x) {
+        if (x.Value == null) return "\"" + x.Key + "\":\"NULL\"";
         if (x.Value[0] == '[') return "\"" + x.Key + "\":" + x.Value;
         return "\"" + x.Key + "\":\"" + x.Value + "\"";
     }
