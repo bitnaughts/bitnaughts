@@ -11,15 +11,20 @@ public static class HTTP {
             SET = "set",
             UPDATE = "update",
             RESET = "reset",
-            MINE = "mine";
+            MINE = "mine",
+            VISIT = "visit",
+            FIGHT = "fight";
 
         public static class Parameters {
             public const string FLAG = "flag",
                 TABLE = "table",
                 TYPE = "type",
                 ID = "id",
+                PLANET = "planet",
                 ASTEROID = "asteroid",
                 SHIP = "ship",
+                SHIP_1 = "ship_1",
+                SHIP_2 = "ship_2",
                 AMOUNT = "amount",
                 DATE = "date";
 
