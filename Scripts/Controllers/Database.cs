@@ -33,7 +33,7 @@ public class Database : MonoBehaviour {
         debugger.text = (debug_text.Length > 5000) ? debug_text.Substring (0, 5000) : debug_text;
         // int deletion_speed = new System.Random ().Next (-50, 5);
         // while (deletion_speed > 0) {
-        if (debug_text.IndexOf ('\n') != -1) {
+        if (debug_text.Length > 5000 && debug_text.IndexOf ('\n') != -1) {
             debug_text = debug_text.Substring (debug_text.IndexOf ('\n') + 1);
         }
         // deletion_speed--;
@@ -43,9 +43,9 @@ public class Database : MonoBehaviour {
     public async Task<string> Mine (CelestialObject asteroid, ShipObject ship, double amount) {
         return await Post (
             HTTP.Endpoints.MINE,
-            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.ASTEROID, asteroid.id.ToString() },
-                { HTTP.Endpoints.Parameters.SHIP, ship.id.ToString() },
-                { HTTP.Endpoints.Parameters.AMOUNT, amount.ToString("F") }
+            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.ASTEROID, asteroid.id.ToString () },
+                { HTTP.Endpoints.Parameters.SHIP, ship.id.ToString () },
+                { HTTP.Endpoints.Parameters.AMOUNT, amount.ToString ("F") }
             }
         );
     }
@@ -59,7 +59,7 @@ public class Database : MonoBehaviour {
     public async Task<string> Get<T> (int id) {
         return await Get (
             HTTP.Endpoints.GET,
-            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.TYPE, typeof (T).ToString () },
+            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.TYPE, GetTableForType(typeof (T).ToString ()) },
                 { HTTP.Endpoints.Parameters.ID, id.ToString () }
             }
         );
@@ -78,21 +78,23 @@ public class Database : MonoBehaviour {
         string result = await Post (
             HTTP.Endpoints.SET,
             new Dictionary<string, string> { { HTTP.Endpoints.Parameters.FLAG, HTTP.Endpoints.Parameters.Values.ADD },
-                { HTTP.Endpoints.Parameters.TABLE, GetTableForType(typeof(T).ToString()) }
+                { HTTP.Endpoints.Parameters.TABLE, GetTableForType (typeof (T).ToString ()) }
             },
             obj.ToString ()
         );
         debug_text += result.Replace (",", ", ");
         System.IO.File.WriteAllText (@"C:\test.txt", debug_text);
-        return result + GetTableForType(typeof(T).ToString()) + typeof(T).ToString();
+        return result + GetTableForType (typeof (T).ToString ()) + typeof (T).ToString ();
     }
     public string GetTableForType (string type) {
         switch (type) {
             case "ShipObject":
                 return "dbo.Ships";
+            case "GalaxyObject":
+                return "dbo.Galaxies";
         }
         return "null";
-    } 
+    }
 
     /* HTTP Post Logic with System.Net.Http */
     private async Task<string> Post (string endpoint, Dictionary<string, string> parameters_dict) {
@@ -108,6 +110,10 @@ public class Database : MonoBehaviour {
         );
     }
     private async Task<string> Post (string endpoint, string json) {
+        debug_text += String.Format ("{0}: Posting value(s) to Endpoint({1})\n",
+            GetRecepitDate (),
+            endpoint
+        );
         try {
             HttpResponseMessage response = await client.PostAsync (
                 HTTP.API_ENDPOINT + endpoint,
@@ -127,6 +133,10 @@ public class Database : MonoBehaviour {
         );
     }
     private async Task<string> Get (string endpoint) {
+        debug_text += String.Format ("{0}: Getting value(s) from Endpoint({1})\n",
+            GetRecepitDate (),
+            endpoint
+        );
         try {
             HttpResponseMessage response = await client.GetAsync (
                 HTTP.API_ENDPOINT + endpoint
@@ -136,5 +146,9 @@ public class Database : MonoBehaviour {
         } catch (Exception ex) {
             return ex.ToString ();
         }
+    }
+
+    public string GetRecepitDate () {
+        return "3" + DateTime.Now.ToString ("yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffffK").Substring (1);
     }
 }
