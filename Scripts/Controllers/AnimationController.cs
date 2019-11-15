@@ -10,11 +10,11 @@ using UnityEngine.UI;
 
 public class AnimationController : MonoBehaviour {
 
-    public string[] timing;
+    public GameObject galaxy;
 
-    Queue<string> timing_queue;
+    // Queue<string> timing_queue;
 
-    List<string> timing_manual = new List<string> ();
+    // List<string> timing_manual = new List<string> ();
 
     Text debug;
 
@@ -26,8 +26,8 @@ public class AnimationController : MonoBehaviour {
     int beat_count = 0;
 
     void Start () {
-        timing_queue = new Queue<string> (timing);
-        next_time = GetNextTime ();
+        // timing_queue = new Queue<string> (timing);
+        // next_time = GetNextTime ();
         debug = GameObject.Find ("DEBUGGER").GetComponent<Text> ();
 
         // GameObject.Find ("IntroText").GetComponent<TextController> ()
@@ -60,9 +60,9 @@ public class AnimationController : MonoBehaviour {
                 Animate (beat_count);
             }
         }
-        if (timer >= next_time) {
-            next_time = GetNextTime ();
-        }
+        // if (timer >= next_time) {
+        //     next_time = GetNextTime ();
+        // }
     }
 
     TextController IntroText;
@@ -86,38 +86,51 @@ public class AnimationController : MonoBehaviour {
         //         { TextAnimations.SMOOTH_ANIMATION + "Welcome, PLAYER." }
         //     });
         switch (beat) {
-            case 0:
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.SMOOTH_ANIMATION + "Initializing connection");
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "...\n\n");
+            case 1:
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.NO_ANIMATION + "Initializing connection");
                 break;
             case 2:
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.SMOOTH_ANIMATION + "Fetching data from server");
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "...\n\n");
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "...\n");
+                break;
+            case 3:
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.NO_ANIMATION + "Fetching data from server");
                 break;
             case 4:
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.SMOOTH_ANIMATION + "Decrypting packets");
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "...\n\n");
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "...\n");
+                break;
+            case 5:
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.NO_ANIMATION + "Decrypting packet stream");
                 break;
             case 6:
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.SMOOTH_ANIMATION + "Parsing Huffman Codes");
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "...\n\n");
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "...\n");
+                break;
+            case 7:
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.NO_ANIMATION + "Parsing Huffman Codes");
                 break;
             case 8:
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.SMOOTH_ANIMATION + "Enter passkey:\t");
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "*******\n\n");
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "...\n");
+                break;
+            case 9:
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.NO_ANIMATION + "Enter passkey:\t");
+                break;
+            case 10:
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "******\n");
+                break;
+            case 11:
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.NO_ANIMATION + "Populating content");
                 break;
             case 12:
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.SMOOTH_ANIMATION + "Populating content");
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "...\n\n");
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.TYPING_ANIMATION + "...\n");
                 break;
-            case 14:
-                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.SMOOTH_ANIMATION + "Welcome, PLAYER.");
+            case 13:
+                GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.NO_ANIMATION + "Welcome, PLAYER.");
                 break;
-            case 25:
+            case 15:
+                GameObject.Find ("IntroPanel").SetActive (false);
+                galaxy.SetActive (true);
                 break;
-            case 30:
-                break;
-            case 35:
+            case 23:
+                galaxy.SetActive (false);
                 break;
             case 40:
                 break;
@@ -137,15 +150,6 @@ public class AnimationController : MonoBehaviour {
                 break;
         }
 
-    }
-
-    float GetNextTime () {
-        if (timing_queue.Peek () != "") {
-            // print (timing_queue.Peek ().Split (' ') [1]);
-            timing_queue.Dequeue ();
-            return float.Parse (timing_queue.Peek ().Split (' ') [0]);
-        }
-        return 1000f;
     }
 
 }

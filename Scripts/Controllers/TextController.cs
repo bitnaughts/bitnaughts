@@ -9,18 +9,19 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent (typeof (Text))]
 public class TextController : MonoBehaviour {
 
     string text = "";
 
-    Text input;
+    Text text_obj;
 
     float timer = 0f;
 
     Queue<TextChunk> chunks = new Queue<TextChunk> (); /* Parts of text to be added at a given rate */
 
     void Start () {
-        input = this.GetComponent<Text> ();
+        text_obj = this.GetComponent<Text> ();
     }
 
     void Update () {
@@ -28,27 +29,31 @@ public class TextController : MonoBehaviour {
             Tuple<string, bool> result = chunks.Peek ().Step (Time.deltaTime);
             if (result.Item2) {
                 text += result.Item1;
-                input.text = text;
+                text_obj.text = text;
                 chunks.Dequeue ();
             } else {
-                input.text = text + result.Item1;
+                text_obj.text = text + result.Item1;
             }
         }
     }
 
     public void AddText (List<string> inputs) {
-        foreach (var input in inputs) AddText(input);
+        foreach (var input in inputs) AddText (input);
     }
     public void AddText (string input) {
-        string animation = input.Substring(0, 2);
-        string input_text = input.Substring(2);
-        
+        string animation = input.Substring (0, 2);
+        string input_text = input.Substring (2);
+
         switch (animation) {
             case TextAnimations.TYPING_ANIMATION:
-                chunks.Enqueue (new TextChunk (input_text, .125f, false));
+                chunks.Enqueue (new TextChunk (input_text, .1f, false));
                 break;
             case TextAnimations.SMOOTH_ANIMATION:
                 chunks.Enqueue (new TextChunk (input_text));
+                break;
+            case TextAnimations.NO_ANIMATION:
+                text += input_text;
+                text_obj.text = text;
                 break;
         }
     }
@@ -63,6 +68,7 @@ public class TextChunk {
     /* Controls how fast text is revealed */
     float timer = 0f;
     float speed = .0125f;
+    float random_variation;
 
     /* Controls garbled text leading output */
     string noise = TextAnimations.NOISE;
@@ -92,8 +98,9 @@ public class TextChunk {
     /* Progresses the string conversion process, returning true when completed */
     public Tuple<string, bool> Step (float delta_time) {
         timer += delta_time;
-        while (timer > speed) {
-            timer -= speed;
+        while (timer > speed * random_variation) {
+            timer -= speed * random_variation;
+            random_variation = RandomHandler.NewFloat (0, 2);
             if (position > -1) {
                 if (noise_distance > 0) output[position] = input[position];
                 else output.Append (input[position]);
@@ -103,7 +110,9 @@ public class TextChunk {
                     return new Tuple<string, bool> (output.ToString (), true);
                 }
             } else if (noise_distance > 0) {
-                output.Append (noise[new System.Random ().Next (0, noise.Length)]);
+                output.Append (
+                    RandomHandler.NewItem<char> (noise.ToCharArray())
+                );
             }
             if (position < input.Length) position++;
         }
