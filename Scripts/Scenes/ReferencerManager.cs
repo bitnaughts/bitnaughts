@@ -6,12 +6,12 @@ public class ReferencerManager : MonoBehaviour {
 	// public Slider codeSpeedTester;
 	void Start () {
 		/* CodeManager-derived scripts */
-		GameObject codeManager = GameObject.Find("CodeManager");
+		// GameObject codeManager = GameObject.Find("CodeManager");
 		// Referencer.consoleManager = GameObject.Find("InnerWindow").GetComponent<ConsoleObject>();//codeManager.GetComponent<ConsoleManager>();
-		Referencer.consoleManager = codeManager.GetComponent<ConsoleManager>();
-		Referencer.shipManager = codeManager.GetComponent<ShipManager>();
+		// Referencer.consoleManager = codeManager.GetComponent<ConsoleManager>();
+		// Referencer.shipManager = codeManager.GetComponent<ShipManager>();
 
-		Referencer.codeSpeedTester = GameObject.Find("12345").GetComponent<Slider>();
+		// Referencer.codeSpeedTester = GameObject.Find("12345").GetComponent<Slider>();
 	}
 }
 
