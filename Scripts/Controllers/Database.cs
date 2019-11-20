@@ -16,7 +16,7 @@ using UnityEngine.UI;
 
 public class Database : MonoBehaviour {
 
-    public const bool LOAD_FROM_SERVER = true;
+    public const bool LOAD_FROM_SERVER = false;
 
     HttpClient client;
     public Text debugger;
@@ -40,7 +40,7 @@ public class Database : MonoBehaviour {
         // }
     }
 
-    public async Task<string> Mine (CelestialObject asteroid, ShipObject ship, double amount) {
+    public async Task<string> Mine (Asteroid asteroid, Ship ship, double amount) {
         return await Post (
             HTTP.Endpoints.MINE,
             new Dictionary<string, string> { { HTTP.Endpoints.Parameters.ASTEROID, asteroid.id.ToString () },
@@ -88,9 +88,9 @@ public class Database : MonoBehaviour {
     }
     public string GetTableForType (string type) {
         switch (type) {
-            case "ShipObject":
+            case "Ship":
                 return "dbo.Ships";
-            case "GalaxyObject":
+            case "Galaxy":
                 return "dbo.Galaxies";
         }
         return "null";

@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class GalaxyController : MonoBehaviour {
 
-    public GalaxyObject galaxy;
+    public Galaxy galaxy;
 
     GameObject[] star_prefabs = new GameObject[4];
     GameObject line_prefab;
@@ -28,17 +28,17 @@ public class GalaxyController : MonoBehaviour {
 
         if (Database.LOAD_FROM_SERVER) {
             //Get simple systems info, connected systems, not full object 
-            fetch_galaxy = database.Get<GalaxyObject> (0);
+            fetch_galaxy = database.Get<Galaxy> (0);
 
         } else {
             /* Procedurally generates galaxy, including all systems, their planets, stars, asteroids, etc. */
-            galaxy = new GalaxyObject (10);
+            galaxy = new Galaxy (10);
             // Visualize ();
         }
         // Debug.Log (galaxy.ToString ());
         // System.IO.File.WriteAllText (@"C:\test.txt", galaxy.ToString ());
 
-        // save_result = database.Set<GalaxyObject> (galaxy);
+        // save_result = database.Set<Galaxy> (galaxy);
         // save_result = database.Add<ShipObject> (new ShipObject(5));
         Create ();
     }
@@ -52,7 +52,7 @@ public class GalaxyController : MonoBehaviour {
         //     if (fetch_galaxy.IsCompleted) {
         //         Debug.Log (fetch_galaxy.Result);
 
-        //         galaxy = new GalaxyObject (fetch_galaxy.Result);
+        //         galaxy = new Galaxy (fetch_galaxy.Result);
         //         Visualize ();
 
         //     } else {
@@ -63,7 +63,7 @@ public class GalaxyController : MonoBehaviour {
 
     public void Visualize () {
         /* Generates systems, represented by sprites */
-        foreach (SystemObject system in galaxy.systems) {
+        foreach (SolarSystem system in galaxy.systems) {
             Instantiate (
                 star_prefabs[system.stars.Count - 1],
                 ConversionHandler.ToVector2 (system.position),
@@ -71,7 +71,7 @@ public class GalaxyController : MonoBehaviour {
             );
 
             /* Generates connection lines between neighboring systems */
-            foreach (SystemObject connected_system in system.connected_systems) {
+            foreach (SolarSystem connected_system in system.connected_systems) {
 
                 /* Creates a new line between two systems, pointed between the two systems */
                 GameObject line = Instantiate (
