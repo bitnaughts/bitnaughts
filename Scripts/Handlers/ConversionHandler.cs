@@ -9,14 +9,14 @@ public static class ConversionHandler {
     public static Vector2 ToVector2 (PointF point) {
         return new Vector2 (point.x, point.y);
     }
+    public static Vector3 ToVector3 (PointF point) {
+        return new Vector3 (point.x, 0, point.y);
+    }
     public static Quaternion ToQuaternion (float z_angle) {
-        return Quaternion.Euler (
-            new Vector3 (
-                0,
-                0,
-                z_angle
-            )
-        );
+        return Quaternion.Euler (new Vector3 (0, 0, z_angle));
+    }
+    public static Quaternion ToQuaternionY (float y_angle) {
+        return Quaternion.Euler (new Vector3 (0, y_angle, 0));
     }
     public static void Each<T> (this IEnumerable<T> ie, Action<T, int> action) {
         var i = 0;
