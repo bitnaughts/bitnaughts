@@ -12,6 +12,9 @@ public static class ConversionHandler {
     public static Vector3 ToVector3 (PointF point) {
         return new Vector3 (point.x, 0, point.y);
     }
+    public static Vector3 ToVector3 (SizeF point) {
+        return new Vector3 (point.x, point.y, point.z);
+    }
     public static Quaternion ToQuaternion (float z_angle) {
         return Quaternion.Euler (new Vector3 (0, 0, z_angle));
     }
