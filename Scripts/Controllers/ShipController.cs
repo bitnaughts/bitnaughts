@@ -2,17 +2,52 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ShipController : MonoBehaviour {
 
-    public Ship ship;
-    List<GameObject> markers = new List<GameObject> ();
-    public GameObject markerPrefab;
+    Ship ship;
+    public GameObject temp_prefab;
+
+    void Visualize () {
+        foreach (var module in ship.modules) {
+
+            // print (module.GetType());
+
+            GameObject module_obj = Instantiate (
+                temp_prefab,
+                ConversionHandler.ToVector3 (module.center),
+                ConversionHandler.ToQuaternionY (module.orientation)
+            ) as GameObject;
+
+            module_obj.transform.localScale = new Vector3 (
+                module.size.y, 
+                module.size.y,
+                module.size.x
+            );
+
+            module_obj.transform.SetParent(this.transform);
+
+        }
+    }
+    bool Fetch () {
+        // if (Controller<Ship>.fetch_obj != null && Controller<Ship>.fetch_obj.IsCompleted) {
+        //     Controller<Ship>.obj = new Ship (fetch_obj.Result);
+        //     Visualize ();
+        //     return true;
+        // }
+        return false;
+    }
+
+    // List<GameObject> markers = new List<GameObject> ();
+    // public GameObject markerPrefab;
 
     void Start () {
+        
         ship = new Ship (1);
+        Visualize();
     }
 
     void Update () {
@@ -88,6 +123,7 @@ public class ShipController : MonoBehaviour {
 
         // }
     }
+
     void OnMouseEnter () {
         // short id = ComponentConstants.getComponentID (type);
         // Point[] component_mount_points = ComponentConstants.getComponentMountPoints (id);
@@ -117,7 +153,4 @@ public class ShipController : MonoBehaviour {
         // }
     }
 
-    public Vector2 addVectors (Vector2 left, Vector2 right) {
-        return new Vector2 (left.x + right.x, left.y + right.y);
-    }
 }
