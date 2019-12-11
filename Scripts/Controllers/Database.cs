@@ -20,34 +20,59 @@ public class Database : MonoBehaviour {
 
     HttpClient client;
     public Text debugger;
-    public string debug_text;
+    public string buffer_text = "";
+
+    int delay_removal = 50;
 
     void Start () {
         // debugger = //GameObject.Find ("DEBUGGER").GetComponent<Text> ();
         print (debugger.text);
         client = new HttpClient ();
     }
+    void FixedUpdate () {
 
-    void Update () {
-
-        debugger.text = (debug_text.Length > 5000) ? debug_text.Substring (0, 5000) : debug_text;
-        // int deletion_speed = new System.Random ().Next (-50, 5);
-        // while (deletion_speed > 0) {
-        if (debug_text.Length > 5000 && debug_text.IndexOf ('\n') != -1) {
-            debug_text = debug_text.Substring (debug_text.IndexOf ('\n') + 1);
+        // buffer_text = buffer_text.Substring (buffer_text.IndexOf ('\n') + 1);
+        if (buffer_text != "") {
+            delay_removal = 50;
+            if (buffer_text.Contains ("\n")) {
+                debugger.text += buffer_text.Substring (0, buffer_text.IndexOf ('\n')) + "\n";
+                buffer_text = buffer_text.Substring (buffer_text.IndexOf ('\n') + 1);
+            } else {
+                debugger.text += buffer_text;
+                buffer_text = "";
+            }
+        } else if (delay_removal <= 0) {
+            if (RandomHandler.NewPercentChance (25)) {
+                if (debugger.text.Contains ("\n")) debugger.text = debugger.text.Substring (debugger.text.IndexOf ('\n') + 1);
+                else debugger.text = "";
+            }
         }
+        delay_removal--;
+        debugger.text = (debugger.text.Length > 10000) ? debugger.text.Substring (0, 10000) : debugger.text;
+
+        // debugger.text = (debug_text.Length > 10000) ? debug_text.Substring (0, 10000) : debug_text;
+        // // int deletion_speed = new System.Random ().Next (-50, 5);
+        // // while (deletion_speed > 0) {
+        // if (debug_text.Length > 10000 && debug_text.IndexOf ('\n') != -1) {
+        //     if (RandomHandler.NextBool ())  if (RandomHandler.NextBool ()) debug_text = debug_text.Substring (debug_text.IndexOf ('\n') + 1); 
+        // }
         // deletion_speed--;
         // }
     }
 
     public async Task<string> Mine (Asteroid asteroid, Ship ship, double amount) {
-        return await Post (
+        return await Mine (asteroid.id, ship.id, amount);
+    }
+    public async Task<string> Mine (int asteroid_id, int ship_id, double amount) {
+        string result = await Post (
             HTTP.Endpoints.MINE,
-            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.ASTEROID, asteroid.id.ToString () },
-                { HTTP.Endpoints.Parameters.SHIP, ship.id.ToString () },
+            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.ASTEROID, asteroid_id.ToString () },
+                { HTTP.Endpoints.Parameters.SHIP, ship_id.ToString () },
                 { HTTP.Endpoints.Parameters.AMOUNT, amount.ToString ("F") }
             }
         );
+        buffer_text += result.Replace (",", ", ");
+        return result;
     }
 
     public async Task<string> Reset () {
@@ -57,12 +82,14 @@ public class Database : MonoBehaviour {
     }
 
     public async Task<string> Get<T> (int id) {
-        return await Get (
+        string result = await Get (
             HTTP.Endpoints.GET,
-            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.TYPE, GetTableForType(typeof (T).ToString ()) },
+            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.TYPE, GetTableForType (typeof (T).ToString ()) },
                 { HTTP.Endpoints.Parameters.ID, id.ToString () }
             }
         );
+        buffer_text += result.Replace (",", ", ");
+        return result;
     }
     public async Task<string> Set<T> (T obj) {
         string result = await Post (
@@ -70,8 +97,8 @@ public class Database : MonoBehaviour {
             new Dictionary<string, string> { { HTTP.Endpoints.Parameters.FLAG, HTTP.Endpoints.Parameters.Values.RESET } },
             obj.ToString ()
         );
-        debug_text += result.Replace (",", ", ");
-        System.IO.File.WriteAllText (@"C:\test.txt", debug_text);
+        buffer_text += result.Replace (",", ", ");
+        System.IO.File.WriteAllText (@"C:\test.txt", buffer_text);
         return result;
     }
     public async Task<string> Add<T> (T obj) {
@@ -82,8 +109,8 @@ public class Database : MonoBehaviour {
             },
             obj.ToString ()
         );
-        debug_text += result.Replace (",", ", ");
-        System.IO.File.WriteAllText (@"C:\test.txt", debug_text);
+        buffer_text += result.Replace (",", ", ");
+        System.IO.File.WriteAllText (@"C:\test.txt", buffer_text);
         return result + GetTableForType (typeof (T).ToString ()) + typeof (T).ToString ();
     }
     public string GetTableForType (string type) {
@@ -92,6 +119,8 @@ public class Database : MonoBehaviour {
                 return "dbo.Ships";
             case "Galaxy":
                 return "dbo.Galaxies";
+            case "SolarSystem":
+                return "dbo.Systems";
         }
         return "null";
     }
@@ -110,7 +139,7 @@ public class Database : MonoBehaviour {
         );
     }
     private async Task<string> Post (string endpoint, string json) {
-        debug_text += String.Format ("{0}: Posting value(s) to Endpoint({1})\n",
+        buffer_text += String.Format ("{0}: Posting value(s) to Endpoint({1})\n",
             GetRecepitDate (),
             endpoint
         );
@@ -133,7 +162,7 @@ public class Database : MonoBehaviour {
         );
     }
     private async Task<string> Get (string endpoint) {
-        debug_text += String.Format ("{0}: Getting value(s) from Endpoint({1})\n",
+        buffer_text += String.Format ("{0}: Getting value(s) from Endpoint({1})\n",
             GetRecepitDate (),
             endpoint
         );
@@ -144,7 +173,7 @@ public class Database : MonoBehaviour {
             response.EnsureSuccessStatusCode ();
             return await response.Content.ReadAsStringAsync ();
         } catch (Exception ex) {
-            return ex.ToString ();
+            return "Errored: " + ex.ToString ();
         }
     }
 
