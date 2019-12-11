@@ -9,6 +9,18 @@ public static class ConversionHandler {
     public static Vector2 ToVector2 (PointF point) {
         return new Vector2 (point.x, point.y);
     }
+    public static Vector2 ToVector2 (OrbitF orbit) {
+        return new Vector2 (
+            orbit.radius * Mathf.Cos (orbit.theta),
+            orbit.radius * Mathf.Sin (orbit.theta)
+        );
+    }
+    public static PointF ToPointF (OrbitF orbit) {
+        return new PointF (
+            orbit.radius * Mathf.Cos (orbit.theta),
+            orbit.radius * Mathf.Sin (orbit.theta)
+        );
+    }
     public static Vector3 ToVector3 (PointF point) {
         return new Vector3 (point.x, 0, point.y);
     }

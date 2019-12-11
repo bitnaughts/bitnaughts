@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using Newtonsoft.Json;
 
 public static class JSONHandler {
     public static string ToJSON (Dictionary<string, string> dict) {
@@ -25,5 +26,8 @@ public static class JSONHandler {
     }
     public static string ToJSONArray<T> (List<T> list) {
         return "[" + String.Join (",", list.Select (x => x.ToString ())) + "]";
+    }
+    public static dynamic ToDynamic (string serial) { 
+        return JsonConvert.DeserializeObject<dynamic> (serial);
     }
 }

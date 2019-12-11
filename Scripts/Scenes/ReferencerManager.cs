@@ -10,6 +10,8 @@ public class ReferencerManager : MonoBehaviour {
 		// Referencer.consoleManager = GameObject.Find("InnerWindow").GetComponent<ConsoleObject>();//codeManager.GetComponent<ConsoleManager>();
 		Referencer.prefab_controller = this.GetComponent<PrefabController>();
 		Referencer.interaction_controller = this.GetComponent<InteractionController>();
+		Referencer.database = this.GetComponent<Database>();
+
 		// Referencer.shipManager = codeManager.GetComponent<ShipManager>();
 
 		// Referencer.codeSpeedTester = GameObject.Find("12345").GetComponent<Slider>();
