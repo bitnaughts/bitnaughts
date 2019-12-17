@@ -22,7 +22,11 @@ public class Database : MonoBehaviour {
     public Text debugger;
     public string buffer_text = "";
 
-    int delay_removal = 50;
+    int delay_removal = 100;
+
+
+
+    //TODO:: Handle all async looping waiters as a list here, checking when done, etc.
 
     void Start () {
         // debugger = //GameObject.Find ("DEBUGGER").GetComponent<Text> ();
@@ -67,6 +71,18 @@ public class Database : MonoBehaviour {
         string result = await Post (
             HTTP.Endpoints.MINE,
             new Dictionary<string, string> { { HTTP.Endpoints.Parameters.ASTEROID, asteroid_id.ToString () },
+                { HTTP.Endpoints.Parameters.SHIP, ship_id.ToString () },
+                { HTTP.Endpoints.Parameters.AMOUNT, amount.ToString ("F") }
+            }
+        );
+        buffer_text += result.Replace (",", ", ");
+        return result;
+    }
+
+    public async Task<string> Visit (int planet_id, int ship_id, double amount) {
+        string result = await Post (
+            HTTP.Endpoints.VISIT,
+            new Dictionary<string, string> { { HTTP.Endpoints.Parameters.PLANET, planet_id.ToString () },
                 { HTTP.Endpoints.Parameters.SHIP, ship_id.ToString () },
                 { HTTP.Endpoints.Parameters.AMOUNT, amount.ToString ("F") }
             }
