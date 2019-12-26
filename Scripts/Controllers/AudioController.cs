@@ -101,15 +101,15 @@ public class AudioController : MonoBehaviour {
             if (i == 0) continue;
 
             audio_lines[i].GetComponent<RectTransform> ().anchoredPosition = ConversionHandler.ToVector2 (
-                PointHandler.GetMidpoint (spectrum_points[i - 1], spectrum_points[i])
+                PointF.GetMidpoint (spectrum_points[i - 1], spectrum_points[i])
             );
             audio_lines[i].GetComponent<RectTransform> ().rotation = ConversionHandler.ToQuaternion (
-                PointHandler.GetAngle (spectrum_points[i], spectrum_points[i - 1])
+                PointF.GetAngle (spectrum_points[i], spectrum_points[i - 1])
             );
             audio_lines[i].GetComponent<RectTransform> ().eulerAngles = new Vector3 (audio_lines[i].GetComponent<RectTransform> ().eulerAngles.x, audio_lines[i].GetComponent<RectTransform> ().eulerAngles.y, -audio_lines[i].GetComponent<RectTransform> ().eulerAngles.z);
             audio_lines[i].GetComponent<RectTransform> ().localScale = new Vector3 (
                 .5f,
-                PointHandler.GetDistance (spectrum_points[i - 1], spectrum_points[i]) / 10f,
+                PointF.GetDistance (spectrum_points[i - 1], spectrum_points[i]) / 10f,
                 .5f
             );
         }
@@ -124,16 +124,16 @@ public class AudioController : MonoBehaviour {
             if (i == 0) continue;
 
             audio_lines_1[i].GetComponent<RectTransform> ().anchoredPosition = ConversionHandler.ToVector2 (
-                PointHandler.GetMidpoint (spectrum_points[i - 1], spectrum_points[i])
+                PointF.GetMidpoint (spectrum_points[i - 1], spectrum_points[i])
             );
             audio_lines_1[i].GetComponent<RectTransform> ().rotation = ConversionHandler.ToQuaternion (
-                PointHandler.GetAngle (spectrum_points[i - 1], spectrum_points[i])
+                PointF.GetAngle (spectrum_points[i - 1], spectrum_points[i])
             );
             audio_lines_1[i].GetComponent<RectTransform> ().eulerAngles = new Vector3 (audio_lines_1[i].GetComponent<RectTransform> ().eulerAngles.x, audio_lines_1[i].GetComponent<RectTransform> ().eulerAngles.y, -audio_lines_1[i].GetComponent<RectTransform> ().eulerAngles.z);
 
             audio_lines_1[i].GetComponent<RectTransform> ().localScale = new Vector3 (
                 .5f,
-                PointHandler.GetDistance (spectrum_points[i - 1], spectrum_points[i]) / 10f,
+                PointF.GetDistance (spectrum_points[i - 1], spectrum_points[i]) / 10f,
                 .5f
             );
         }
