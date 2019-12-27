@@ -30,7 +30,7 @@ public class PrefabController : MonoBehaviour {
 			parent
 		);
 	}
-	public GameObject Add (string prefab_path, PointF position, SizeF scale, int rotation, Transform parent) {
+	public GameObject Add (string prefab_path, PointF position, SizeF scale, float rotation, Transform parent) {
 		return Add (
 			Get<GameObject> (prefab_path),
 			ConversionHandler.ToVector3 (position),
