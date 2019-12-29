@@ -8,19 +8,42 @@ public class TupleF {
     public float x { get; set; } = 0f;
     public float y { get; set; } = 0f;
     public float z { get; set; } = 0f;
+
+    enum index { x, y, z };
+
     public TupleF (float x, float y) { this.x = x; this.y = y; this.z = 0; }
     public TupleF (float x, float y, float z) { this.x = x; this.y = y; this.z = z; }
+
+    public static implicit operator TupleF (string serial) {
+        string[] data = serial.Split (',');
+        return new TupleF (
+            float.Parse (data[(int) index.x]),
+            float.Parse (data[(int) index.y]),
+            float.Parse (data[(int) index.z])
+        );
+    }
     public override string ToString () {
         return x + " " + y + " " + z;
     }
 }
 #endregion
+#region ColorF Class
+public class ColorF : TupleF {
+    public static readonly ColorF white;
+
+    static ColorF () {
+        white = new ColorF (0, 0, 0);
+    }
+
+    public ColorF (int r, int g, int b) : base (r, g, b) { }
+}
+#endregion
 #region PointF Class
 public class PointF : TupleF {
     public const float Rad2Deg = 57.2958f;
-    
+
     public static readonly PointF zero;
-    
+
     static PointF () {
         zero = new PointF (0, 0, 0);
     }
