@@ -1,4 +1,6 @@
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 #region Point-related Classes
@@ -9,21 +11,39 @@ public class TupleF {
     public float y { get; set; } = 0f;
     public float z { get; set; } = 0f;
 
-    enum index { x, y, z };
+    public TupleF (dynamic json) {
+        this.x = float.Parse (json.x);
+        this.y = float.Parse (json.y);
+        this.z = float.Parse (json.z);
+    }
+    public TupleF (float x, float y) {
+        this.x = x;
+        this.y = y;
+        this.z = 0;
+    }
+    public TupleF (float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
-    public TupleF (float x, float y) { this.x = x; this.y = y; this.z = 0; }
-    public TupleF (float x, float y, float z) { this.x = x; this.y = y; this.z = z; }
-
-    public static implicit operator TupleF (string serial) {
-        string[] data = serial.Split (',');
-        return new TupleF (
-            float.Parse (data[(int) index.x]),
-            float.Parse (data[(int) index.y]),
-            float.Parse (data[(int) index.z])
-        );
+    // public static implicit operator TupleF (string serial) {
+    //     string[] data = serial.Split (',');
+    //     return new TupleF (
+    //         float.Parse (json.x),
+    //         float.Parse (json.y),
+    //         float.Parse (json.z)
+    //     );
+    // }
+    public JObject ToJObject () {
+        dynamic json = new JObject ();
+        json.x = x;
+        json.y = y;
+        json.z = z;
+        return json;
     }
     public override string ToString () {
-        return x + " " + y + " " + z;
+        return ToJObject().ToString ();
     }
 }
 #endregion
@@ -34,7 +54,7 @@ public class ColorF : TupleF {
     static ColorF () {
         white = new ColorF (0, 0, 0);
     }
-
+    public ColorF (dynamic json) : base ((object) json) { }
     public ColorF (int r, int g, int b) : base (r, g, b) { }
 }
 #endregion
@@ -47,7 +67,7 @@ public class PointF : TupleF {
     static PointF () {
         zero = new PointF (0, 0, 0);
     }
-
+    public PointF (dynamic json) : base ((object) json) { }
     public PointF (float x, float y) : base (x, y) { }
     public PointF (float x, float y, float z) : base (x, y, z) { }
 
@@ -85,6 +105,7 @@ public class PointF : TupleF {
 #endregion
 #region SizeF Class
 public class SizeF : TupleF {
+    public SizeF (dynamic json) : base ((object) json) { }
     public SizeF (float x, float y) : base (x, y) { }
     public SizeF (float x, float y, float z) : base (x, y, z) { }
     public static SizeF operator + (SizeF left, float right) {
