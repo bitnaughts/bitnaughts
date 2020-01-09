@@ -12,9 +12,9 @@ public class TupleF {
     public float z { get; set; } = 0f;
 
     public TupleF (dynamic json) {
-        this.x = float.Parse (json.x);
-        this.y = float.Parse (json.y);
-        this.z = float.Parse (json.z);
+        this.x = json.x;
+        this.y = json.y;
+        this.z = json.z;
     }
     public TupleF (float x, float y) {
         this.x = x;
@@ -30,9 +30,9 @@ public class TupleF {
     // public static implicit operator TupleF (string serial) {
     //     string[] data = serial.Split (',');
     //     return new TupleF (
-    //         float.Parse (json.x),
-    //         float.Parse (json.y),
-    //         float.Parse (json.z)
+    //         json.x,
+    //         json.y,
+    //         json.z
     //     );
     // }
     public JObject ToJObject () {
