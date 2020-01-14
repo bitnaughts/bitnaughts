@@ -47,6 +47,7 @@ public class AnimationController : MonoBehaviour {
         //     });
     }
     bool first_fire = true;
+    float accel = 0;
     void Update () {
         timer += Time.deltaTime;
         if (delay_start > 0) delay_start -= Time.deltaTime;
@@ -63,6 +64,19 @@ public class AnimationController : MonoBehaviour {
         // if (timer >= next_time) {
         //     next_time = GetNextTime ();
         // }
+        // GameObject.Find("Spin1").transform.Rotate(new Vector3(0,0,.1f));
+        // GameObject.Find("Spin2").transform.Rotate(new Vector3(0,0,.1f));
+        Vector3 pos = GameObject.Find ("Main Camera").transform.position;
+        accel += .0005f;
+        GameObject.Find ("Main Camera").transform.position = new Vector3 (pos.x, pos.y, pos.z + .0025f + accel);
+
+        pos = GameObject.Find ("subship1").transform.position;
+        GameObject.Find ("subship1").transform.position = new Vector3 (pos.x + .05f + accel, pos.y, pos.z);
+
+        pos = GameObject.Find ("subship2").transform.position;
+        GameObject.Find ("subship2").transform.position = new Vector3 (pos.x + .025f + accel, pos.y, pos.z);
+
+        GameObject.Find ("light").transform.Rotate (new Vector3 (.2f, .3f, 0f));
     }
 
     TextController IntroText;
@@ -70,21 +84,7 @@ public class AnimationController : MonoBehaviour {
     void Animate (int beat) {
         first_fire = false;
         print ("Beat" + beat_count);
-        // GameObject.Find ("IntroText").GetComponent<TextController> ()
-        //     .AddText (new List<string> { { TextAnimations.SMOOTH_ANIMATION + "Initializing connection" },
-        //         { TextAnimations.TYPING_ANIMATION + "...\n" },
-        //         { TextAnimations.SMOOTH_ANIMATION + "Fetching data from server" },
-        //         { TextAnimations.TYPING_ANIMATION + "...\n" },
-        //         { TextAnimations.SMOOTH_ANIMATION + "Decrypting packets" },
-        //         { TextAnimations.TYPING_ANIMATION + "...\n" },
-        //         { TextAnimations.SMOOTH_ANIMATION + "Parsing Huffman Codes" },
-        //         { TextAnimations.TYPING_ANIMATION + "...\n" },
-        //         { TextAnimations.SMOOTH_ANIMATION + "Enter passkey: " },
-        //         { TextAnimations.TYPING_ANIMATION + "********\n" },
-        //         { TextAnimations.SMOOTH_ANIMATION + "Populating content:" },
-        //         { TextAnimations.TYPING_ANIMATION + "...\n" },
-        //         { TextAnimations.SMOOTH_ANIMATION + "Welcome, PLAYER." }
-        //     });
+
         switch (beat) {
             case 1:
                 GameObject.Find ("IntroText").GetComponent<TextController> ().AddText (TextAnimations.NO_ANIMATION + "Initializing connection");
@@ -127,7 +127,7 @@ public class AnimationController : MonoBehaviour {
                 break;
             case 15:
                 GameObject.Find ("IntroPanel").SetActive (false);
-                galaxy.SetActive (true);
+                // galaxy.SetActive (true);
                 break;
             case 23:
                 galaxy.SetActive (false);

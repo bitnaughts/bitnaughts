@@ -20,23 +20,25 @@ public class CameraController : MonoBehaviour {
 		/* Get Movement Vector */
 		// if (ShipManager.isShipSelected ()) movement = new Vector3 (-this.transform.position.x + (ShipManager.getSelectedShipPosition ().x - CameraProperties.OFFSET_X), Input.GetAxis ("Mouse ScrollWheel"), -this.transform.position.z + (ShipManager.getSelectedShipPosition ().z - CameraProperties.OFFSET_Z));
 
-		float x = 0;
-		if (Input.GetKey("a")) x = -1;
-		if (Input.GetKey("d")) x = 1;
+		// float x = 0;
+		// if (Input.GetKey("a")) x = -1;
+		// if (Input.GetKey("d")) x = 1;
 		
-		float y = 0;
-		if (Input.GetKey("s")) y = -1;
-		if (Input.GetKey("w")) y = 1;
+		// float y = 0;
+		// if (Input.GetKey("s")) y = -1;
+		// if (Input.GetKey("w")) y = 1;
 
-		/* Move Camera via Input */
-		this.transform.Translate (
-			new Vector2 (
-				x * 10 * Time.deltaTime,
-				y * 10 * Time.deltaTime
-			)
-		);
+		// /* Move Camera via Input */
+		// this.transform.Translate (
+		// 	new Vector2 (
+		// 		x * 10 * Time.deltaTime,
+		// 		y * 10 * Time.deltaTime
+		// 	)
+		// );
 		/* Handle Zooming based on Camera Mode */
 		camera.orthographicSize += Input.GetAxis ("Mouse ScrollWheel") * -100 * Time.deltaTime;
+
+		this.transform.position = new Vector3(GameObject.Find("Fighter").transform.position.x, GameObject.Find("Fighter").transform.position.y, -10);
 
 
 		// 	if (isPerspective) {

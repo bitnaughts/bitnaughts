@@ -13,7 +13,7 @@ public class SimpleFlier : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		this.transform.Translate (new Vector3 (Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0)); //Input.GetAxis ("Vertical") * .05f * ship.thrust / Mathf.Sqrt (ship.weight)));
-		// this.transform.Rotate (new Vector3 (0, -Input.GetAxis ("Horizontal"), 0));
+		this.transform.Translate (new Vector3 (0, Input.GetAxis("Vertical") * 2 * Time.deltaTime, 0)); //Input.GetAxis ("Vertical") * .05f * ship.thrust / Mathf.Sqrt (ship.weight)));
+		this.transform.Rotate (new Vector3 (0, 0, -Input.GetAxis ("Horizontal") * Time.deltaTime * 75));
 	}
 }

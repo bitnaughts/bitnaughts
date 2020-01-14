@@ -7,6 +7,8 @@ public static class Referencer {
     public static PrefabController prefab_controller;
     public static InteractionController interaction_controller;
     public static Database database;
+
+    public static Transform world_space;
     // public static ConsoleManager consoleManager;
     // public static PlotterManager plotterManager;
     // public static Slider codeSpeedTester;
