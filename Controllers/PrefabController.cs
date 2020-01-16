@@ -8,13 +8,21 @@ public class PrefabController : MonoBehaviour {
 	Dictionary<string, List<UnityEngine.Object>> prefab_pool = new Dictionary<string, List<UnityEngine.Object>> (); //Separate keys for "Projectile Active 1->n" and "Projectile Inactive 1->n" or check by tag per projectile 
 
 	public T Get<T> (string path) where T : UnityEngine.Object {
+		// print (path);
 		if (!prefab_cache.ContainsKey (path)) {
 			prefab_cache[path] = Resources.Load<T> (path);
 		}
 		return (T) prefab_cache[path];
 	}
 
-#region Add Overrides
+	#region Add Overrides
+	public GameObject Add (Ship ship) => Add (
+		"Prefabs/Ships/Template",
+		ship.center,
+		new SizeF (1, 1), //move to static const
+		ship.rotation,
+		Referencer.world_space
+	);
 	public GameObject Add (Panel panel, Transform parent) => Add (
 		panel.prefab_path,
 		panel.position,
@@ -47,9 +55,9 @@ public class PrefabController : MonoBehaviour {
 		rotation,
 		parent
 	);
-#endregion
+	#endregion
 
-#region Add Implementation with Instantiate
+	#region Add Implementation with Instantiate
 	public GameObject Add (GameObject prefab, Vector3 position, Vector3 scale, Quaternion rotation, Transform parent) {
 		GameObject obj = Instantiate (
 			prefab,
@@ -57,12 +65,14 @@ public class PrefabController : MonoBehaviour {
 			rotation,
 			parent
 		) as GameObject;
-		if (obj.GetComponent<SpriteRenderer> ().size.x == 0) obj.transform.localScale = scale;
-		else obj.GetComponent<SpriteRenderer> ().size = scale;
+		if (obj.GetComponent<SpriteRenderer> () != null) {
+			if (obj.GetComponent<SpriteRenderer> ().size.x == 0) obj.transform.localScale = scale;
+			else obj.GetComponent<SpriteRenderer> ().size = scale;
+		}
 		obj.transform.localPosition = position;
 		return obj;
 	}
-#endregion
+	#endregion
 
 	void Start () { }
 
