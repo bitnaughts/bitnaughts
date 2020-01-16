@@ -26,7 +26,6 @@ public class TupleF {
         this.y = y;
         this.z = z;
     }
-
     // public static implicit operator TupleF (string serial) {
     //     string[] data = serial.Split (',');
     //     return new TupleF (
@@ -43,7 +42,7 @@ public class TupleF {
         return json;
     }
     public override string ToString () {
-        return ToJObject().ToString ();
+        return ToJObject ().ToString ();
     }
 }
 #endregion
@@ -94,6 +93,13 @@ public class PointF : TupleF {
         return Rad2Deg * (float) Math.Atan (
             (start.y - end.y) / (start.x - end.x)
         );
+    }
+    public static void Clamp (ref PointF input, SizeF upper_constraint) => Clamp (ref input, (TupleF) PointF.zero, (TupleF) upper_constraint);
+    public static void Clamp (ref PointF input, TupleF lower_constraint, TupleF upper_constraint) {
+        if (input.x < lower_constraint.x) input.x = lower_constraint.x;
+        if (input.x > upper_constraint.x) input.x = upper_constraint.x;
+        if (input.y < lower_constraint.y) input.y = lower_constraint.y;
+        if (input.y > upper_constraint.y) input.y = upper_constraint.y;
     }
     public static implicit operator Vector3 (PointF point) {
         return new Vector3 (point.x, point.y, point.z);
