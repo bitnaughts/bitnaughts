@@ -1,0 +1,2163 @@
+{
+    "id": "0",
+    "seed": "10",
+    "systems": [
+        {
+            "id": "0",
+            "seed": "1613858733",
+            "position_x": "0.47",
+            "position_y": "7.40",
+            "connected_systems": [
+                3,
+                6
+            ],
+            "stars": [
+                {
+                    "id": "0",
+                    "seed": "173076344",
+                    "radius": "-4.35",
+                    "theta": "2.71",
+                    "size": "6.94",
+                    "density": "3.55",
+                    "composition": "carbonaceous"
+                }
+            ],
+            "planets": [
+                {
+                    "id": "0",
+                    "seed": "63024220",
+                    "radius": "-6.99",
+                    "theta": "-6.22",
+                    "size": "76.11",
+                    "density": "2.15",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "1",
+                    "seed": "355636444",
+                    "radius": "-3.04",
+                    "theta": "0.59",
+                    "size": "25.05",
+                    "density": "4.08",
+                    "composition": "carbonaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.29",
+                    "economy_type": "mixed chemical manufacturing"
+                },
+                {
+                    "id": "2",
+                    "seed": "1700523214",
+                    "radius": "-7.88",
+                    "theta": "-1.54",
+                    "size": "99.56",
+                    "density": "1.00",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "3",
+                    "seed": "1114253672",
+                    "radius": "-2.84",
+                    "theta": "0.66",
+                    "size": "38.07",
+                    "density": "5.63",
+                    "composition": "silicaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.69",
+                    "economy_type": "command telecommunications service"
+                },
+                {
+                    "id": "4",
+                    "seed": "2074666933",
+                    "radius": "0.27",
+                    "theta": "-2.99",
+                    "size": "25.46",
+                    "density": "3.18",
+                    "composition": "silicaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.84",
+                    "economy_type": "command energy manufacturing"
+                },
+                {
+                    "id": "5",
+                    "seed": "1155221768",
+                    "radius": "0.16",
+                    "theta": "2.51",
+                    "size": "24.44",
+                    "density": "3.73",
+                    "composition": "silicaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.33",
+                    "economy_type": "traditional construction manufacturing"
+                },
+                {
+                    "id": "6",
+                    "seed": "2146299981",
+                    "radius": "-3.91",
+                    "theta": "-7.30",
+                    "size": "86.28",
+                    "density": "1.27",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                }
+            ],
+            "asteroids": [
+                {
+                    "id": "8",
+                    "seed": "693307948",
+                    "radius": "-5.26",
+                    "theta": "0.54",
+                    "size": "2.10",
+                    "density": "4.11",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "9",
+                    "seed": "1442427144",
+                    "radius": "-4.20",
+                    "theta": "3.74",
+                    "size": "6.07",
+                    "density": "2.32",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "10",
+                    "seed": "2147263512",
+                    "radius": "4.34",
+                    "theta": "3.59",
+                    "size": "1.42",
+                    "density": "2.19",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "11",
+                    "seed": "140038965",
+                    "radius": "-2.59",
+                    "theta": "4.29",
+                    "size": "5.52",
+                    "density": "3.58",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "12",
+                    "seed": "1981016874",
+                    "radius": "-4.66",
+                    "theta": "3.00",
+                    "size": "6.65",
+                    "density": "3.74",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "13",
+                    "seed": "1607731834",
+                    "radius": "5.23",
+                    "theta": "0.17",
+                    "size": "6.78",
+                    "density": "4.21",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "14",
+                    "seed": "54203995",
+                    "radius": "4.77",
+                    "theta": "3.38",
+                    "size": "3.78",
+                    "density": "1.40",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "15",
+                    "seed": "1938787168",
+                    "radius": "-4.90",
+                    "theta": "1.48",
+                    "size": "3.63",
+                    "density": "2.91",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "16",
+                    "seed": "640827249",
+                    "radius": "-2.80",
+                    "theta": "4.88",
+                    "size": "8.11",
+                    "density": "3.33",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "17",
+                    "seed": "1980868989",
+                    "radius": "1.86",
+                    "theta": "5.36",
+                    "size": "8.10",
+                    "density": "3.70",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "18",
+                    "seed": "797827161",
+                    "radius": "-5.90",
+                    "theta": "0.98",
+                    "size": "8.05",
+                    "density": "4.61",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "19",
+                    "seed": "1435746364",
+                    "radius": "2.90",
+                    "theta": "4.11",
+                    "size": "6.18",
+                    "density": "1.27",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "20",
+                    "seed": "23555038",
+                    "radius": "-5.85",
+                    "theta": "-0.17",
+                    "size": "5.01",
+                    "density": "4.60",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                }
+            ]
+        },
+        {
+            "id": "1",
+            "seed": "1295812107",
+            "position_x": "14.44",
+            "position_y": "-9.20",
+            "connected_systems": [
+                8,
+                4
+            ],
+            "stars": [
+                {
+                    "id": "21",
+                    "seed": "352921454",
+                    "radius": "5.11",
+                    "theta": "-1.05",
+                    "size": "7.26",
+                    "density": "4.87",
+                    "composition": "metallic"
+                }
+            ],
+            "planets": [
+                {
+                    "id": "7",
+                    "seed": "200527148",
+                    "radius": "8.11",
+                    "theta": "-3.53",
+                    "size": "53.58",
+                    "density": "1.41",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "8",
+                    "seed": "1942495864",
+                    "radius": "3.39",
+                    "theta": "-1.26",
+                    "size": "43.58",
+                    "density": "3.87",
+                    "composition": "metallic",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.16",
+                    "economy_type": "traditional hospitality extraction"
+                }
+            ],
+            "asteroids": [
+                {
+                    "id": "24",
+                    "seed": "21122507",
+                    "radius": "-3.68",
+                    "theta": "-3.51",
+                    "size": "5.41",
+                    "density": "2.41",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "25",
+                    "seed": "210071489",
+                    "radius": "-1.18",
+                    "theta": "-5.24",
+                    "size": "7.49",
+                    "density": "4.21",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "26",
+                    "seed": "91327660",
+                    "radius": "-4.80",
+                    "theta": "-1.98",
+                    "size": "3.76",
+                    "density": "4.81",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "27",
+                    "seed": "692213123",
+                    "radius": "-5.65",
+                    "theta": "2.01",
+                    "size": "6.36",
+                    "density": "1.48",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "28",
+                    "seed": "1085512674",
+                    "radius": "5.50",
+                    "theta": "-0.04",
+                    "size": "4.65",
+                    "density": "4.54",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "29",
+                    "seed": "1060047968",
+                    "radius": "2.72",
+                    "theta": "4.74",
+                    "size": "7.57",
+                    "density": "2.64",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "30",
+                    "seed": "1658730669",
+                    "radius": "-2.73",
+                    "theta": "-4.93",
+                    "size": "8.52",
+                    "density": "3.41",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                }
+            ]
+        },
+        {
+            "id": "2",
+            "seed": "161291718",
+            "position_x": "-0.19",
+            "position_y": "-3.57",
+            "connected_systems": [
+                5,
+                6,
+                3,
+                7
+            ],
+            "stars": [
+                {
+                    "id": "31",
+                    "seed": "1132244466",
+                    "radius": "1.90",
+                    "theta": "-5.28",
+                    "size": "8.08",
+                    "density": "3.08",
+                    "composition": "carbonaceous"
+                },
+                {
+                    "id": "32",
+                    "seed": "53192459",
+                    "radius": "-4.65",
+                    "theta": "-3.53",
+                    "size": "8.14",
+                    "density": "4.57",
+                    "composition": "metallic"
+                }
+            ],
+            "planets": [
+                {
+                    "id": "9",
+                    "seed": "906615151",
+                    "radius": "2.73",
+                    "theta": "0.97",
+                    "size": "10.19",
+                    "density": "4.03",
+                    "composition": "silicaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.75",
+                    "economy_type": "traditional hospitality data"
+                },
+                {
+                    "id": "10",
+                    "seed": "1559336246",
+                    "radius": "1.15",
+                    "theta": "-3.24",
+                    "size": "16.75",
+                    "density": "4.74",
+                    "composition": "silicaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.45",
+                    "economy_type": "mixed agricultural data"
+                },
+                {
+                    "id": "11",
+                    "seed": "11112678",
+                    "radius": "-4.49",
+                    "theta": "-7.96",
+                    "size": "91.62",
+                    "density": "1.97",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "12",
+                    "seed": "905572228",
+                    "radius": "5.65",
+                    "theta": "-7.56",
+                    "size": "50.62",
+                    "density": "1.69",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "13",
+                    "seed": "1965992346",
+                    "radius": "-3.86",
+                    "theta": "0.39",
+                    "size": "12.56",
+                    "density": "5.45",
+                    "composition": "silicaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.47",
+                    "economy_type": "traditional metallurgic data"
+                },
+                {
+                    "id": "14",
+                    "seed": "129664774",
+                    "radius": "4.61",
+                    "theta": "6.56",
+                    "size": "98.84",
+                    "density": "1.02",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                }
+            ],
+            "asteroids": [
+                {
+                    "id": "39",
+                    "seed": "1202742959",
+                    "radius": "3.09",
+                    "theta": "5.11",
+                    "size": "7.66",
+                    "density": "2.87",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "40",
+                    "seed": "927490950",
+                    "radius": "1.97",
+                    "theta": "5.33",
+                    "size": "1.85",
+                    "density": "1.07",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "41",
+                    "seed": "1034708878",
+                    "radius": "-4.54",
+                    "theta": "2.95",
+                    "size": "2.18",
+                    "density": "4.13",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "42",
+                    "seed": "1284354686",
+                    "radius": "-0.91",
+                    "theta": "5.01",
+                    "size": "8.16",
+                    "density": "3.60",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "43",
+                    "seed": "1410411048",
+                    "radius": "0.18",
+                    "theta": "-5.61",
+                    "size": "9.61",
+                    "density": "4.89",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "44",
+                    "seed": "1990628622",
+                    "radius": "0.95",
+                    "theta": "4.92",
+                    "size": "1.42",
+                    "density": "2.38",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "45",
+                    "seed": "524510244",
+                    "radius": "-5.68",
+                    "theta": "-0.85",
+                    "size": "2.86",
+                    "density": "1.64",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "46",
+                    "seed": "801070969",
+                    "radius": "3.62",
+                    "theta": "4.00",
+                    "size": "6.57",
+                    "density": "4.15",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "47",
+                    "seed": "783983777",
+                    "radius": "4.13",
+                    "theta": "-3.99",
+                    "size": "6.58",
+                    "density": "2.81",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "48",
+                    "seed": "1619002589",
+                    "radius": "-3.69",
+                    "theta": "4.67",
+                    "size": "1.28",
+                    "density": "4.12",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "49",
+                    "seed": "213454254",
+                    "radius": "5.11",
+                    "theta": "-1.85",
+                    "size": "8.47",
+                    "density": "1.31",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "50",
+                    "seed": "2054176215",
+                    "radius": "4.06",
+                    "theta": "3.32",
+                    "size": "4.40",
+                    "density": "4.31",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "51",
+                    "seed": "830863907",
+                    "radius": "2.13",
+                    "theta": "-4.95",
+                    "size": "5.34",
+                    "density": "4.14",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "52",
+                    "seed": "1155133338",
+                    "radius": "5.74",
+                    "theta": "-0.52",
+                    "size": "4.87",
+                    "density": "2.75",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "53",
+                    "seed": "135308440",
+                    "radius": "0.62",
+                    "theta": "4.97",
+                    "size": "4.04",
+                    "density": "3.10",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "54",
+                    "seed": "1074870914",
+                    "radius": "-5.68",
+                    "theta": "0.32",
+                    "size": "9.71",
+                    "density": "2.77",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "55",
+                    "seed": "1654380443",
+                    "radius": "-3.74",
+                    "theta": "3.96",
+                    "size": "1.95",
+                    "density": "3.46",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "56",
+                    "seed": "247247935",
+                    "radius": "4.58",
+                    "theta": "3.64",
+                    "size": "1.03",
+                    "density": "2.54",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                }
+            ]
+        },
+        {
+            "id": "3",
+            "seed": "1422022856",
+            "position_x": "-0.93",
+            "position_y": "0.62",
+            "connected_systems": [
+                7,
+                6
+            ],
+            "stars": [
+                {
+                    "id": "57",
+                    "seed": "649154077",
+                    "radius": "-1.86",
+                    "theta": "-5.03",
+                    "size": "6.05",
+                    "density": "1.62",
+                    "composition": "metallic"
+                }
+            ],
+            "planets": [
+                {
+                    "id": "15",
+                    "seed": "1874150191",
+                    "radius": "0.78",
+                    "theta": "-2.42",
+                    "size": "37.54",
+                    "density": "4.05",
+                    "composition": "metallic",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.84",
+                    "economy_type": "traditional mass media service"
+                },
+                {
+                    "id": "16",
+                    "seed": "219594129",
+                    "radius": "6.33",
+                    "theta": "-3.95",
+                    "size": "52.39",
+                    "density": "1.76",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "17",
+                    "seed": "1896067536",
+                    "radius": "2.75",
+                    "theta": "-1.15",
+                    "size": "21.75",
+                    "density": "4.13",
+                    "composition": "silicaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.72",
+                    "economy_type": "command mass media data"
+                },
+                {
+                    "id": "18",
+                    "seed": "98847789",
+                    "radius": "-3.33",
+                    "theta": "1.41",
+                    "size": "21.03",
+                    "density": "5.90",
+                    "composition": "silicaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.34",
+                    "economy_type": "traditional education service"
+                },
+                {
+                    "id": "19",
+                    "seed": "1746493361",
+                    "radius": "-1.41",
+                    "theta": "8.67",
+                    "size": "94.78",
+                    "density": "1.33",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                }
+            ],
+            "asteroids": [
+                {
+                    "id": "63",
+                    "seed": "1740301656",
+                    "radius": "4.35",
+                    "theta": "-2.74",
+                    "size": "2.08",
+                    "density": "1.47",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "64",
+                    "seed": "1510411699",
+                    "radius": "-5.04",
+                    "theta": "-0.95",
+                    "size": "1.41",
+                    "density": "4.93",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "65",
+                    "seed": "1079515271",
+                    "radius": "-1.70",
+                    "theta": "5.07",
+                    "size": "7.61",
+                    "density": "3.45",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "66",
+                    "seed": "356765318",
+                    "radius": "0.67",
+                    "theta": "5.03",
+                    "size": "5.22",
+                    "density": "3.25",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "67",
+                    "seed": "986761576",
+                    "radius": "-2.68",
+                    "theta": "4.33",
+                    "size": "8.71",
+                    "density": "1.51",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "68",
+                    "seed": "1168074662",
+                    "radius": "-3.73",
+                    "theta": "3.36",
+                    "size": "5.38",
+                    "density": "3.23",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "69",
+                    "seed": "1550862198",
+                    "radius": "5.70",
+                    "theta": "0.98",
+                    "size": "1.50",
+                    "density": "1.13",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "70",
+                    "seed": "1842550026",
+                    "radius": "-1.37",
+                    "theta": "5.81",
+                    "size": "8.17",
+                    "density": "4.43",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "71",
+                    "seed": "2111424807",
+                    "radius": "2.93",
+                    "theta": "-5.13",
+                    "size": "6.92",
+                    "density": "1.30",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                }
+            ]
+        },
+        {
+            "id": "4",
+            "seed": "797504224",
+            "position_x": "-0.28",
+            "position_y": "-10.33",
+            "connected_systems": [
+                5,
+                2,
+                8,
+                6
+            ],
+            "stars": [
+                {
+                    "id": "72",
+                    "seed": "607722070",
+                    "radius": "-5.03",
+                    "theta": "0.77",
+                    "size": "3.22",
+                    "density": "1.64",
+                    "composition": "carbonaceous"
+                },
+                {
+                    "id": "73",
+                    "seed": "1298110739",
+                    "radius": "-2.71",
+                    "theta": "4.67",
+                    "size": "6.75",
+                    "density": "4.66",
+                    "composition": "carbonaceous"
+                }
+            ],
+            "planets": [
+                {
+                    "id": "20",
+                    "seed": "1560054300",
+                    "radius": "-0.94",
+                    "theta": "3.11",
+                    "size": "27.61",
+                    "density": "5.34",
+                    "composition": "carbonaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.98",
+                    "economy_type": "mixed agricultural manufacturing"
+                },
+                {
+                    "id": "21",
+                    "seed": "1573765893",
+                    "radius": "-2.13",
+                    "theta": "-2.65",
+                    "size": "29.35",
+                    "density": "5.25",
+                    "composition": "carbonaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.38",
+                    "economy_type": "market hospitality data"
+                },
+                {
+                    "id": "22",
+                    "seed": "177839690",
+                    "radius": "1.65",
+                    "theta": "1.48",
+                    "size": "35.08",
+                    "density": "3.50",
+                    "composition": "metallic",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.63",
+                    "economy_type": "market education manufacturing"
+                }
+            ],
+            "asteroids": [
+                {
+                    "id": "77",
+                    "seed": "1256860844",
+                    "radius": "2.52",
+                    "theta": "4.37",
+                    "size": "4.83",
+                    "density": "2.76",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "78",
+                    "seed": "935651166",
+                    "radius": "-5.09",
+                    "theta": "0.27",
+                    "size": "1.71",
+                    "density": "2.74",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "79",
+                    "seed": "743630497",
+                    "radius": "0.19",
+                    "theta": "5.76",
+                    "size": "5.72",
+                    "density": "1.44",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "80",
+                    "seed": "1867148890",
+                    "radius": "5.02",
+                    "theta": "-1.43",
+                    "size": "3.80",
+                    "density": "2.92",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "81",
+                    "seed": "600633525",
+                    "radius": "-4.66",
+                    "theta": "3.34",
+                    "size": "4.79",
+                    "density": "2.37",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "82",
+                    "seed": "1452577642",
+                    "radius": "-5.66",
+                    "theta": "0.89",
+                    "size": "7.86",
+                    "density": "2.48",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "83",
+                    "seed": "2016129308",
+                    "radius": "-0.13",
+                    "theta": "5.90",
+                    "size": "3.79",
+                    "density": "2.99",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "84",
+                    "seed": "1736337589",
+                    "radius": "3.09",
+                    "theta": "-4.18",
+                    "size": "9.04",
+                    "density": "1.16",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "85",
+                    "seed": "529349299",
+                    "radius": "-3.34",
+                    "theta": "4.46",
+                    "size": "5.83",
+                    "density": "1.96",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "86",
+                    "seed": "1984154831",
+                    "radius": "-4.90",
+                    "theta": "2.94",
+                    "size": "8.97",
+                    "density": "2.69",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "87",
+                    "seed": "1048879789",
+                    "radius": "-4.98",
+                    "theta": "-0.75",
+                    "size": "7.60",
+                    "density": "3.22",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "88",
+                    "seed": "1373677107",
+                    "radius": "-5.40",
+                    "theta": "-2.48",
+                    "size": "4.20",
+                    "density": "4.82",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "89",
+                    "seed": "979792681",
+                    "radius": "1.88",
+                    "theta": "-5.63",
+                    "size": "9.50",
+                    "density": "4.03",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "90",
+                    "seed": "1048886799",
+                    "radius": "-4.01",
+                    "theta": "3.38",
+                    "size": "6.76",
+                    "density": "4.16",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "91",
+                    "seed": "1424411075",
+                    "radius": "-2.29",
+                    "theta": "4.58",
+                    "size": "7.27",
+                    "density": "4.06",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "92",
+                    "seed": "1751821674",
+                    "radius": "-2.58",
+                    "theta": "-4.48",
+                    "size": "4.17",
+                    "density": "3.08",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "93",
+                    "seed": "357521788",
+                    "radius": "-3.96",
+                    "theta": "-3.30",
+                    "size": "9.23",
+                    "density": "3.95",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                }
+            ]
+        },
+        {
+            "id": "5",
+            "seed": "2004284785",
+            "position_x": "-1.91",
+            "position_y": "-4.72",
+            "connected_systems": [
+                2,
+                7,
+                3,
+                4
+            ],
+            "stars": [
+                {
+                    "id": "94",
+                    "seed": "1710213940",
+                    "radius": "4.01",
+                    "theta": "-3.99",
+                    "size": "9.78",
+                    "density": "4.36",
+                    "composition": "silicaceous"
+                },
+                {
+                    "id": "95",
+                    "seed": "1466413500",
+                    "radius": "1.69",
+                    "theta": "-4.91",
+                    "size": "4.08",
+                    "density": "2.79",
+                    "composition": "silicaceous"
+                }
+            ],
+            "planets": [
+                {
+                    "id": "23",
+                    "seed": "32498831",
+                    "radius": "3.31",
+                    "theta": "1.42",
+                    "size": "14.65",
+                    "density": "5.63",
+                    "composition": "silicaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.42",
+                    "economy_type": "market software service"
+                },
+                {
+                    "id": "24",
+                    "seed": "203961235",
+                    "radius": "3.38",
+                    "theta": "-7.13",
+                    "size": "99.21",
+                    "density": "2.11",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "25",
+                    "seed": "1359469012",
+                    "radius": "6.76",
+                    "theta": "-6.95",
+                    "size": "72.87",
+                    "density": "2.32",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "26",
+                    "seed": "478342124",
+                    "radius": "-0.20",
+                    "theta": "2.60",
+                    "size": "19.12",
+                    "density": "4.64",
+                    "composition": "metallic",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.98",
+                    "economy_type": "market telecommunications data"
+                },
+                {
+                    "id": "27",
+                    "seed": "98283860",
+                    "radius": "8.45",
+                    "theta": "2.90",
+                    "size": "92.04",
+                    "density": "2.06",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "28",
+                    "seed": "768439593",
+                    "radius": "0.28",
+                    "theta": "-7.72",
+                    "size": "94.55",
+                    "density": "2.33",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "29",
+                    "seed": "717110417",
+                    "radius": "-0.13",
+                    "theta": "-7.46",
+                    "size": "80.07",
+                    "density": "2.35",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                }
+            ],
+            "asteroids": [
+                {
+                    "id": "103",
+                    "seed": "1735220578",
+                    "radius": "5.29",
+                    "theta": "0.94",
+                    "size": "6.58",
+                    "density": "4.75",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "104",
+                    "seed": "1682676198",
+                    "radius": "-2.01",
+                    "theta": "-4.74",
+                    "size": "1.29",
+                    "density": "2.94",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "105",
+                    "seed": "747456024",
+                    "radius": "5.01",
+                    "theta": "3.13",
+                    "size": "9.59",
+                    "density": "4.22",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "106",
+                    "seed": "1125633473",
+                    "radius": "-3.98",
+                    "theta": "3.83",
+                    "size": "1.67",
+                    "density": "4.20",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "107",
+                    "seed": "1593595653",
+                    "radius": "-2.26",
+                    "theta": "4.94",
+                    "size": "9.03",
+                    "density": "4.61",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "108",
+                    "seed": "975972892",
+                    "radius": "-4.56",
+                    "theta": "-3.03",
+                    "size": "3.77",
+                    "density": "4.19",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "109",
+                    "seed": "556919273",
+                    "radius": "5.89",
+                    "theta": "0.38",
+                    "size": "3.34",
+                    "density": "2.15",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "110",
+                    "seed": "1573761375",
+                    "radius": "4.17",
+                    "theta": "-3.61",
+                    "size": "7.93",
+                    "density": "2.92",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "111",
+                    "seed": "887212072",
+                    "radius": "-5.19",
+                    "theta": "0.24",
+                    "size": "1.92",
+                    "density": "2.03",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "112",
+                    "seed": "734415337",
+                    "radius": "-0.49",
+                    "theta": "-5.88",
+                    "size": "4.18",
+                    "density": "2.42",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "113",
+                    "seed": "1626138926",
+                    "radius": "-5.05",
+                    "theta": "0.20",
+                    "size": "9.01",
+                    "density": "2.85",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "114",
+                    "seed": "754722602",
+                    "radius": "-3.32",
+                    "theta": "4.01",
+                    "size": "7.37",
+                    "density": "3.03",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "115",
+                    "seed": "215718584",
+                    "radius": "-5.69",
+                    "theta": "-0.83",
+                    "size": "3.76",
+                    "density": "2.24",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                }
+            ]
+        },
+        {
+            "id": "6",
+            "seed": "2098426314",
+            "position_x": "2.40",
+            "position_y": "-0.21",
+            "connected_systems": [
+                3,
+                2
+            ],
+            "stars": [
+                {
+                    "id": "116",
+                    "seed": "1365660259",
+                    "radius": "4.30",
+                    "theta": "3.60",
+                    "size": "8.93",
+                    "density": "2.69",
+                    "composition": "carbonaceous"
+                }
+            ],
+            "planets": [
+                {
+                    "id": "30",
+                    "seed": "1248420715",
+                    "radius": "-3.25",
+                    "theta": "8.40",
+                    "size": "78.30",
+                    "density": "1.50",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "31",
+                    "seed": "1604027244",
+                    "radius": "-3.20",
+                    "theta": "1.10",
+                    "size": "49.18",
+                    "density": "3.44",
+                    "composition": "carbonaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.67",
+                    "economy_type": "market philosphical extraction"
+                },
+                {
+                    "id": "32",
+                    "seed": "284292940",
+                    "radius": "-1.19",
+                    "theta": "9.17",
+                    "size": "73.27",
+                    "density": "2.90",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "33",
+                    "seed": "146331977",
+                    "radius": "7.20",
+                    "theta": "-3.05",
+                    "size": "66.85",
+                    "density": "1.83",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "34",
+                    "seed": "2065528072",
+                    "radius": "-0.50",
+                    "theta": "-8.85",
+                    "size": "82.90",
+                    "density": "1.07",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                }
+            ],
+            "asteroids": [
+                {
+                    "id": "122",
+                    "seed": "433382824",
+                    "radius": "5.06",
+                    "theta": "-2.67",
+                    "size": "1.21",
+                    "density": "3.31",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "123",
+                    "seed": "1946448680",
+                    "radius": "-1.37",
+                    "theta": "-5.77",
+                    "size": "2.52",
+                    "density": "1.21",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "124",
+                    "seed": "1784732171",
+                    "radius": "1.80",
+                    "theta": "5.62",
+                    "size": "5.64",
+                    "density": "2.79",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "125",
+                    "seed": "669193624",
+                    "radius": "4.15",
+                    "theta": "-4.33",
+                    "size": "3.23",
+                    "density": "4.18",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "126",
+                    "seed": "1757606851",
+                    "radius": "-1.71",
+                    "theta": "4.79",
+                    "size": "6.38",
+                    "density": "3.61",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "127",
+                    "seed": "1413161370",
+                    "radius": "-4.99",
+                    "theta": "2.18",
+                    "size": "1.04",
+                    "density": "4.04",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "128",
+                    "seed": "623692653",
+                    "radius": "3.83",
+                    "theta": "-4.53",
+                    "size": "9.68",
+                    "density": "1.80",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "129",
+                    "seed": "128037180",
+                    "radius": "2.66",
+                    "theta": "5.06",
+                    "size": "9.30",
+                    "density": "2.93",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "130",
+                    "seed": "718777860",
+                    "radius": "3.05",
+                    "theta": "-4.05",
+                    "size": "7.56",
+                    "density": "2.75",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "131",
+                    "seed": "1943216532",
+                    "radius": "-2.38",
+                    "theta": "5.50",
+                    "size": "5.80",
+                    "density": "4.64",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                }
+            ]
+        },
+        {
+            "id": "7",
+            "seed": "1681495168",
+            "position_x": "-3.52",
+            "position_y": "0.08",
+            "connected_systems": [
+                3,
+                2
+            ],
+            "stars": [
+                {
+                    "id": "132",
+                    "seed": "2107426503",
+                    "radius": "5.69",
+                    "theta": "0.01",
+                    "size": "2.61",
+                    "density": "2.41",
+                    "composition": "metallic"
+                }
+            ],
+            "planets": [
+                {
+                    "id": "35",
+                    "seed": "538078781",
+                    "radius": "-5.35",
+                    "theta": "6.85",
+                    "size": "66.28",
+                    "density": "1.77",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "36",
+                    "seed": "1486365906",
+                    "radius": "-1.45",
+                    "theta": "1.80",
+                    "size": "29.03",
+                    "density": "4.83",
+                    "composition": "metallic",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.42",
+                    "economy_type": "traditional metallurgic extraction"
+                },
+                {
+                    "id": "37",
+                    "seed": "1858724039",
+                    "radius": "8.15",
+                    "theta": "-2.90",
+                    "size": "53.15",
+                    "density": "2.74",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                }
+            ],
+            "asteroids": [
+                {
+                    "id": "136",
+                    "seed": "681392904",
+                    "radius": "-0.19",
+                    "theta": "-5.68",
+                    "size": "5.15",
+                    "density": "4.47",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "137",
+                    "seed": "1832997745",
+                    "radius": "1.69",
+                    "theta": "5.30",
+                    "size": "1.86",
+                    "density": "1.03",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "138",
+                    "seed": "1220829737",
+                    "radius": "-5.24",
+                    "theta": "-2.10",
+                    "size": "4.14",
+                    "density": "2.48",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "139",
+                    "seed": "120369260",
+                    "radius": "-2.01",
+                    "theta": "-4.80",
+                    "size": "9.38",
+                    "density": "1.66",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "140",
+                    "seed": "1857336193",
+                    "radius": "5.79",
+                    "theta": "-1.20",
+                    "size": "9.59",
+                    "density": "3.70",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "141",
+                    "seed": "1919315837",
+                    "radius": "-5.31",
+                    "theta": "2.56",
+                    "size": "7.88",
+                    "density": "3.11",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "142",
+                    "seed": "1813159068",
+                    "radius": "5.45",
+                    "theta": "0.72",
+                    "size": "2.13",
+                    "density": "3.60",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "143",
+                    "seed": "538393638",
+                    "radius": "1.57",
+                    "theta": "-4.97",
+                    "size": "8.92",
+                    "density": "2.85",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "144",
+                    "seed": "2016353526",
+                    "radius": "5.05",
+                    "theta": "-0.35",
+                    "size": "9.99",
+                    "density": "1.98",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "145",
+                    "seed": "916898103",
+                    "radius": "-2.52",
+                    "theta": "-4.62",
+                    "size": "3.31",
+                    "density": "3.84",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "146",
+                    "seed": "1550482677",
+                    "radius": "-5.40",
+                    "theta": "0.00",
+                    "size": "4.91",
+                    "density": "4.84",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "147",
+                    "seed": "619579611",
+                    "radius": "0.50",
+                    "theta": "-5.65",
+                    "size": "1.02",
+                    "density": "2.84",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "148",
+                    "seed": "1453907935",
+                    "radius": "1.42",
+                    "theta": "5.28",
+                    "size": "6.34",
+                    "density": "1.02",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "149",
+                    "seed": "158438238",
+                    "radius": "-5.16",
+                    "theta": "-3.04",
+                    "size": "4.26",
+                    "density": "2.57",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "150",
+                    "seed": "519125856",
+                    "radius": "2.76",
+                    "theta": "-4.35",
+                    "size": "6.93",
+                    "density": "3.42",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "151",
+                    "seed": "1094142392",
+                    "radius": "5.01",
+                    "theta": "-2.57",
+                    "size": "6.84",
+                    "density": "1.74",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "152",
+                    "seed": "270824426",
+                    "radius": "-5.57",
+                    "theta": "-0.14",
+                    "size": "1.63",
+                    "density": "3.87",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "153",
+                    "seed": "937059847",
+                    "radius": "-0.96",
+                    "theta": "-5.63",
+                    "size": "2.62",
+                    "density": "2.74",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "154",
+                    "seed": "1250899245",
+                    "radius": "5.71",
+                    "theta": "1.08",
+                    "size": "3.88",
+                    "density": "2.11",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "155",
+                    "seed": "311976731",
+                    "radius": "5.15",
+                    "theta": "-1.76",
+                    "size": "1.41",
+                    "density": "2.19",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "156",
+                    "seed": "1107639669",
+                    "radius": "-1.20",
+                    "theta": "5.69",
+                    "size": "2.58",
+                    "density": "3.17",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                }
+            ]
+        },
+        {
+            "id": "8",
+            "seed": "1916843119",
+            "position_x": "7.65",
+            "position_y": "-3.52",
+            "connected_systems": [
+                6,
+                2,
+                1,
+                3
+            ],
+            "stars": [
+                {
+                    "id": "157",
+                    "seed": "751762577",
+                    "radius": "4.51",
+                    "theta": "-2.61",
+                    "size": "8.03",
+                    "density": "1.39",
+                    "composition": "carbonaceous"
+                },
+                {
+                    "id": "158",
+                    "seed": "1600361079",
+                    "radius": "-0.41",
+                    "theta": "5.22",
+                    "size": "4.75",
+                    "density": "2.02",
+                    "composition": "metallic"
+                }
+            ],
+            "planets": [
+                {
+                    "id": "38",
+                    "seed": "1958161857",
+                    "radius": "-0.86",
+                    "theta": "3.70",
+                    "size": "42.09",
+                    "density": "4.21",
+                    "composition": "metallic",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.47",
+                    "economy_type": "traditional chemical service"
+                },
+                {
+                    "id": "39",
+                    "seed": "110989994",
+                    "radius": "-0.68",
+                    "theta": "2.06",
+                    "size": "42.57",
+                    "density": "4.17",
+                    "composition": "silicaceous",
+                    "is_habitable": "1",
+                    "is_inhabited": "1",
+                    "kardashev_level": "0.24",
+                    "economy_type": "traditional energy service"
+                },
+                {
+                    "id": "40",
+                    "seed": "1208718354",
+                    "radius": "9.43",
+                    "theta": "2.43",
+                    "size": "73.22",
+                    "density": "1.10",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                },
+                {
+                    "id": "41",
+                    "seed": "787869350",
+                    "radius": "2.67",
+                    "theta": "-9.63",
+                    "size": "65.85",
+                    "density": "2.77",
+                    "composition": "gas",
+                    "is_habitable": "0",
+                    "is_inhabited": "0",
+                    "kardashev_level": "0.00",
+                    "economy_type": "NULL"
+                }
+            ],
+            "asteroids": [
+                {
+                    "id": "163",
+                    "seed": "1989911723",
+                    "radius": "-1.58",
+                    "theta": "-5.60",
+                    "size": "3.30",
+                    "density": "2.29",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "164",
+                    "seed": "1676177952",
+                    "radius": "-2.80",
+                    "theta": "5.24",
+                    "size": "2.07",
+                    "density": "4.26",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "165",
+                    "seed": "904901311",
+                    "radius": "-5.21",
+                    "theta": "-1.56",
+                    "size": "7.52",
+                    "density": "2.07",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "166",
+                    "seed": "1086568059",
+                    "radius": "-4.18",
+                    "theta": "-3.31",
+                    "size": "8.61",
+                    "density": "2.41",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "167",
+                    "seed": "279879380",
+                    "radius": "-4.88",
+                    "theta": "-3.05",
+                    "size": "2.53",
+                    "density": "3.54",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "168",
+                    "seed": "1882407105",
+                    "radius": "-2.14",
+                    "theta": "5.59",
+                    "size": "4.17",
+                    "density": "3.42",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "169",
+                    "seed": "1937208420",
+                    "radius": "-4.15",
+                    "theta": "3.12",
+                    "size": "4.60",
+                    "density": "4.51",
+                    "composition": "metallic",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "170",
+                    "seed": "1898169252",
+                    "radius": "-2.02",
+                    "theta": "-5.21",
+                    "size": "8.29",
+                    "density": "2.81",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "171",
+                    "seed": "1275586641",
+                    "radius": "-3.57",
+                    "theta": "-4.09",
+                    "size": "6.77",
+                    "density": "2.72",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "172",
+                    "seed": "778204468",
+                    "radius": "5.38",
+                    "theta": "0.69",
+                    "size": "1.32",
+                    "density": "4.21",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "173",
+                    "seed": "632790323",
+                    "radius": "-3.75",
+                    "theta": "-3.36",
+                    "size": "1.32",
+                    "density": "3.18",
+                    "composition": "silicaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "174",
+                    "seed": "1972557859",
+                    "radius": "5.26",
+                    "theta": "-2.83",
+                    "size": "7.58",
+                    "density": "3.93",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "175",
+                    "seed": "200711257",
+                    "radius": "-3.83",
+                    "theta": "3.55",
+                    "size": "9.68",
+                    "density": "2.81",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                },
+                {
+                    "id": "176",
+                    "seed": "1777445781",
+                    "radius": "-1.01",
+                    "theta": "-5.22",
+                    "size": "4.71",
+                    "density": "1.05",
+                    "composition": "carbonaceous",
+                    "is_mineable": "1",
+                    "is_regenerating": "0"
+                }
+            ]
+        }
+    ]
+}
