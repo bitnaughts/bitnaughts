@@ -9,8 +9,8 @@ public class ReferencerManager : MonoBehaviour {
 
 		// Referencer.consoleManager = GameObject.Find("InnerWindow").GetComponent<ConsoleObject>();//codeManager.GetComponent<ConsoleManager>();
 		Referencer.prefab_controller = this.GetComponent<PrefabController>();
-		Referencer.interaction_controller = this.GetComponent<InteractionController>();
-		Referencer.database = this.GetComponent<Database>();
+		// Referencer.interaction_controller = this.GetComponent<InteractionController>();
+		// Referencer.database = this.GetComponent<Database>();
 
 		Referencer.world_space = GameObject.Find("WorldSpace").transform;
 

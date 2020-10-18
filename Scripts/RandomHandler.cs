@@ -59,28 +59,28 @@ public static class RandomHandler {
     public static float NextFloat (double low, double high) {
         return (float) NextDouble (low, high);
     }
-    public static PointF NextPosition (int low, int high) {
-        return new PointF (
-            (float) seeded_random.NextDouble () * (high - low) + low,
-            (float) seeded_random.NextDouble () * (high - low) + low
-        );
-    }
-    public static PointF NextPosition (double max_radius) {
-        double radius = NextDouble (max_radius);
-        double theta = NextDouble (2 * Math.PI);
-        return new PointF (
-            (float) (radius * Math.Cos (theta)),
-            (float) (radius * Math.Sin (theta))
-        );
-    }
-    public static OrbitF NextOrbit (double min_radius, double max_radius) {
-        double radius = NextDouble (min_radius, max_radius);
-        double theta = NextDouble (2 * Math.PI);
-        return new OrbitF ((float)radius, (float)theta);
-        // (float) (radius * Math.Cos (theta)),
-        // (float) (radius * Math.Sin (theta))
+    // public static PointF NextPosition (int low, int high) {
+    //     return new PointF (
+    //         (float) seeded_random.NextDouble () * (high - low) + low,
+    //         (float) seeded_random.NextDouble () * (high - low) + low
+    //     );
+    // }
+    // public static PointF NextPosition (double max_radius) {
+    //     double radius = NextDouble (max_radius);
+    //     double theta = NextDouble (2 * Math.PI);
+    //     return new PointF (
+    //         (float) (radius * Math.Cos (theta)),
+    //         (float) (radius * Math.Sin (theta))
+    //     );
+    // }
+    // public static OrbitF NextOrbit (double min_radius, double max_radius) {
+    //     double radius = NextDouble (min_radius, max_radius);
+    //     double theta = NextDouble (2 * Math.PI);
+    //     return new OrbitF ((float)radius, (float)theta);
+    //     // (float) (radius * Math.Cos (theta)),
+    //     // (float) (radius * Math.Sin (theta))
 
-    }
+    // }
     public static T NextItem<T> (T[] elements) {
         return elements[
             NextInt (0, elements.Length)

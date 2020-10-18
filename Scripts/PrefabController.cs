@@ -16,38 +16,38 @@ public class PrefabController : MonoBehaviour {
 	}
 
 	#region Add Overrides
-	public GameObject Add (Ship ship) => Add (
-		"Prefabs/Ships/Template",
-		ship.center,
-		new SizeF (1, 1), //move to static const
-		ship.rotation,
-		Referencer.world_space
-	);
-	public GameObject Add (Panel panel, Transform parent) => Add (
-		panel.prefab_path,
-		panel.position,
-		panel.size,
-		0,
-		parent
-	);
-	public GameObject Add (Module module) => Add (
-		module,
-		Referencer.world_space
-	);
-	public GameObject Add (Module module, Transform parent) => Add (
-		module.prefab_path,
-		module.center,
-		module.size,
-		module.rotation,
-		parent
-	);
-	public GameObject Add (string prefab_path, PointF position, SizeF scale, float rotation, Transform parent) => Add (
-		Get<GameObject> (prefab_path),
-		ConversionHandler.ToVector3 (position),
-		ConversionHandler.ToVector3 (scale),
-		ConversionHandler.ToQuaternion (rotation),
-		parent
-	);
+	// public GameObject Add (Ship ship) => Add (
+	// 	"Prefabs/Ships/Template",
+	// 	ship.center,
+	// 	new SizeF (1, 1), //move to static const
+	// 	ship.rotation,
+	// 	Referencer.world_space
+	// );
+	// public GameObject Add (Panel panel, Transform parent) => Add (
+	// 	panel.prefab_path,
+	// 	panel.position,
+	// 	panel.size,
+	// 	0,
+	// 	parent
+	// );
+	// public GameObject Add (Module module) => Add (
+	// 	module,
+	// 	Referencer.world_space
+	// );
+	// public GameObject Add (Module module, Transform parent) => Add (
+	// 	module.prefab_path,
+	// 	module.center,
+	// 	module.size,
+	// 	module.rotation,
+	// 	parent
+	// );
+	// public GameObject Add (string prefab_path, PointF position, SizeF scale, float rotation, Transform parent) => Add (
+	// 	Get<GameObject> (prefab_path),
+	// 	ConversionHandler.ToVector3 (position),
+	// 	ConversionHandler.ToVector3 (scale),
+	// 	ConversionHandler.ToQuaternion (rotation),
+	// 	parent
+	// );
 	public GameObject Add (string prefab_path, Vector3 position, Vector3 scale, Quaternion rotation, Transform parent) => Add (
 		Get<GameObject> (prefab_path),
 		position,

@@ -5,8 +5,8 @@ public static class Referencer {
     public static int system_id;
 
     public static PrefabController prefab_controller;
-    public static InteractionController interaction_controller;
-    public static Database database;
+    // public static InteractionController interaction_controller;
+    // public static Database database;
 
     public static Transform world_space;
     // public static ConsoleManager consoleManager;
