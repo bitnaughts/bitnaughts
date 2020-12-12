@@ -1,0 +1,9 @@
+[submodule "bitnaughts.github.io"]
+	path = bitnaughts.github.io
+	url = https://github.com/bitnaughts/bitnaughts.github.io.git
+[submodule "bitnaughts.mainframe"]
+	path = bitnaughts.mainframe
+	url = https://github.com/bitnaughts/bitnaughts.mainframe.git
+[submodule "bitnaughts.unity"]
+	path = bitnaughts.unity
+	url = https://github.com/bitnaughts/bitnaughts.unity.git
