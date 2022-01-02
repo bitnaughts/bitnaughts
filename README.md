@@ -2,8 +2,8 @@
 
 ## About
 
-[Microsoft Hackathon '20](https://www.youtube.com/watch?v=kQaZFAu65z4)
-[Microsoft Hackathon '21](https://www.youtube.com/watch?v=-gN4dHWMkSI)
+- [Microsoft Hackathon '20](https://www.youtube.com/watch?v=kQaZFAu65z4)
+- [Microsoft Hackathon '21](https://www.youtube.com/watch?v=-gN4dHWMkSI)
 
 ## Initialize
 
