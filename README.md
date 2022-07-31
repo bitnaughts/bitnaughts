@@ -18,7 +18,7 @@ BitNaughts is a educational programming video-game; it's code gamified!
 git clone --recurse-submodules https://github.com/bitnaughts/bitnaughts.git
 ```
 
-### Submodules
+## Submodules
 
 - [Unity Project](https://github.com/bitnaughts/bitnaughts.unity)
     - [Assets](https://github.com/bitnaughts/bitnaughts.assets)
